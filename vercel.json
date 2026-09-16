@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd campusfix-web && npm install && npm run build",
+  "outputDirectory": "campusfix-web/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
