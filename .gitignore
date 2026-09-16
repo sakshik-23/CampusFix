@@ -42,3 +42,4 @@ Thumbs.db
 !pubspec.lock
 !package-lock.json
 *.iml
+*.apk
