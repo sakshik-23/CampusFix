@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/ticket_model.dart';
+import '../services/firebase_service.dart';
 import '../widgets/status_badge_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,7 +15,6 @@ class TicketDetailScreen extends StatefulWidget {
 class _TicketDetailScreenState extends State<TicketDetailScreen> {
   late String _status;
   String _notes = '';
-  bool _isClosing = false;
 
   @override
   void initState() {
@@ -66,15 +66,25 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF10B981)),
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(ctx).pop();
+              final remarks = controller.text.isNotEmpty ? controller.text : 'Resolved on-site by administrator.';
               setState(() {
                 _status = 'CLOSED';
-                _notes = controller.text.isNotEmpty ? controller.text : 'Resolved on-site by administrator.';
+                _notes = remarks;
               });
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Ticket resolved & closed! 🟢'), backgroundColor: Color(0xFF10B981)),
-              );
+              try {
+                await FirebaseService.resolveTicket(widget.ticket.ticketId, remarks);
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Ticket resolved & synced to Cloud! 🟢'), backgroundColor: Color(0xFF10B981)),
+                );
+              } catch (e) {
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Cloud sync error: $e'), backgroundColor: const Color(0xFFEF4444)),
+                );
+              }
             },
             child: const Text('Close Ticket 🟢', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           ),

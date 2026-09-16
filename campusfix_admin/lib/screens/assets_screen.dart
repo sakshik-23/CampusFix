@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/asset_model.dart';
+import '../services/firebase_service.dart';
 import 'asset_detail_screen.dart';
+import 'add_asset_screen.dart';
 
 class AssetsScreen extends StatefulWidget {
   const AssetsScreen({Key? key}) : super(key: key);
@@ -10,75 +12,27 @@ class AssetsScreen extends StatefulWidget {
 }
 
 class _AssetsScreenState extends State<AssetsScreen> {
-  final List<CampusAsset> _sampleAssets = [
-    CampusAsset(
-      itemId: 'AST-000001',
-      itemName: 'Projector #01',
-      itemType: 'Projector',
-      description: 'Ceiling-mounted Epson EB-X06 projector with HDMI/VGA inputs.',
-      building: 'Main Academic Block',
-      floor: '2',
-      room: 'A-203',
-      manufacturer: 'Epson',
-      model: 'EB-X06',
-      serialNumber: 'SN-EPS-98214',
-      latitude: 18.520430,
-      longitude: 73.856744,
-      status: 'ACTIVE',
-      qrUrl: 'https://campusfix.web.app/report/AST-000001',
-    ),
-    CampusAsset(
-      itemId: 'AST-000002',
-      itemName: 'AC Unit #02',
-      itemType: 'AC',
-      description: 'Voltas 2-Ton Split Inverter Air Conditioner.',
-      building: 'Main Academic Block',
-      floor: '2',
-      room: 'A-203',
-      manufacturer: 'Voltas',
-      model: '183V CZT',
-      serialNumber: 'SN-VOL-44120',
-      latitude: 18.520480,
-      longitude: 73.856790,
-      status: 'ACTIVE',
-      qrUrl: 'https://campusfix.web.app/report/AST-000002',
-    ),
-    CampusAsset(
-      itemId: 'AST-000003',
-      itemName: 'Ceiling Fan #04',
-      itemType: 'Fan',
-      description: 'Havells 1200mm high-speed ceiling fan near entrance.',
-      building: 'Science & CS Block',
-      floor: '3',
-      room: 'B-301',
-      manufacturer: 'Havells',
-      model: 'Stealth Air',
-      serialNumber: 'SN-HAV-10922',
-      latitude: 18.521150,
-      longitude: 73.857320,
-      status: 'ACTIVE',
-      qrUrl: 'https://campusfix.web.app/report/AST-000003',
-    ),
-  ];
-
   String _searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
-    final filtered = _sampleAssets.where((a) {
-      final q = _searchQuery.toLowerCase();
-      return a.itemId.toLowerCase().contains(q) ||
-          a.itemName.toLowerCase().contains(q) ||
-          a.room.toLowerCase().contains(q) ||
-          a.building.toLowerCase().contains(q);
-    }).toList();
-
     return Scaffold(
       backgroundColor: const Color(0xFF0B0F19),
       appBar: AppBar(
         backgroundColor: const Color(0xFF111827),
         elevation: 0,
         title: const Text('Campus Assets', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add_circle_outline, color: Color(0xFF38BDF8)),
+            tooltip: 'Add New Asset',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const AddAssetScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -101,29 +55,66 @@ class _AssetsScreenState extends State<AssetsScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              itemCount: filtered.length,
-              itemBuilder: (context, index) {
-                final asset = filtered[index];
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF111827),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: const Color(0xFF1E293B)),
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-                    title: Text(asset.itemName, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
-                    subtitle: Text('${asset.itemId} • Room ${asset.room} (${asset.building})', style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12)),
-                    trailing: const Icon(Icons.chevron_right, color: Color(0xFF64748B)),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => AssetDetailScreen(asset: asset)),
-                      );
-                    },
-                  ),
+            child: StreamBuilder<List<CampusAsset>>(
+              stream: FirebaseService.streamAssets(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator(color: Color(0xFF3B82F6)));
+                }
+
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error loading assets: ${snapshot.error}', style: const TextStyle(color: Color(0xFFEF4444))),
+                  );
+                }
+
+                final assets = snapshot.data ?? [];
+                final filtered = assets.where((a) {
+                  final q = _searchQuery.toLowerCase();
+                  return a.itemId.toLowerCase().contains(q) ||
+                      a.itemName.toLowerCase().contains(q) ||
+                      a.room.toLowerCase().contains(q) ||
+                      a.building.toLowerCase().contains(q);
+                }).toList();
+
+                if (filtered.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.inventory_2_outlined, size: 48, color: Color(0xFF334155)),
+                        SizedBox(height: 12),
+                        Text('No campus assets found', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
+                      ],
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  itemCount: filtered.length,
+                  itemBuilder: (context, index) {
+                    final asset = filtered[index];
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF111827),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: const Color(0xFF1E293B)),
+                      ),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                        title: Text(asset.itemName, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
+                        subtitle: Text('${asset.itemId} • Room ${asset.room} (${asset.building})', style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12)),
+                        trailing: const Icon(Icons.chevron_right, color: Color(0xFF64748B)),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => AssetDetailScreen(asset: asset)),
+                          );
+                        },
+                      ),
+                    );
+                  },
                 );
               },
             ),

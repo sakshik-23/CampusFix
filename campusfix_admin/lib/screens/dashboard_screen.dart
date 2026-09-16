@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import '../models/asset_model.dart';
+import '../models/ticket_model.dart';
+import '../services/firebase_service.dart';
+import '../widgets/status_badge_widget.dart';
 import 'assets_screen.dart';
 import 'tickets_screen.dart';
+import 'ticket_detail_screen.dart';
 import 'qr_scanner_screen.dart';
+import 'add_asset_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -73,93 +79,212 @@ class DashboardHomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text('CampusFix Admin', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.white)),
-                  Text('On-Site Maintenance Control', style: TextStyle(fontSize: 12, color: Color(0xFF94A3B8))),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0x263B82F6),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color(0xFF3B82F6).withOpacity(0.3)),
-                ),
-                child: const Text('ADMIN', style: TextStyle(color: Color(0xFF60A5FA), fontSize: 10, fontWeight: FontWeight.bold)),
-              )
-            ],
-          ),
-          const SizedBox(height: 20),
+      child: StreamBuilder<List<CampusAsset>>(
+        stream: FirebaseService.streamAssets(),
+        builder: (context, assetSnap) {
+          final assets = assetSnap.data ?? [];
 
-          // Stat Cards Grid
-          Row(
-            children: [
-              Expanded(
-                child: _buildMetricCard('Total Assets', '6', const Color(0xFF3B82F6), Icons.devices),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildMetricCard('Open Tickets', '2', const Color(0xFFEF4444), Icons.error_outline),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _buildMetricCard('Closed Tickets', '1', const Color(0xFF10B981), Icons.check_circle_outline),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildMetricCard('Active Assets', '6', const Color(0xFFA855F7), Icons.layers_outlined),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
+          return StreamBuilder<List<CampusTicket>>(
+            stream: FirebaseService.streamTickets(),
+            builder: (context, ticketSnap) {
+              final tickets = ticketSnap.data ?? [];
+              final totalAssets = assets.length;
+              final activeAssets = assets.where((a) => a.status.toUpperCase() == 'ACTIVE').length;
+              final openTickets = tickets.where((t) => t.status.toUpperCase() == 'OPEN').length;
+              final closedTickets = tickets.where((t) => t.status.toUpperCase() == 'CLOSED').length;
+              final recentTickets = tickets.take(4).toList();
 
-          // Quick Scan Banner
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
-              ),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF334155)),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF3B82F6).withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(Icons.qr_code_scanner, color: Color(0xFF3B82F6), size: 28),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text('On-Site Asset Scanner', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
-                      SizedBox(height: 2),
-                      Text('Scan physical asset QR to view details or update GPS location on-site.', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 11)),
+              final isLoading = (assetSnap.connectionState == ConnectionState.waiting && assets.isEmpty) ||
+                  (ticketSnap.connectionState == ConnectionState.waiting && tickets.isEmpty);
+
+              return ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text('CampusFix Admin', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.white)),
+                          Text('On-Site Maintenance Control', style: TextStyle(fontSize: 12, color: Color(0xFF94A3B8))),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0x2610B981),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: const Color(0xFF10B981).withOpacity(0.3)),
+                        ),
+                        child: Row(
+                          children: const [
+                            Icon(Icons.cloud_done, size: 12, color: Color(0xFF34D399)),
+                            SizedBox(width: 4),
+                            Text('FIREBASE LIVE', style: TextStyle(color: Color(0xFF34D399), fontSize: 10, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                ),
-              ],
-            ),
-          ),
-        ],
+                  const SizedBox(height: 20),
+
+                  if (isLoading)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20.0),
+                      child: Center(child: CircularProgressIndicator(color: Color(0xFF3B82F6))),
+                    )
+                  else ...[
+                    // Stat Cards Grid
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildMetricCard('Total Assets', '$totalAssets', const Color(0xFF3B82F6), Icons.devices),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _buildMetricCard('Open Tickets', '$openTickets', const Color(0xFFEF4444), Icons.error_outline),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildMetricCard('Closed Tickets', '$closedTickets', const Color(0xFF10B981), Icons.check_circle_outline),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _buildMetricCard('Active Assets', '$activeAssets', const Color(0xFFA855F7), Icons.layers_outlined),
+                        ),
+                      ],
+                    ),
+                  ],
+
+                  const SizedBox(height: 20),
+
+                  // Quick Actions Grid
+                  Row(
+                    children: [
+                      // Quick Scan Card
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => const QRScannerScreen()),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: const Color(0xFF334155)),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF3B82F6).withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Icon(Icons.qr_code_scanner, color: Color(0xFF3B82F6), size: 22),
+                                ),
+                                const SizedBox(height: 10),
+                                const Text('Scan QR Code', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                                const SizedBox(height: 2),
+                                const Text('Inspect & tag GPS', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 10)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      // Add Asset Card
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => const AddAssetScreen()),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: const Color(0xFF334155)),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF10B981).withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Icon(Icons.add_box_outlined, color: Color(0xFF10B981), size: 22),
+                                ),
+                                const SizedBox(height: 10),
+                                const Text('Register Asset', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                                const SizedBox(height: 2),
+                                const Text('Add on-site & QR', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 10)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 24),
+                  const Text('Recent Incident Reports', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
+                  const SizedBox(height: 10),
+
+                  if (recentTickets.isEmpty && !isLoading)
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF111827),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: const Color(0xFF1E293B)),
+                      ),
+                      child: const Center(
+                        child: Text('No incident tickets yet.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
+                      ),
+                    )
+                  else
+                    ...recentTickets.map((t) => Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF111827),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: const Color(0xFF1E293B)),
+                          ),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+                            title: Text(t.ticketType, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+                            subtitle: Text('${t.ticketId} • ${t.itemId}', style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12)),
+                            trailing: StatusBadgeWidget(status: t.status),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => TicketDetailScreen(ticket: t)),
+                              );
+                            },
+                          ),
+                        )),
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }

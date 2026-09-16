@@ -1,3 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+DateTime? _parseDate(dynamic val) {
+  if (val == null) return null;
+  if (val is Timestamp) return val.toDate();
+  if (val is String) return DateTime.tryParse(val);
+  if (val is DateTime) return val;
+  return null;
+}
+
 class CampusTicket {
   final String ticketId;
   final String itemId;
@@ -33,7 +43,7 @@ class CampusTicket {
 
   factory CampusTicket.fromMap(Map<String, dynamic> map, String id) {
     return CampusTicket(
-      ticketId: id,
+      ticketId: map['ticketId'] ?? id,
       itemId: map['itemId'] ?? '',
       ticketType: map['ticketType'] ?? 'Not Working',
       description: map['description'] ?? '',
@@ -43,15 +53,9 @@ class CampusTicket {
       longitude: (map['longitude'] as num?)?.toDouble() ?? 73.856744,
       itemSnapshot: Map<String, dynamic>.from(map['itemSnapshot'] ?? {}),
       adminNotes: map['adminNotes'] ?? '',
-      createdAt: map['createdAt'] != null
-          ? (map['createdAt'] is String ? DateTime.tryParse(map['createdAt']) : map['createdAt'].toDate())
-          : null,
-      updatedAt: map['updatedAt'] != null
-          ? (map['updatedAt'] is String ? DateTime.tryParse(map['updatedAt']) : map['updatedAt'].toDate())
-          : null,
-      closedAt: map['closedAt'] != null
-          ? (map['closedAt'] is String ? DateTime.tryParse(map['closedAt']) : map['closedAt'].toDate())
-          : null,
+      createdAt: _parseDate(map['createdAt']),
+      updatedAt: _parseDate(map['updatedAt']),
+      closedAt: _parseDate(map['closedAt'] ?? map['resolvedAt']),
       closedBy: map['closedBy'],
     );
   }

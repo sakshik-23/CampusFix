@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../models/asset_model.dart';
+import '../services/firebase_service.dart';
 import 'asset_detail_screen.dart';
 
 class QRScannerScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   final MobileScannerController _cameraController = MobileScannerController();
   bool _hasScanned = false;
 
-  void _onDetect(BarcodeCapture capture) {
+  void _onDetect(BarcodeCapture capture) async {
     if (_hasScanned) return;
     final List<Barcode> barcodes = capture.barcodes;
     for (final barcode in barcodes) {
@@ -24,29 +25,39 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         _cameraController.stop();
 
         // Extract Asset ID from URL or raw text
-        String assetId = 'AST-000001';
+        String assetId = rawValue.trim();
         final match = RegExp(r'AST-\d+').firstMatch(rawValue);
         if (match != null) {
           assetId = match.group(0)!;
         }
 
+        // Fetch live asset from Firestore or create fallback
+        CampusAsset? liveAsset;
+        try {
+          liveAsset = await FirebaseService.getAssetById(assetId);
+        } catch (e) {
+          debugPrint("Error fetching scanned asset: $e");
+        }
+
+        final targetAsset = liveAsset ??
+            CampusAsset(
+              itemId: assetId,
+              itemName: 'Asset ($assetId)',
+              itemType: 'Equipment',
+              description: 'Physical asset scanned via QR.',
+              building: 'Campus Building',
+              floor: '1',
+              room: 'Lab',
+              latitude: 18.520430,
+              longitude: 73.856744,
+              status: 'ACTIVE',
+              qrUrl: rawValue,
+            );
+
+        if (!mounted) return;
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (_) => AssetDetailScreen(
-              asset: CampusAsset(
-                itemId: assetId,
-                itemName: 'Scanned Asset ($assetId)',
-                itemType: 'Equipment',
-                description: 'Physical asset scanned via camera.',
-                building: 'Main Campus',
-                floor: '1',
-                room: 'Lab',
-                latitude: 18.520430,
-                longitude: 73.856744,
-                status: 'ACTIVE',
-                qrUrl: rawValue,
-              ),
-            ),
+            builder: (_) => AssetDetailScreen(asset: targetAsset),
           ),
         );
         break;

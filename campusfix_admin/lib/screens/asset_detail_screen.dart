@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/asset_model.dart';
 import '../services/location_service.dart';
+import '../services/firebase_service.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class AssetDetailScreen extends StatefulWidget {
@@ -33,13 +34,24 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
         _lat = pos.latitude;
         _lng = pos.longitude;
       });
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('GPS Updated: ${_lat.toStringAsFixed(6)}, ${_lng.toStringAsFixed(6)}'),
-          backgroundColor: const Color(0xFF10B981),
-        ),
-      );
+      try {
+        await FirebaseService.updateAssetLocation(widget.asset.itemId, pos.latitude, pos.longitude);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('GPS Synced to Cloud: ${_lat.toStringAsFixed(6)}, ${_lng.toStringAsFixed(6)}'),
+            backgroundColor: const Color(0xFF10B981),
+          ),
+        );
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to sync GPS to cloud: $e'),
+            backgroundColor: const Color(0xFFEF4444),
+          ),
+        );
+      }
     } else {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

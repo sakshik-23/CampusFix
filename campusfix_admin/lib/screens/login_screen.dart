@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/firebase_service.dart';
 import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,14 +14,35 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController(text: 'admin123');
   bool _isLoading = false;
 
-  void _login() {
+  void _login() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter both email and password.')),
+      );
+      return;
+    }
+
     setState(() => _isLoading = true);
-    Future.delayed(const Duration(milliseconds: 600), () {
+    try {
+      await FirebaseService.login(email, password);
+      if (!mounted) return;
       setState(() => _isLoading = false);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const DashboardScreen()),
       );
-    });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Login failed: ${e.toString()}'),
+          backgroundColor: const Color(0xFFEF4444),
+        ),
+      );
+    }
   }
 
   @override
