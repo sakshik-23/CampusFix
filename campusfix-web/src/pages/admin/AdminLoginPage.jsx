@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Shield, Lock, Mail, AlertCircle, Sparkles, ArrowLeft } from "lucide-react";
+import { Shield, Lock, Mail, AlertCircle } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 export const AdminLoginPage = () => {
@@ -25,12 +25,6 @@ export const AdminLoginPage = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const fillDemoAdmin = () => {
-    setEmail("admin@campusfix.edu");
-    setPassword("admin123");
-    setError("");
   };
 
   return (
@@ -147,33 +141,6 @@ export const AdminLoginPage = () => {
             {loading ? "Authenticating..." : "Sign In to Admin Portal"}
           </button>
         </form>
-
-        {/* Demo Helper */}
-        <div
-          style={{
-            marginTop: "1.25rem",
-            padding: "0.75rem",
-            borderRadius: "0.375rem",
-            background: "#08090D",
-            border: "1px solid rgba(255, 255, 255, 0.05)",
-            textAlign: "center"
-          }}
-        >
-          <button
-            type="button"
-            onClick={fillDemoAdmin}
-            className="btn-ghost"
-            style={{
-              color: "#38BDF8",
-              fontSize: "0.75rem",
-              fontWeight: "600",
-              width: "100%",
-              justifyContent: "center"
-            }}
-          >
-            <Sparkles size={13} /> Quick-Fill Demo Admin Credentials
-          </button>
-        </div>
       </div>
     </div>
   );
