@@ -1,12 +1,10 @@
 import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { QrCode, Shield, Search, LogOut, ArrowRight, Activity } from "lucide-react";
+import { QrCode, Shield, Search, LogOut } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { useData } from "../context/DataContext";
 
 export const Navbar = () => {
   const { user, isAdmin, logout } = useAuth();
-  const { stats } = useData();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -68,31 +66,8 @@ export const Navbar = () => {
           </div>
         </Link>
 
-        {/* Center Live Pill Stats */}
+        {/* Center Navigation Actions */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }} className="no-print">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.75rem",
-              background: "#0E1117",
-              padding: "0.3rem 0.75rem",
-              borderRadius: "9999px",
-              border: "1px solid rgba(255, 255, 255, 0.07)",
-              fontSize: "0.75rem",
-              fontFamily: "var(--font-mono)"
-            }}
-          >
-            <span style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#94A3B8" }}>
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: stats.openTickets > 0 ? "#EF4444" : "#10B981" }}></span>
-              Open: <strong style={{ color: stats.openTickets > 0 ? "#F87171" : "#34D399" }}>{stats.openTickets}</strong>
-            </span>
-            <span style={{ color: "rgba(255, 255, 255, 0.1)" }}>•</span>
-            <span style={{ color: "#94A3B8" }}>
-              Assets: <strong style={{ color: "#F1F5F9" }}>{stats.totalAssets}</strong>
-            </span>
-          </div>
-
           <Link
             to="/track"
             style={{
