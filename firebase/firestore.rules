@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users Collection (Admin Profile)
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+
+    // Items (Campus Assets)
+    match /items/{itemId} {
+      // Anyone can read campus assets for public QR scans and campus map
+      allow read: if true;
+      // Creation and updates allowed
+      allow write: if true;
+    }
+
+    // Tickets (Maintenance Issues)
+    match /tickets/{ticketId} {
+      // Public can create and view tickets
+      allow read, create: if true;
+      // Status update / close allowed
+      allow update, delete: if true;
+    }
+
+    // Sequential Counters
+    match /counters/{counterId} {
+      allow read, write: if true;
+    }
+  }
+}
