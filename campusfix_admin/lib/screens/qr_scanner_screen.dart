@@ -14,28 +14,35 @@ class QRScannerScreen extends StatefulWidget {
 }
 
 class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingObserver {
-  late MobileScannerController _cameraController;
+  MobileScannerController? _cameraController;
   bool _hasScanned = false;
   bool _permissionGranted = false;
   bool _checkingPermission = true;
   String _permissionMessage = '';
+  Key _scannerKey = UniqueKey();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _requestCameraPermission();
+  }
+
+  void _initController() {
+    _cameraController?.dispose();
     _cameraController = MobileScannerController(
+      autoStart: true,
       detectionSpeed: DetectionSpeed.noDuplicates,
       facing: CameraFacing.back,
       torchEnabled: false,
     );
-    _requestCameraPermission();
+    _scannerKey = UniqueKey();
   }
 
   Future<void> _requestCameraPermission() async {
     if (kIsWeb) {
-      // On web, browser prompts for camera when MobileScanner initializes
       if (mounted) {
+        _initController();
         setState(() {
           _permissionGranted = true;
           _checkingPermission = false;
@@ -53,6 +60,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
       final status = await Permission.camera.status;
       if (status.isGranted) {
         if (mounted) {
+          _initController();
           setState(() {
             _permissionGranted = true;
             _checkingPermission = false;
@@ -63,6 +71,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
 
       final requested = await Permission.camera.request();
       if (mounted) {
+        if (requested.isGranted) {
+          _initController();
+        }
         setState(() {
           _checkingPermission = false;
           _permissionGranted = requested.isGranted;
@@ -76,9 +87,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
     } catch (e) {
       debugPrint("Camera permission check error: $e");
       if (mounted) {
+        _initController();
         setState(() {
           _checkingPermission = false;
-          // Fall back to attempting camera initialization in case permission_handler is unavailable
           _permissionGranted = true;
         });
       }
@@ -87,15 +98,18 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && !_permissionGranted) {
-      _requestCameraPermission();
+    if (!_permissionGranted || _cameraController == null) return;
+    if (state == AppLifecycleState.resumed) {
+      _cameraController?.start();
+    } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      _cameraController?.stop();
     }
   }
 
   void _handleScannedCode(String rawValue) async {
     if (_hasScanned) return;
     _hasScanned = true;
-    _cameraController.stop();
+    _cameraController?.stop();
 
     // Extract Asset ID from URL or raw text
     String assetId = rawValue.trim();
@@ -202,7 +216,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _cameraController.dispose();
+    _cameraController?.dispose();
     super.dispose();
   }
 
@@ -223,14 +237,14 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
             tooltip: 'Manual Lookup',
             onPressed: _showManualLookupDialog,
           ),
-          if (_permissionGranted) ...[
+          if (_permissionGranted && _cameraController != null) ...[
             IconButton(
               icon: const Icon(Icons.flash_on_rounded, color: Color(0xFF94A3B8), size: 20),
-              onPressed: () => _cameraController.toggleTorch(),
+              onPressed: () => _cameraController?.toggleTorch(),
             ),
             IconButton(
               icon: const Icon(Icons.cameraswitch_rounded, color: Color(0xFF94A3B8), size: 20),
-              onPressed: () => _cameraController.switchCamera(),
+              onPressed: () => _cameraController?.switchCamera(),
             ),
           ],
         ],
@@ -239,7 +253,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
           ? const Center(
               child: CircularProgressIndicator(color: Color(0xFF0284C7), strokeWidth: 2),
             )
-          : !_permissionGranted
+          : !_permissionGranted || _cameraController == null
               ? Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -314,7 +328,8 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                   alignment: Alignment.center,
                   children: [
                     MobileScanner(
-                      controller: _cameraController,
+                      key: _scannerKey,
+                      controller: _cameraController!,
                       onDetect: (capture) {
                         for (final barcode in capture.barcodes) {
                           final String? rawValue = barcode.rawValue;
@@ -348,13 +363,34 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                                     style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
                                   ),
                                   const SizedBox(height: 16),
-                                  ElevatedButton(
-                                    onPressed: _showManualLookupDialog,
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF0284C7),
-                                      foregroundColor: Colors.white,
-                                    ),
-                                    child: const Text('Enter Asset ID Manually'),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _initController();
+                                            });
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                            foregroundColor: const Color(0xFF38BDF8),
+                                            side: const BorderSide(color: Color(0xFF1E2638)),
+                                          ),
+                                          child: const Text('Retry'),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: _showManualLookupDialog,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: const Color(0xFF0284C7),
+                                            foregroundColor: Colors.white,
+                                          ),
+                                          child: const Text('Manual Entry'),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
