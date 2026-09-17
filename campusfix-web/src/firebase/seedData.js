@@ -13,7 +13,7 @@ export const INITIAL_ASSETS = [
     latitude: 18.520430,
     longitude: 73.856744,
     status: "ACTIVE",
-    qrUrl: "https://campusfix.web.app/report/AST-000001",
+    qrUrl: "https://campusfix1.vercel.app/report/AST-000001",
     createdAt: "2026-09-10T09:00:00.000Z",
     updatedAt: "2026-09-15T10:00:00.000Z",
     locationUpdatedAt: "2026-09-15T10:00:00.000Z"
@@ -32,7 +32,7 @@ export const INITIAL_ASSETS = [
     latitude: 18.520480,
     longitude: 73.856790,
     status: "ACTIVE",
-    qrUrl: "https://campusfix.web.app/report/AST-000002",
+    qrUrl: "https://campusfix1.vercel.app/report/AST-000002",
     createdAt: "2026-09-10T09:15:00.000Z",
     updatedAt: "2026-09-10T09:15:00.000Z",
     locationUpdatedAt: "2026-09-10T09:15:00.000Z"
@@ -51,7 +51,7 @@ export const INITIAL_ASSETS = [
     latitude: 18.521150,
     longitude: 73.857320,
     status: "ACTIVE",
-    qrUrl: "https://campusfix.web.app/report/AST-000003",
+    qrUrl: "https://campusfix1.vercel.app/report/AST-000003",
     createdAt: "2026-09-11T11:00:00.000Z",
     updatedAt: "2026-09-11T11:00:00.000Z",
     locationUpdatedAt: "2026-09-11T11:00:00.000Z"
@@ -70,7 +70,7 @@ export const INITIAL_ASSETS = [
     latitude: 18.521180,
     longitude: 73.857360,
     status: "ACTIVE",
-    qrUrl: "https://campusfix.web.app/report/AST-000004",
+    qrUrl: "https://campusfix1.vercel.app/report/AST-000004",
     createdAt: "2026-09-12T14:30:00.000Z",
     updatedAt: "2026-09-12T14:30:00.000Z",
     locationUpdatedAt: "2026-09-12T14:30:00.000Z"
@@ -89,7 +89,7 @@ export const INITIAL_ASSETS = [
     latitude: 18.519920,
     longitude: 73.856100,
     status: "ACTIVE",
-    qrUrl: "https://campusfix.web.app/report/AST-000005",
+    qrUrl: "https://campusfix1.vercel.app/report/AST-000005",
     createdAt: "2026-09-12T16:00:00.000Z",
     updatedAt: "2026-09-12T16:00:00.000Z",
     locationUpdatedAt: "2026-09-12T16:00:00.000Z"
@@ -108,7 +108,7 @@ export const INITIAL_ASSETS = [
     latitude: 18.521010,
     longitude: 73.857150,
     status: "ACTIVE",
-    qrUrl: "https://campusfix.web.app/report/AST-000006",
+    qrUrl: "https://campusfix1.vercel.app/report/AST-000006",
     createdAt: "2026-09-13T10:00:00.000Z",
     updatedAt: "2026-09-13T10:00:00.000Z",
     locationUpdatedAt: "2026-09-13T10:00:00.000Z"

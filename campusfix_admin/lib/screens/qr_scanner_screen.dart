@@ -124,7 +124,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
           latitude: 18.520430,
           longitude: 73.856744,
           status: 'ACTIVE',
-          qrUrl: rawValue,
+          qrUrl: rawValue.startsWith('http') ? rawValue : 'https://campusfix1.vercel.app/report/$assetId',
         );
 
     if (!mounted) return;

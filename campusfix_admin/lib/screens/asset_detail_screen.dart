@@ -264,18 +264,18 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: QrImageView(
-                    data: widget.asset.qrUrl.isNotEmpty
+                    data: (widget.asset.qrUrl.isNotEmpty && widget.asset.qrUrl.contains('campusfix1.vercel.app'))
                         ? widget.asset.qrUrl
-                        : 'https://campusfix-360dd.web.app/report/${widget.asset.itemId}',
+                        : 'https://campusfix1.vercel.app/report/${widget.asset.itemId}',
                     version: QrVersions.auto,
                     size: 160.0,
                   ),
                 ),
                 const SizedBox(height: 14),
                 Text(
-                  widget.asset.qrUrl.isNotEmpty
+                  (widget.asset.qrUrl.isNotEmpty && widget.asset.qrUrl.contains('campusfix1.vercel.app'))
                       ? widget.asset.qrUrl
-                      : 'https://campusfix-360dd.web.app/report/${widget.asset.itemId}',
+                      : 'https://campusfix1.vercel.app/report/${widget.asset.itemId}',
                   textAlign: TextAlign.center,
                   style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 11, fontFamily: 'monospace'),
                 ),

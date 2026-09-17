@@ -62,7 +62,9 @@ class CampusAsset {
       latitude: (map['latitude'] as num?)?.toDouble() ?? 18.520430,
       longitude: (map['longitude'] as num?)?.toDouble() ?? 73.856744,
       status: map['status'] ?? 'ACTIVE',
-      qrUrl: map['qrUrl'] ?? '',
+      qrUrl: (map['qrUrl'] != null && map['qrUrl'].toString().isNotEmpty && !map['qrUrl'].toString().contains('web.app'))
+          ? map['qrUrl'].toString()
+          : 'https://campusfix1.vercel.app/report/${map['itemId'] ?? id}',
       createdAt: _parseDate(map['createdAt']),
       updatedAt: _parseDate(map['updatedAt']),
       locationUpdatedAt: _parseDate(map['locationUpdatedAt']),

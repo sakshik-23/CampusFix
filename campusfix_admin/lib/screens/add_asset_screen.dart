@@ -83,7 +83,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
     setState(() => _isSaving = true);
 
     final assetId = _idController.text.trim();
-    final qrUrl = 'https://campusfix-360dd.web.app/report/$assetId';
+    final qrUrl = 'https://campusfix1.vercel.app/report/$assetId';
 
     final newAsset = CampusAsset(
       itemId: assetId,
