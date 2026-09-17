@@ -28,12 +28,12 @@ if (isFirebaseConfigured) {
     app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     auth = getAuth(app);
     db = getFirestore(app);
-    console.log("🔥 Firebase initialized in Live Mode.");
+    console.log("[Firebase] Initialized in Live Mode.");
   } catch (error) {
-    console.warn("⚠️ Error initializing Firebase. Falling back to persistent simulated store:", error);
+    console.warn("[Firebase] Error initializing Firebase. Falling back to persistent store:", error);
   }
 } else {
-  console.info("💡 CampusFix running in Zero-Cost Local/Demo Mode. Add your Firebase keys in .env for live cloud sync.");
+  console.info("[CampusFix] Running in Local Mode.");
 }
 
 export { app, auth, db };

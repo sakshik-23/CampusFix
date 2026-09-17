@@ -7,8 +7,8 @@ export const Footer = () => {
     <footer
       className="no-print"
       style={{
-        borderTop: "1px solid #1E293B",
-        backgroundColor: "#0B0F19",
+        borderTop: "1px solid rgba(255, 255, 255, 0.06)",
+        backgroundColor: "#080A0F",
         padding: "2.5rem 1.25rem 1.5rem 1.25rem",
         color: "#94A3B8"
       }}
@@ -37,7 +37,7 @@ export const Footer = () => {
                   width: "28px",
                   height: "28px",
                   borderRadius: "0.375rem",
-                  background: "#3B82F6",
+                  background: "#0284C7",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center"
@@ -50,7 +50,7 @@ export const Footer = () => {
               </span>
             </div>
             <p style={{ fontSize: "0.85rem", lineHeight: 1.6, color: "#64748B" }}>
-              QR-Based Campus Asset & Issue Management System. Built as a ₹0-cost modern MCA college project prototype.
+              QR-Based Campus Asset & Issue Management System. Fast, transparent maintenance workflows for college facilities and equipment.
             </p>
           </div>
 
@@ -72,10 +72,10 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Col 3: Architecture Highlights */}
+          {/* Col 3: Technology Highlights */}
           <div>
             <h4 style={{ fontSize: "0.875rem", fontWeight: "700", color: "#F8FAFC", marginBottom: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-              Technology
+              Technology Stack
             </h4>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.375rem" }}>
               {["React 19 + Vite", "Firebase Firestore", "OpenStreetMap", "Leaflet", "Flutter (Mobile)", "QR Code"].map((tech) => (
@@ -85,7 +85,7 @@ export const Footer = () => {
                     fontSize: "0.7rem",
                     padding: "0.2rem 0.5rem",
                     borderRadius: "0.25rem",
-                    background: "#1E293B",
+                    background: "#131722",
                     color: "#94A3B8",
                     fontFamily: "var(--font-mono)"
                   }}
@@ -99,7 +99,7 @@ export const Footer = () => {
 
         <div
           style={{
-            borderTop: "1px solid #1E293B",
+            borderTop: "1px solid rgba(255, 255, 255, 0.06)",
             paddingTop: "1.25rem",
             display: "flex",
             alignItems: "center",
@@ -114,7 +114,7 @@ export const Footer = () => {
             © {new Date().getFullYear()} CampusFix — College Maintenance Management System.
           </div>
           <div>
-            Zero-Cost High Performance System Architecture
+            Smart Campus Facility Operations
           </div>
         </div>
       </div>

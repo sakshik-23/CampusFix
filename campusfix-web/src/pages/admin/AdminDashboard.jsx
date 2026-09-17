@@ -25,7 +25,7 @@ export const AdminDashboard = () => {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
         <div>
           <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#38BDF8", fontWeight: "600", letterSpacing: "0.06em" }}>
-            OPERATIONAL TELEMETRY
+            ADMIN OVERVIEW
           </div>
           <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#FFFFFF", letterSpacing: "-0.025em", marginTop: "0.15rem" }}>
             Campus Maintenance Overview
@@ -37,7 +37,7 @@ export const AdminDashboard = () => {
             <PlusCircle size={14} /> Register Asset
           </Link>
           <Link to="/admin/print-qr" className="btn-secondary" style={{ fontSize: "0.8rem", padding: "0.45rem 0.85rem" }}>
-            <Printer size={14} /> QR Studio
+            <Printer size={14} /> Print QR Labels
           </Link>
         </div>
       </div>
@@ -141,8 +141,8 @@ export const AdminDashboard = () => {
             <h3 style={{ fontSize: "0.95rem", fontWeight: "700", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "0.4rem" }}>
               <Ticket size={15} color="#F87171" /> Recent Reported Tickets
             </h3>
-            <Link to="/admin/tickets" style={{ fontSize: "0.75rem", color: "#38BDF8", textDecoration: "none", fontWeight: "600" }}>
-              View All ({tickets.length}) →
+            <Link to="/admin/tickets" style={{ fontSize: "0.75rem", color: "#38BDF8", textDecoration: "none", fontWeight: "600", display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+              View All ({tickets.length}) <ArrowRight size={12} />
             </Link>
           </div>
 

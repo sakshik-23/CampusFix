@@ -11,9 +11,9 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    debugPrint("🔥 Firebase initialized in Flutter Admin App");
+    debugPrint("[Firebase] Initialized in Flutter Admin App");
   } catch (e) {
-    debugPrint("⚠️ Firebase initialization error: $e");
+    debugPrint("[Firebase] Initialization error: $e");
   }
 
   if (!kIsWeb) {
@@ -37,16 +37,15 @@ class CampusFixAdminApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF0B0F19),
-        primaryColor: const Color(0xFF3B82F6),
+        scaffoldBackgroundColor: const Color(0xFF07090E),
+        primaryColor: const Color(0xFF0284C7),
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF3B82F6),
+          primary: Color(0xFF0284C7),
           secondary: Color(0xFF10B981),
-          surface: Color(0xFF111827),
-          background: Color(0xFF0B0F19),
+          surface: Color(0xFF0D111A),
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF111827),
+          backgroundColor: Color(0xFF0D111A),
           elevation: 0,
           centerTitle: false,
         ),

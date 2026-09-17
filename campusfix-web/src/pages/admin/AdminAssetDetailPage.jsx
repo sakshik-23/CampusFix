@@ -136,9 +136,9 @@ export const AdminAssetDetailPage = () => {
       {/* Grid: Specifications & Geo-Location */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "1.5rem" }}>
         {/* Specifications Card (PRD FR-17) */}
-        <div className="glass-card" style={{ padding: "1.5rem", borderRadius: "0.75rem" }}>
+        <div className="card-premium" style={{ padding: "1.5rem" }}>
           <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#F8FAFC", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <Box size={18} color="#3B82F6" /> Asset Specifications
+            <Box size={18} color="#0284C7" /> Asset Specifications
           </h3>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", fontSize: "0.875rem" }}>
@@ -185,17 +185,17 @@ export const AdminAssetDetailPage = () => {
             </div>
           </div>
 
-          <div style={{ borderTop: "1px solid #1E293B", marginTop: "1.25rem", paddingTop: "0.875rem", display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "#64748B" }}>
+          <div style={{ borderTop: "1px solid rgba(255, 255, 255, 0.08)", marginTop: "1.25rem", paddingTop: "0.875rem", display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "#64748B" }}>
             <span>Registered: {new Date(asset.createdAt).toLocaleDateString()}</span>
             <span>Last Updated: {new Date(asset.updatedAt).toLocaleDateString()}</span>
           </div>
         </div>
 
         {/* Geo-Location Map Card (PRD FR-20, FR-37) */}
-        <div className="glass-card" style={{ padding: "1.5rem", borderRadius: "0.75rem", display: "flex", flexDirection: "column" }}>
+        <div className="card-premium" style={{ padding: "1.5rem", display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
             <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#F8FAFC", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <MapPin size={18} color="#3B82F6" /> Map Coordinates
+              <MapPin size={18} color="#0284C7" /> Map Coordinates
             </h3>
             <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "#94A3B8" }}>
               {asset.latitude?.toFixed(6)}, {asset.longitude?.toFixed(6)}
@@ -214,18 +214,18 @@ export const AdminAssetDetailPage = () => {
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.75rem", fontSize: "0.75rem", color: "#64748B" }}>
             <span>GPS Updated: {asset.locationUpdatedAt ? new Date(asset.locationUpdatedAt).toLocaleDateString() : "Default"}</span>
-            <Link to={`/report/${asset.itemId}`} target="_blank" style={{ color: "#3B82F6", textDecoration: "none", display: "flex", alignItems: "center", gap: "0.25rem" }}>
-              Test QR Link <ExternalLink size={12} />
+            <Link to={`/report/${asset.itemId}`} target="_blank" style={{ color: "#38BDF8", textDecoration: "none", display: "flex", alignItems: "center", gap: "0.25rem" }}>
+              Open QR Link <ExternalLink size={12} />
             </Link>
           </div>
         </div>
       </div>
 
       {/* Asset Maintenance History (PRD FR-40, FR-41) */}
-      <div className="glass-card" style={{ padding: "1.5rem", borderRadius: "0.75rem" }}>
+      <div className="card-premium" style={{ padding: "1.5rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
           <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#F8FAFC", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <Ticket size={18} color="#EF4444" /> Maintenance & Issue History ({tickets.length})
+            <Ticket size={18} color="#EF4444" /> Maintenance History ({tickets.length})
           </h3>
         </div>
 
@@ -235,10 +235,10 @@ export const AdminAssetDetailPage = () => {
               <div
                 key={t.ticketId}
                 style={{
-                  background: "#0B0F19",
+                  background: "#090A0F",
                   padding: "1rem",
                   borderRadius: "0.5rem",
-                  border: "1px solid #1E293B",
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
@@ -248,7 +248,7 @@ export const AdminAssetDetailPage = () => {
               >
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <span style={{ fontFamily: "var(--font-mono)", fontWeight: "700", color: "#60A5FA", fontSize: "0.9rem" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontWeight: "700", color: "#38BDF8", fontSize: "0.9rem" }}>
                       {t.ticketId}
                     </span>
                     <StatusBadge status={t.status} size="sm" />
@@ -270,14 +270,14 @@ export const AdminAssetDetailPage = () => {
                   className="btn-secondary"
                   style={{ fontSize: "0.75rem", padding: "0.35rem 0.65rem" }}
                 >
-                  View Details →
+                  View Details
                 </Link>
               </div>
             ))}
           </div>
         ) : (
           <div style={{ textAlign: "center", padding: "2rem", color: "#64748B" }}>
-            No maintenance issues reported for this asset yet. 🟢 Clear Record.
+            No maintenance issues recorded for this asset.
           </div>
         )}
       </div>

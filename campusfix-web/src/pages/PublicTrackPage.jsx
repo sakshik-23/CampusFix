@@ -45,10 +45,10 @@ export const PublicTrackPage = () => {
       <div className="card-premium" style={{ padding: "1.75rem", marginBottom: "1.5rem" }}>
         <div style={{ marginBottom: "1.25rem" }}>
           <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#38BDF8", fontWeight: "600", letterSpacing: "0.06em" }}>
-            SEARCH & TELEMETRY
+            TICKET LOOKUP
           </div>
           <h1 style={{ fontSize: "1.4rem", fontWeight: "800", color: "#FFFFFF", marginTop: "0.2rem" }}>
-            Track Raised Maintenance Ticket
+            Track Maintenance Ticket
           </h1>
           <p style={{ color: "#94A3B8", fontSize: "0.825rem", marginTop: "0.25rem" }}>
             Enter your Ticket ID (e.g. <span style={{ fontFamily: "var(--font-mono)", color: "#CBD5E1" }}>TKT-2026-000001</span>) or 10-digit registered phone number.

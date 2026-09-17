@@ -39,16 +39,18 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('GPS Synced to Cloud: ${_lat.toStringAsFixed(6)}, ${_lng.toStringAsFixed(6)}'),
+            content: Text('GPS updated to ${_lat.toStringAsFixed(6)}, ${_lng.toStringAsFixed(6)}'),
             backgroundColor: const Color(0xFF10B981),
+            behavior: SnackBarBehavior.floating,
           ),
         );
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to sync GPS to cloud: $e'),
+            content: Text('Failed to update GPS: $e'),
             backgroundColor: const Color(0xFFEF4444),
+            behavior: SnackBarBehavior.floating,
           ),
         );
       }
@@ -56,8 +58,9 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Could not fetch GPS. Please check location permissions.'),
+          content: Text('Could not acquire GPS fix. Please verify location permissions.'),
           backgroundColor: Color(0xFFEF4444),
+          behavior: SnackBarBehavior.floating,
         ),
       );
     }
@@ -66,22 +69,25 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0B0F19),
+      backgroundColor: const Color(0xFF07090E),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF111827),
+        backgroundColor: const Color(0xFF0D111A),
         elevation: 0,
-        title: Text(widget.asset.itemId, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, fontFamily: 'monospace')),
+        title: Text(
+          widget.asset.itemId,
+          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, fontFamily: 'monospace', color: Color(0xFFF8FAFC)),
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           // Header Card
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: const Color(0xFF111827),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF1E293B)),
+              color: const Color(0xFF0D111A),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: const Color(0xFF1E2638)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,87 +95,207 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(widget.asset.itemName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(color: const Color(0x2610B981), borderRadius: BorderRadius.circular(20)),
-                      child: Text(widget.asset.status, style: const TextStyle(color: Color(0xFF10B981), fontSize: 11, fontWeight: FontWeight.bold)),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0284C7).withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        widget.asset.itemType,
+                        style: const TextStyle(color: Color(0xFF38BDF8), fontWeight: FontWeight.w700, fontSize: 11),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF10B981).withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.3)),
+                      ),
+                      child: Text(
+                        widget.asset.status.toUpperCase(),
+                        style: const TextStyle(color: Color(0xFF34D399), fontWeight: FontWeight.w700, fontSize: 10, letterSpacing: 0.5),
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
-                Text('${widget.asset.room} • ${widget.asset.building}', style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13)),
                 const SizedBox(height: 12),
-                Text(widget.asset.description, style: const TextStyle(color: Color(0xFFCBD5E1), fontSize: 13, height: 1.4)),
+                Text(
+                  widget.asset.itemName,
+                  style: const TextStyle(color: Color(0xFFF8FAFC), fontWeight: FontWeight.w800, fontSize: 18, letterSpacing: -0.3),
+                ),
+                if (widget.asset.description.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    widget.asset.description,
+                    style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13, height: 1.4),
+                  ),
+                ],
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
 
-          // GPS Location Card
+          // Location & Hardware Details Card
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF111827),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF1E293B)),
+              color: const Color(0xFF0D111A),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: const Color(0xFF1E2638)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('PHYSICAL LOCATION (GPS)', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF64748B))),
-                const SizedBox(height: 8),
-                Text('Latitude: $_lat', style: const TextStyle(color: Colors.white, fontFamily: 'monospace', fontSize: 13)),
-                const SizedBox(height: 2),
-                Text('Longitude: $_lng', style: const TextStyle(color: Colors.white, fontFamily: 'monospace', fontSize: 13)),
-                const SizedBox(height: 14),
+                const Text('SPECIFICATIONS & PLACEMENT', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                const SizedBox(height: 10),
+                _buildInfoRow('Building', widget.asset.building),
+                _buildInfoRow('Floor', widget.asset.floor),
+                _buildInfoRow('Room / Lab', widget.asset.room),
+                if (widget.asset.manufacturer.isNotEmpty) _buildInfoRow('Manufacturer', widget.asset.manufacturer),
+                if (widget.asset.model.isNotEmpty) _buildInfoRow('Model', widget.asset.model),
+                if (widget.asset.serialNumber.isNotEmpty) _buildInfoRow('Serial Number', widget.asset.serialNumber),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: 42,
-                  child: ElevatedButton.icon(
-                    onPressed: _updatingGps ? null : _updateGps,
-                    icon: _updatingGps
-                        ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                        : const Icon(Icons.my_location, size: 16, color: Colors.white),
-                    label: const Text('Tag Current GPS Location', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF3B82F6),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          // GPS Pinning Card
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF0D111A),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: const Color(0xFF1E2638)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('GEOLOCATION PIN', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                    ElevatedButton.icon(
+                      onPressed: _updatingGps ? null : _updateGps,
+                      icon: _updatingGps
+                          ? const SizedBox(width: 12, height: 12, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                          : const Icon(Icons.my_location_rounded, size: 14),
+                      label: const Text('Update GPS', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF0284C7),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                      ),
                     ),
-                  ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF07090E),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: const Color(0xFF161D2B)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('LATITUDE', style: TextStyle(color: Color(0xFF64748B), fontSize: 9, fontWeight: FontWeight.w700)),
+                            const SizedBox(height: 2),
+                            Text(
+                              _lat.toStringAsFixed(6),
+                              style: const TextStyle(color: Color(0xFF38BDF8), fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF07090E),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: const Color(0xFF161D2B)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('LONGITUDE', style: TextStyle(color: Color(0xFF64748B), fontSize: 9, fontWeight: FontWeight.w700)),
+                            const SizedBox(height: 2),
+                            Text(
+                              _lng.toStringAsFixed(6),
+                              style: const TextStyle(color: Color(0xFF38BDF8), fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
 
           // QR Code Card
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFF111827),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF1E293B)),
+              color: const Color(0xFF0D111A),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: const Color(0xFF1E2638)),
             ),
             child: Column(
               children: [
-                const Text('ATTACHED QR CODE', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF64748B))),
-                const SizedBox(height: 12),
+                const Text('PUBLIC ISSUE REPORTING QR', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                const SizedBox(height: 16),
                 Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   child: QrImageView(
-                    data: widget.asset.qrUrl,
+                    data: widget.asset.qrUrl.isNotEmpty
+                        ? widget.asset.qrUrl
+                        : 'https://campusfix-360dd.web.app/report/${widget.asset.itemId}',
                     version: QrVersions.auto,
                     size: 160.0,
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(widget.asset.itemId, style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.bold, color: Colors.white)),
+                const SizedBox(height: 14),
+                Text(
+                  widget.asset.qrUrl.isNotEmpty
+                      ? widget.asset.qrUrl
+                      : 'https://campusfix-360dd.web.app/report/${widget.asset.itemId}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 11, fontFamily: 'monospace'),
+                ),
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    if (value.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(color: Color(0xFF64748B), fontSize: 12.5)),
+          Text(value, style: const TextStyle(color: Color(0xFFF8FAFC), fontWeight: FontWeight.w600, fontSize: 12.5)),
         ],
       ),
     );

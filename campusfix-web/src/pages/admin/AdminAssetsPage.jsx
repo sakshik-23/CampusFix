@@ -47,10 +47,10 @@ export const AdminAssetsPage = () => {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
         <div>
           <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#38BDF8", fontWeight: "600", letterSpacing: "0.06em" }}>
-            HARDWARE ASSET REGISTRY
+            ASSET INVENTORY
           </div>
           <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#FFFFFF", letterSpacing: "-0.025em", marginTop: "0.15rem" }}>
-            Campus Assets Inventory
+            Campus Equipment Inventory
           </h1>
         </div>
 

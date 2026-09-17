@@ -120,8 +120,8 @@ export const AdminTicketDetailPage = () => {
             <CheckCircle size={18} /> Resolve & Close Ticket
           </button>
         ) : (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(16, 185, 129, 0.15)", border: "1px solid rgba(16, 185, 129, 0.3)", padding: "0.5rem 1rem", borderRadius: "0.5rem", color: "#10B981", fontSize: "0.85rem", fontWeight: "700" }}>
-            <CheckCircle size={16} /> Ticket Resolved (🟢 CLOSED)
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(16, 185, 129, 0.12)", border: "1px solid rgba(16, 185, 129, 0.3)", padding: "0.5rem 1rem", borderRadius: "0.5rem", color: "#34D399", fontSize: "0.85rem", fontWeight: "700" }}>
+            <CheckCircle size={16} /> Ticket Resolved (Closed)
           </div>
         )}
       </div>
@@ -129,7 +129,7 @@ export const AdminTicketDetailPage = () => {
       {/* Grid: Issue Details & Reporter Information */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "1.5rem" }}>
         {/* Issue Details Card (PRD FR-35) */}
-        <div className="glass-card" style={{ padding: "1.5rem", borderRadius: "0.75rem" }}>
+        <div className="card-premium" style={{ padding: "1.5rem" }}>
           <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#F8FAFC", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <Ticket size={18} color="#EF4444" /> Issue Information
           </h3>
@@ -149,17 +149,17 @@ export const AdminTicketDetailPage = () => {
                   <a
                     href={`tel:${ticket.phoneNumber}`}
                     style={{
-                      color: "#60A5FA",
+                      color: "#38BDF8",
                       textDecoration: "none",
                       fontWeight: "700",
                       fontFamily: "var(--font-mono)",
                       display: "inline-flex",
                       alignItems: "center",
                       gap: "0.375rem",
-                      background: "#0B0F19",
+                      background: "#090A0F",
                       padding: "0.25rem 0.5rem",
                       borderRadius: "0.375rem",
-                      border: "1px solid #1E293B"
+                      border: "1px solid rgba(255, 255, 255, 0.08)"
                     }}
                   >
                     <Phone size={14} /> {ticket.phoneNumber}
@@ -170,15 +170,15 @@ export const AdminTicketDetailPage = () => {
 
             <div>
               <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Problem Description</span>
-              <div style={{ background: "#0B0F19", padding: "1rem", borderRadius: "0.5rem", marginTop: "0.25rem", border: "1px solid #1E293B", color: "#F8FAFC", lineHeight: 1.6 }}>
+              <div style={{ background: "#090A0F", padding: "1rem", borderRadius: "0.5rem", marginTop: "0.25rem", border: "1px solid rgba(255, 255, 255, 0.08)", color: "#F8FAFC", lineHeight: 1.6 }}>
                 "{ticket.description}"
               </div>
             </div>
 
             {/* Resolution Section if Closed */}
             {isClosed && (
-              <div style={{ background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.3)", borderRadius: "0.5rem", padding: "1rem", marginTop: "0.5rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", color: "#10B981", fontSize: "0.85rem", fontWeight: "700" }}>
+              <div style={{ background: "rgba(16, 185, 129, 0.08)", border: "1px solid rgba(16, 185, 129, 0.25)", borderRadius: "0.5rem", padding: "1rem", marginTop: "0.5rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", color: "#34D399", fontSize: "0.85rem", fontWeight: "700" }}>
                   <Wrench size={15} /> Resolution Summary
                 </div>
                 <p style={{ color: "#D1FAE5", marginTop: "0.35rem", fontSize: "0.9rem", margin: "0.35rem 0 0 0" }}>
@@ -194,16 +194,16 @@ export const AdminTicketDetailPage = () => {
         </div>
 
         {/* Associated Asset Card */}
-        <div className="glass-card" style={{ padding: "1.5rem", borderRadius: "0.75rem", display: "flex", flexDirection: "column" }}>
+        <div className="card-premium" style={{ padding: "1.5rem", display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
             <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#F8FAFC", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <Box size={18} color="#3B82F6" /> Reported Asset Details
+              <Box size={18} color="#38BDF8" /> Reported Asset Details
             </h3>
             <Link
               to={`/admin/assets/${ticket.itemId}`}
-              style={{ fontSize: "0.75rem", color: "#3B82F6", textDecoration: "none", fontWeight: "600" }}
+              style={{ fontSize: "0.75rem", color: "#38BDF8", textDecoration: "none", fontWeight: "600" }}
             >
-              Full Asset File →
+              View Asset Details
             </Link>
           </div>
 
@@ -214,7 +214,7 @@ export const AdminTicketDetailPage = () => {
             </div>
             <div>
               <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Asset ID</span>
-              <div style={{ color: "#60A5FA", fontFamily: "var(--font-mono)", fontWeight: "700" }}>{ticket.itemId}</div>
+              <div style={{ color: "#38BDF8", fontFamily: "var(--font-mono)", fontWeight: "700" }}>{ticket.itemId}</div>
             </div>
             <div>
               <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Type</span>
@@ -252,8 +252,8 @@ export const AdminTicketDetailPage = () => {
           style={{
             position: "fixed",
             inset: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.75)",
-            backdropFilter: "blur(6px)",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            backdropFilter: "blur(8px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -263,24 +263,23 @@ export const AdminTicketDetailPage = () => {
           onClick={() => setShowCloseModal(false)}
         >
           <div
-            className="glass-card"
+            className="card-premium"
             style={{
               width: "100%",
               maxWidth: "500px",
               padding: "1.75rem",
-              borderRadius: "1rem",
               border: "1px solid rgba(16, 185, 129, 0.4)"
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#10B981", fontSize: "0.85rem", fontWeight: "700", textTransform: "uppercase", marginBottom: "0.5rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#34D399", fontSize: "0.85rem", fontWeight: "700", textTransform: "uppercase", marginBottom: "0.5rem" }}>
               <CheckCircle size={18} /> Confirm Issue Resolution
             </div>
             <h3 style={{ fontSize: "1.35rem", fontWeight: "800", color: "#F8FAFC" }}>
               Close Ticket {ticket.ticketId}?
             </h3>
             <p style={{ color: "#94A3B8", fontSize: "0.85rem", margin: "0.35rem 0 1.25rem 0" }}>
-              Are you sure you want to close this ticket? Status will change to 🟢 CLOSED and the reporter can see resolution status.
+              Are you sure you want to close this ticket? Status will change to Closed and the reporter will be notified.
             </p>
 
             <form onSubmit={handleCloseTicket}>
@@ -290,11 +289,11 @@ export const AdminTicketDetailPage = () => {
                 </label>
                 <textarea
                   rows={3}
-                  placeholder="e.g. Cleaned air filter, tightened power connections, and tested unit for 30 minutes. Working normally."
+                  placeholder="e.g. Replaced faulty lamp module, tested unit for 30 minutes, working normally."
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
-                  className="glass-input"
-                  style={{ width: "100%", padding: "0.625rem", borderRadius: "0.5rem", fontSize: "0.9rem" }}
+                  className="input-refined"
+                  style={{ width: "100%", resize: "vertical" }}
                   required
                 />
               </div>
@@ -306,7 +305,7 @@ export const AdminTicketDetailPage = () => {
                   className="btn-success"
                   style={{ flex: 1, padding: "0.75rem" }}
                 >
-                  {submitting ? "Resolving Ticket..." : "Close Ticket 🟢"}
+                  {submitting ? "Resolving Ticket..." : "Confirm & Resolve"}
                 </button>
                 <button
                   type="button"

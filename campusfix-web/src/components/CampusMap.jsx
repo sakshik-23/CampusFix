@@ -108,7 +108,7 @@ export const CampusMap = ({
                       color: open ? "#F87171" : "#34D399",
                       border: `1px solid ${open ? "rgba(239, 68, 68, 0.3)" : "rgba(16, 185, 129, 0.3)"}`
                     }}>
-                      {open ? "ISSUE REPORTED" : "NOMINAL"}
+                      {open ? "ISSUE REPORTED" : "OPERATIONAL"}
                     </span>
                   </div>
                   <h4 style={{ fontSize: "0.95rem", fontWeight: "700", color: "#F8FAFC", margin: "0.125rem 0" }}>
@@ -123,7 +123,7 @@ export const CampusMap = ({
                       to={`/admin/assets/${asset.itemId}`}
                       style={{ fontSize: "0.75rem", color: "#38BDF8", textDecoration: "none", fontWeight: "600" }}
                     >
-                      Admin View →
+                      Asset Details
                     </Link>
                     <Link
                       to={`/report/${asset.itemId}`}

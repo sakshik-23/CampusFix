@@ -61,7 +61,7 @@ export const AdminTicketsPage = () => {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
         <div>
           <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#38BDF8", fontWeight: "600", letterSpacing: "0.06em" }}>
-            TICKETING QUEUE
+            MAINTENANCE QUEUE
           </div>
           <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#FFFFFF", letterSpacing: "-0.025em", marginTop: "0.15rem" }}>
             Maintenance Issues & Tickets
@@ -105,7 +105,7 @@ export const AdminTicketsPage = () => {
               gap: "0.35rem"
             }}
           >
-            <span>Open Defect</span>
+            <span>Open Issues</span>
             <span style={{ background: "rgba(0,0,0,0.4)", padding: "0.05rem 0.35rem", borderRadius: "9999px", fontSize: "0.7rem", fontFamily: "var(--font-mono)" }}>
               {openCount}
             </span>

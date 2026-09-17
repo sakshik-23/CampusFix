@@ -25,7 +25,6 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
   final _serialController = TextEditingController();
 
   String _selectedCategory = 'Projector';
-  String _selectedStatus = 'ACTIVE';
   double _latitude = 18.520430;
   double _longitude = 73.856744;
 
@@ -99,7 +98,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
       serialNumber: _serialController.text.trim(),
       latitude: _latitude,
       longitude: _longitude,
-      status: _selectedStatus,
+      status: 'ACTIVE',
       qrUrl: qrUrl,
     );
 
@@ -110,8 +109,9 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Asset $assetId registered successfully! 🎉'),
+          content: Text('Asset $assetId registered successfully'),
           backgroundColor: const Color(0xFF10B981),
+          behavior: SnackBarBehavior.floating,
         ),
       );
 
@@ -125,6 +125,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
         SnackBar(
           content: Text('Failed to save asset: $e'),
           backgroundColor: const Color(0xFFEF4444),
+          behavior: SnackBarBehavior.floating,
         ),
       );
     }
@@ -133,11 +134,14 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0B0F19),
+      backgroundColor: const Color(0xFF07090E),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF111827),
+        backgroundColor: const Color(0xFF0D111A),
         elevation: 0,
-        title: const Text('Register New Asset', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: const Text(
+          'Register New Asset',
+          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17, color: Color(0xFFF8FAFC), letterSpacing: -0.3),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -155,28 +159,26 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Asset ID', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 12, fontWeight: FontWeight.bold)),
+                          const Text('ASSET ID', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                           const SizedBox(height: 6),
                           TextFormField(
                             controller: _idController,
-                            style: const TextStyle(color: Color(0xFF60A5FA), fontFamily: 'monospace', fontWeight: FontWeight.bold),
+                            style: const TextStyle(color: Color(0xFF38BDF8), fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13.5),
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: const Color(0xFF111827),
+                              fillColor: const Color(0xFF0D111A),
                               suffixIcon: _isLoadingId
                                   ? const SizedBox(
                                       width: 14,
                                       height: 14,
                                       child: Center(
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: Color(0xFF38BDF8),
-                                        ),
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF0284C7)),
                                       ),
                                     )
                                   : null,
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E293B))),
-                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E293B))),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E2638))),
+                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E2638))),
+                              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF0284C7))),
                               contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                             ),
                             validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
@@ -190,21 +192,21 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Category', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 12, fontWeight: FontWeight.bold)),
+                          const Text('CATEGORY', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                           const SizedBox(height: 6),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF111827),
+                              color: const Color(0xFF0D111A),
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: const Color(0xFF1E293B)),
+                              border: Border.all(color: const Color(0xFF1E2638)),
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: _selectedCategory,
-                                dropdownColor: const Color(0xFF111827),
+                                dropdownColor: const Color(0xFF0D111A),
                                 isExpanded: true,
-                                style: const TextStyle(color: Colors.white, fontSize: 14),
+                                style: const TextStyle(color: Color(0xFFF8FAFC), fontSize: 13.5, fontWeight: FontWeight.w600),
                                 items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                                 onChanged: (val) {
                                   if (val != null) setState(() => _selectedCategory = val);
@@ -220,63 +222,67 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                 const SizedBox(height: 16),
 
                 // Asset Name
-                const Text('Asset Name *', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 12, fontWeight: FontWeight.bold)),
+                const Text('ASSET NAME *', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                 const SizedBox(height: 6),
                 TextFormField(
                   controller: _nameController,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
                   decoration: InputDecoration(
                     hintText: 'e.g. Epson Ceiling Projector #02',
-                    hintStyle: const TextStyle(color: Color(0xFF64748B), fontSize: 13),
+                    hintStyle: const TextStyle(color: Color(0xFF475569), fontSize: 13),
                     filled: true,
-                    fillColor: const Color(0xFF111827),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E293B))),
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E293B))),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                    fillColor: const Color(0xFF0D111A),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E2638))),
+                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E2638))),
+                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF0284C7))),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   ),
                   validator: (v) => (v == null || v.isEmpty) ? 'Please enter asset name' : null,
                 ),
                 const SizedBox(height: 16),
 
                 // Description
-                const Text('Description', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 12, fontWeight: FontWeight.bold)),
+                const Text('DESCRIPTION', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                 const SizedBox(height: 6),
                 TextFormField(
                   controller: _descController,
                   maxLines: 2,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white, fontSize: 13.5),
                   decoration: InputDecoration(
-                    hintText: 'e.g. HDMI projector connected to main instructor lectern.',
-                    hintStyle: const TextStyle(color: Color(0xFF64748B), fontSize: 13),
+                    hintText: 'e.g. HDMI projector connected to main instructor podium.',
+                    hintStyle: const TextStyle(color: Color(0xFF475569), fontSize: 13),
                     filled: true,
-                    fillColor: const Color(0xFF111827),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E293B))),
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E293B))),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    fillColor: const Color(0xFF0D111A),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E2638))),
+                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E2638))),
+                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF0284C7))),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   ),
                 ),
                 const SizedBox(height: 16),
 
                 // Location Details (Building, Floor, Room)
                 Container(
-                  padding: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF111827),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFF1E293B)),
+                    color: const Color(0xFF0D111A),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: const Color(0xFF1E2638)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Campus Location', style: TextStyle(color: Color(0xFF38BDF8), fontWeight: FontWeight.bold, fontSize: 13)),
-                      const SizedBox(height: 10),
+                      const Text('LOCATION PLACEMENT', style: TextStyle(color: Color(0xFF38BDF8), fontWeight: FontWeight.w700, fontSize: 11, letterSpacing: 0.6)),
+                      const SizedBox(height: 12),
                       TextFormField(
                         controller: _buildingController,
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white, fontSize: 13.5),
                         decoration: const InputDecoration(
                           labelText: 'Building Name',
-                          labelStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
-                          border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF334155))),
+                          labelStyle: TextStyle(color: Color(0xFF64748B), fontSize: 12),
+                          border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
+                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
+                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0284C7))),
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -285,11 +291,13 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                           Expanded(
                             child: TextFormField(
                               controller: _floorController,
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white, fontSize: 13.5),
                               decoration: const InputDecoration(
                                 labelText: 'Floor',
-                                labelStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
-                                border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF334155))),
+                                labelStyle: TextStyle(color: Color(0xFF64748B), fontSize: 12),
+                                border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
+                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0284C7))),
                               ),
                             ),
                           ),
@@ -297,11 +305,13 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                           Expanded(
                             child: TextFormField(
                               controller: _roomController,
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white, fontSize: 13.5),
                               decoration: const InputDecoration(
                                 labelText: 'Room / Hall Number',
-                                labelStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
-                                border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF334155))),
+                                labelStyle: TextStyle(color: Color(0xFF64748B), fontSize: 12),
+                                border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
+                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0284C7))),
                               ),
                             ),
                           ),
@@ -314,27 +324,29 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
 
                 // Hardware Info (Manufacturer, Model, Serial)
                 Container(
-                  padding: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF111827),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFF1E293B)),
+                    color: const Color(0xFF0D111A),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: const Color(0xFF1E2638)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Hardware Specifications (Optional)', style: TextStyle(color: Color(0xFF38BDF8), fontWeight: FontWeight.bold, fontSize: 13)),
-                      const SizedBox(height: 10),
+                      const Text('HARDWARE SPECIFICATIONS (OPTIONAL)', style: TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.w700, fontSize: 10, letterSpacing: 0.8)),
+                      const SizedBox(height: 12),
                       Row(
                         children: [
                           Expanded(
                             child: TextFormField(
                               controller: _manufacturerController,
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white, fontSize: 13.5),
                               decoration: const InputDecoration(
                                 labelText: 'Manufacturer',
-                                labelStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
-                                border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF334155))),
+                                labelStyle: TextStyle(color: Color(0xFF64748B), fontSize: 12),
+                                border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
+                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0284C7))),
                               ),
                             ),
                           ),
@@ -342,11 +354,13 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                           Expanded(
                             child: TextFormField(
                               controller: _modelController,
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white, fontSize: 13.5),
                               decoration: const InputDecoration(
                                 labelText: 'Model Number',
-                                labelStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
-                                border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF334155))),
+                                labelStyle: TextStyle(color: Color(0xFF64748B), fontSize: 12),
+                                border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
+                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0284C7))),
                               ),
                             ),
                           ),
@@ -355,11 +369,13 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: _serialController,
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white, fontSize: 13.5),
                         decoration: const InputDecoration(
-                          labelText: 'Serial Number / Tag',
-                          labelStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
-                          border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF334155))),
+                          labelText: 'Serial / Inventory Tag',
+                          labelStyle: TextStyle(color: Color(0xFF64748B), fontSize: 12),
+                          border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
+                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
+                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0284C7))),
                         ),
                       ),
                     ],
@@ -369,34 +385,49 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
 
                 // Live GPS Location
                 Container(
-                  padding: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF111827),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFF1E293B)),
+                    color: const Color(0xFF0D111A),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: const Color(0xFF1E2638)),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.location_on, color: Color(0xFF10B981), size: 24),
-                      const SizedBox(width: 10),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF10B981).withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(Icons.location_on_rounded, color: Color(0xFF34D399), size: 20),
+                      ),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('On-Site GPS Pin', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                            const Text('GEOLOCATION PIN', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                            const SizedBox(height: 2),
                             Text(
                               '${_latitude.toStringAsFixed(6)}, ${_longitude.toStringAsFixed(6)}',
-                              style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12, fontFamily: 'monospace'),
+                              style: const TextStyle(color: Color(0xFF38BDF8), fontSize: 12.5, fontFamily: 'monospace', fontWeight: FontWeight.w700),
                             ),
                           ],
                         ),
                       ),
-                      TextButton.icon(
+                      ElevatedButton.icon(
                         onPressed: _fetchingGps ? null : _fetchCurrentGps,
                         icon: _fetchingGps
-                            ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF3B82F6)))
-                            : const Icon(Icons.my_location, size: 16, color: Color(0xFF3B82F6)),
-                        label: const Text('Update GPS', style: TextStyle(color: Color(0xFF3B82F6), fontSize: 12)),
+                            ? const SizedBox(width: 12, height: 12, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                            : const Icon(Icons.my_location_rounded, size: 14),
+                        label: const Text('Fetch GPS', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF0284C7),
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                        ),
                       ),
                     ],
                   ),
@@ -406,20 +437,21 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                 // Submit Button
                 SizedBox(
                   width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton.icon(
+                  height: 48,
+                  child: ElevatedButton(
                     onPressed: _isSaving ? null : _saveAsset,
-                    icon: _isSaving
-                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                        : const Icon(Icons.add_task_rounded, color: Colors.white),
-                    label: Text(
-                      _isSaving ? 'Registering to Cloud...' : 'Register Asset & Generate QR',
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF3B82F6),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      backgroundColor: const Color(0xFF0284C7),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
+                    child: _isSaving
+                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                        : const Text(
+                            'Register Asset & Generate QR Code',
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: -0.2),
+                          ),
                   ),
                 ),
               ],

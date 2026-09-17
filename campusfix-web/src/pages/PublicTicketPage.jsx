@@ -107,7 +107,7 @@ export const PublicTicketPage = () => {
         {/* Top Header Pass */}
         <div
           style={{
-            background: "#0B0D13",
+            background: "#0B0E16",
             borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
             padding: "1.5rem"
           }}
@@ -115,7 +115,7 @@ export const PublicTicketPage = () => {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
             <div>
               <span style={{ fontSize: "0.65rem", color: "#64748B", textTransform: "uppercase", fontWeight: "700", letterSpacing: "0.08em", fontFamily: "var(--font-mono)" }}>
-                CAMPUS MAINTENANCE VOUCHER
+                MAINTENANCE TICKET
               </span>
               <h1 style={{ fontSize: "1.6rem", fontWeight: "800", color: "#FFFFFF", fontFamily: "var(--font-mono)", marginTop: "0.2rem" }}>
                 {ticket.ticketId}
@@ -127,13 +127,15 @@ export const PublicTicketPage = () => {
           {/* Simple 2-Step Progression Bar */}
           <div style={{ marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", color: "#38BDF8", fontWeight: "600" }}>
-              <span style={{ width: "16px", height: "16px", borderRadius: "50%", background: "rgba(56, 189, 248, 0.15)", border: "1px solid #38BDF8", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.65rem" }}>✓</span>
+              <span style={{ width: "16px", height: "16px", borderRadius: "50%", background: "rgba(2, 132, 199, 0.15)", border: "1px solid #0284C7", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Check size={10} color="#38BDF8" />
+              </span>
               Reported
             </div>
             <div style={{ flex: 1, height: "1px", background: isClosed ? "#10B981" : "rgba(255, 255, 255, 0.1)" }}></div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", color: isClosed ? "#34D399" : "#64748B", fontWeight: isClosed ? "600" : "400" }}>
               <span style={{ width: "16px", height: "16px", borderRadius: "50%", background: isClosed ? "rgba(16, 185, 129, 0.15)" : "rgba(255, 255, 255, 0.05)", border: isClosed ? "1px solid #10B981" : "1px solid rgba(255, 255, 255, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.65rem" }}>
-                {isClosed ? "✓" : "2"}
+                {isClosed ? <Check size={10} color="#34D399" /> : "2"}
               </span>
               Resolved on Site
             </div>

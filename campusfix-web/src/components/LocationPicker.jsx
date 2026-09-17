@@ -139,7 +139,7 @@ export const LocationPicker = ({
         </MapContainer>
       </div>
       <p style={{ fontSize: "0.75rem", color: "#64748B", margin: 0 }}>
-        💡 Click or drag anywhere on the map to pinpoint the exact location of the asset inside campus.
+        Click or drag anywhere on the map to pinpoint the exact location of the asset inside campus.
       </p>
     </div>
   );
