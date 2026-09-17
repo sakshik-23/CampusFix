@@ -110,21 +110,6 @@ class DashboardHomeTab extends StatelessWidget {
                           Text('On-Site Maintenance Control', style: TextStyle(fontSize: 12, color: Color(0xFF94A3B8))),
                         ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: const Color(0x2610B981),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: const Color(0xFF10B981).withOpacity(0.3)),
-                        ),
-                        child: Row(
-                          children: const [
-                            Icon(Icons.cloud_done, size: 12, color: Color(0xFF34D399)),
-                            SizedBox(width: 4),
-                            Text('FIREBASE LIVE', style: TextStyle(color: Color(0xFF34D399), fontSize: 10, fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                      )
                     ],
                   ),
                   const SizedBox(height: 20),

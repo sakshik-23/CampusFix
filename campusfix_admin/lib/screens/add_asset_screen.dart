@@ -163,6 +163,18 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: const Color(0xFF111827),
+                              suffixIcon: _isLoadingId
+                                  ? const SizedBox(
+                                      width: 14,
+                                      height: 14,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Color(0xFF38BDF8),
+                                        ),
+                                      ),
+                                    )
+                                  : null,
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E293B))),
                               enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E293B))),
                               contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
