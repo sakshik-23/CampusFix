@@ -49,36 +49,45 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
     final lng = _itemLng;
     final assetName = widget.ticket.itemSnapshot['itemName'] ?? widget.ticket.itemId;
     final room = widget.ticket.itemSnapshot['room'] ?? '';
-    final encodedLabel = Uri.encodeComponent('$assetName ${room.isNotEmpty ? "(Room $room)" : ""}');
+    final encodedLabel = Uri.encodeComponent('$assetName ${room.isNotEmpty ? "($room)" : ""}');
 
-    // 1. Google Maps turn-by-turn navigation intent
-    final googleNavigationUri = Uri.parse('google.navigation:q=$lat,$lng&mode=d');
-    // 2. Universal geo URI with label
+    // 1. Universal Google Maps directions URL (opens native Google Maps app when mode is externalApplication)
+    final mapsDirUri = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=$lat,$lng');
+    // 2. Google Maps turn-by-turn navigation intent
+    final googleNavUri = Uri.parse('google.navigation:q=$lat,$lng&mode=d');
+    // 3. Geo intent with label
     final geoUri = Uri.parse('geo:$lat,$lng?q=$lat,$lng($encodedLabel)');
-    // 3. Fallback universal Google Maps web directions URL
-    final mapsWebUri = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=$lat,$lng');
 
+    bool success = false;
+
+    // Try Google Maps URL with externalApplication (standard on Android)
     try {
-      if (await canLaunchUrl(googleNavigationUri)) {
-        await launchUrl(googleNavigationUri, mode: LaunchMode.externalApplication);
-        return;
-      }
+      success = await launchUrl(mapsDirUri, mode: LaunchMode.externalApplication);
+      if (success) return;
     } catch (_) {}
 
+    // Try Google navigation intent
     try {
-      if (await canLaunchUrl(geoUri)) {
-        await launchUrl(geoUri, mode: LaunchMode.externalApplication);
-        return;
-      }
+      success = await launchUrl(googleNavUri, mode: LaunchMode.externalApplication);
+      if (success) return;
     } catch (_) {}
 
-    if (await canLaunchUrl(mapsWebUri)) {
-      await launchUrl(mapsWebUri, mode: LaunchMode.externalApplication);
-    } else {
-      if (!mounted) return;
+    // Try Geo intent
+    try {
+      success = await launchUrl(geoUri, mode: LaunchMode.externalApplication);
+      if (success) return;
+    } catch (_) {}
+
+    // Fallback to platform default
+    try {
+      success = await launchUrl(mapsDirUri, mode: LaunchMode.platformDefault);
+      if (success) return;
+    } catch (_) {}
+
+    if (!success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Could not open map navigation.'),
+          content: Text('Could not open map navigation. Please ensure Google Maps or a web browser is installed.'),
           backgroundColor: AppColors.danger,
           behavior: SnackBarBehavior.floating,
         ),
