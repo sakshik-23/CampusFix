@@ -20,17 +20,39 @@ import { CampusMap } from "../components/CampusMap";
 export const LandingPage = () => {
   const { assets, tickets, stats } = useData();
   const [searchCode, setSearchCode] = useState("");
+  const [searchError, setSearchError] = useState("");
   const navigate = useNavigate();
 
   const handleSimulateScan = (e) => {
     e.preventDefault();
-    if (!searchCode.trim()) return;
-    const clean = searchCode.trim().toUpperCase();
+    setSearchError("");
+    const raw = searchCode.trim();
+    if (!raw) return;
+
+    const clean = raw.toUpperCase();
+
+    // Reject any Asset ID input from anonymous users
+    if (clean.startsWith("AST-") || clean.startsWith("AST") || /^AST/i.test(raw)) {
+      setSearchError(
+        "Asset IDs are reserved for administrators. Anonymous users cannot look up Asset IDs. To track an issue, please enter your Ticket Number (e.g. TKT-2026-000001). To report a defect, scan the physical QR sticker affixed to the equipment."
+      );
+      return;
+    }
+
+    // Accept only Ticket Number (e.g. TKT-2026-000001 or 2026-000001)
     if (clean.startsWith("TKT-")) {
       navigate(`/ticket/${clean}`);
-    } else {
-      navigate(`/report/${clean}`);
+      return;
     }
+
+    if (/^20\d{2}-\d{5,6}$/.test(clean)) {
+      navigate(`/ticket/TKT-${clean}`);
+      return;
+    }
+
+    setSearchError(
+      "Invalid format. Please enter a valid Ticket Number (e.g. TKT-2026-000001). Asset IDs cannot be accepted."
+    );
   };
 
   const sampleFeaturedAsset = assets[0] || {
@@ -97,14 +119,14 @@ export const LandingPage = () => {
               Spot a broken projector, fan, or lab PC? Scan the physical QR sticker to log an issue instantly. Technicians track, repair, and close requests with ease.
             </p>
 
-            {/* Clean & Clear Search / Lookup Bar */}
+            {/* Clean & Clear Ticket Lookup Bar */}
             <form
               onSubmit={handleSimulateScan}
               style={{
                 background: "#FFFFFF",
                 padding: "0.45rem 0.5rem",
                 borderRadius: "0.75rem",
-                border: "1.5px solid #CBD5E1",
+                border: searchError ? "1.5px solid #FCA5A5" : "1.5px solid #CBD5E1",
                 boxShadow: "0 4px 14px rgba(0, 0, 0, 0.05)",
                 display: "flex",
                 gap: "0.5rem",
@@ -118,9 +140,12 @@ export const LandingPage = () => {
               </div>
               <input
                 type="text"
-                placeholder="Enter Asset ID or Ticket ID..."
+                placeholder="Enter Ticket Number (e.g. TKT-2026-000001)..."
                 value={searchCode}
-                onChange={(e) => setSearchCode(e.target.value)}
+                onChange={(e) => {
+                  setSearchCode(e.target.value);
+                  if (searchError) setSearchError("");
+                }}
                 style={{
                   flex: 1,
                   background: "transparent",
@@ -137,13 +162,36 @@ export const LandingPage = () => {
                 className="btn-primary"
                 style={{ padding: "0.55rem 1.15rem", fontSize: "0.875rem", flexShrink: 0 }}
               >
-                Look Up <ArrowRight size={15} />
+                Track Ticket <ArrowRight size={15} />
               </button>
             </form>
 
+            {/* Error banner when Asset ID or invalid input is provided */}
+            {searchError && (
+              <div
+                style={{
+                  maxWidth: "560px",
+                  background: "#FEF2F2",
+                  border: "1px solid #FCA5A5",
+                  color: "#DC2626",
+                  padding: "0.6rem 0.85rem",
+                  borderRadius: "0.5rem",
+                  fontSize: "0.8rem",
+                  marginBottom: "0.6rem",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "0.5rem",
+                  lineHeight: 1.45
+                }}
+              >
+                <AlertTriangle size={16} style={{ flexShrink: 0, marginTop: "2px" }} />
+                <span>{searchError}</span>
+              </div>
+            )}
+
             {/* Clear Helper Instructions */}
             <div style={{ fontSize: "0.8rem", color: "#64748B", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-              <span>Search by <strong>Asset ID</strong> (e.g. <code>AST-000001</code>) or <strong>Ticket ID</strong> (e.g. <code>TKT-2026-000001</code>)</span>
+              <span>Track maintenance status with your <strong>Ticket Number</strong> (e.g. <code>TKT-2026-000001</code>). Asset IDs are for admin inventory only.</span>
             </div>
           </div>
 

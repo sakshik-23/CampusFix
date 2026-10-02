@@ -9,11 +9,22 @@ export const PublicTrackPage = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState(null);
   const [searched, setSearched] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSearch = (e) => {
     e.preventDefault();
+    setErrorMessage("");
     const clean = query.trim();
     if (!clean) return;
+
+    if (clean.toUpperCase().startsWith("AST-") || clean.toUpperCase().startsWith("AST") || /^AST/i.test(clean)) {
+      setErrorMessage(
+        "Asset IDs are reserved for administrators. Anonymous users cannot look up Asset IDs. Please enter your Ticket Number (e.g. TKT-2026-000001) or registered 10-digit mobile number."
+      );
+      setResults(null);
+      setSearched(false);
+      return;
+    }
 
     const matched = tickets.filter((t) => {
       const matchId = t.ticketId.toLowerCase().includes(clean.toLowerCase());
@@ -61,7 +72,10 @@ export const PublicTrackPage = () => {
               type="text"
               placeholder="e.g. TKT-2026-000001 or 9876543210"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                if (errorMessage) setErrorMessage("");
+              }}
               className="input-refined"
               style={{
                 width: "100%",
@@ -69,7 +83,7 @@ export const PublicTrackPage = () => {
                 fontFamily: "var(--font-mono)",
                 background: "#FFFFFF",
                 color: "#0F172A",
-                border: "1px solid #CBD5E1"
+                border: errorMessage ? "1px solid #FCA5A5" : "1px solid #CBD5E1"
               }}
             />
             <div style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "#64748B" }}>
@@ -80,6 +94,27 @@ export const PublicTrackPage = () => {
             Search
           </button>
         </form>
+
+        {errorMessage && (
+          <div
+            style={{
+              marginTop: "0.85rem",
+              background: "#FEF2F2",
+              border: "1px solid #FCA5A5",
+              color: "#DC2626",
+              padding: "0.6rem 0.85rem",
+              borderRadius: "0.5rem",
+              fontSize: "0.8rem",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "0.5rem",
+              lineHeight: 1.45
+            }}
+          >
+            <AlertCircle size={16} style={{ flexShrink: 0, marginTop: "2px" }} />
+            <span>{errorMessage}</span>
+          </div>
+        )}
       </div>
 
       {/* Results */}
