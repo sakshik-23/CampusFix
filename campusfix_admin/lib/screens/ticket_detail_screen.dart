@@ -121,11 +121,32 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Enter maintenance action taken / resolution notes:',
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+            Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF2F2),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xFFFCA5A5)),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.info_outline_rounded, color: Color(0xFFDC2626), size: 16),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Resolving this ticket will permanently remove and delete it from the system.',
+                      style: TextStyle(color: Color(0xFFB91C1C), fontSize: 11.5, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 12),
+            const Text(
+              'Enter resolution notes (optional):',
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+            ),
+            const SizedBox(height: 8),
             TextField(
               controller: controller,
               style: const TextStyle(color: AppColors.textPrimary, fontSize: 13.5),
@@ -167,32 +188,29 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
             onPressed: () async {
               Navigator.of(ctx).pop();
               final remarks = controller.text.isNotEmpty ? controller.text : 'Resolved on-site by administrator.';
-              setState(() {
-                _status = 'CLOSED';
-                _notes = remarks;
-              });
               try {
                 await FirebaseService.resolveTicket(widget.ticket.ticketId, remarks);
                 if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Ticket marked as resolved'),
+                  SnackBar(
+                    content: Text('Ticket ${widget.ticket.ticketId} resolved and deleted from system'),
                     backgroundColor: AppColors.success,
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
+                Navigator.of(context).pop();
               } catch (e) {
                 if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Cloud sync error: $e'),
+                    content: Text('Error resolving ticket: $e'),
                     backgroundColor: AppColors.danger,
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
               }
             },
-            child: const Text('Confirm Resolution', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+            child: const Text('Confirm Resolution & Delete', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
           ),
         ],
       ),

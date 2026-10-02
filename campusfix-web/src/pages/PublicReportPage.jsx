@@ -20,7 +20,7 @@ import { StatusBadge } from "../components/StatusBadge";
 
 export const PublicReportPage = () => {
   const { itemId } = useParams();
-  const { getAsset, createTicket, loading } = useData();
+  const { getAsset, createTicket, loading, tickets } = useData();
   const navigate = useNavigate();
 
   const [asset, setAsset] = useState(null);
@@ -38,9 +38,34 @@ export const PublicReportPage = () => {
     }
   }, [itemId, loading, getAsset]);
 
+  // Active tickets for this asset (resolved tickets are deleted from system)
+  const activeTicketsForAsset = (tickets || []).filter(
+    (t) =>
+      asset &&
+      t.itemId?.toUpperCase() === asset.itemId?.toUpperCase() &&
+      (t.status || "ACTIVE") !== "RESOLVED" &&
+      (t.status || "ACTIVE") !== "CLOSED"
+  );
+
+  // Check if a ticket has already been raised for the similar issue
+  const duplicateTicket = activeTicketsForAsset.find(
+    (t) =>
+      t.ticketType?.toLowerCase() === ticketType?.toLowerCase() ||
+      (description.trim().length >= 4 &&
+        t.description &&
+        t.description.trim().toLowerCase() === description.trim().toLowerCase())
+  );
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
+
+    if (duplicateTicket) {
+      setErrorMessage(
+        `A ticket (${duplicateTicket.ticketId}: "${duplicateTicket.ticketType}") has already been raised for this issue on this asset. Duplicate reports are blocked.`
+      );
+      return;
+    }
 
     if (!description.trim() || description.trim().length < 5) {
       setErrorMessage("Please enter a clear description of the defect (minimum 5 characters).");
@@ -253,7 +278,99 @@ export const PublicReportPage = () => {
         </div>
 
         <div style={{ padding: "1.5rem" }}>
-          {errorMessage && (
+          {/* Active Tickets on this Asset Notice */}
+          {activeTicketsForAsset.length > 0 && (
+            <div
+              style={{
+                background: "#F8FAFC",
+                border: "1px solid #BAE6FD",
+                borderRadius: "0.625rem",
+                padding: "1rem",
+                marginBottom: "1.25rem"
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.5rem" }}>
+                <ShieldAlert size={16} color="#0284C7" />
+                <span style={{ fontSize: "0.825rem", fontWeight: "700", color: "#0F172A" }}>
+                  Active Ticket Already Raised for this Asset
+                </span>
+              </div>
+              <p style={{ fontSize: "0.75rem", color: "#475569", margin: "0 0 0.75rem 0", lineHeight: 1.4 }}>
+                Campus technicians are already tracking existing maintenance issue(s) on this item:
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                {activeTicketsForAsset.map((t) => (
+                  <div
+                    key={t.ticketId}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      background: "#FFFFFF",
+                      padding: "0.6rem 0.75rem",
+                      borderRadius: "0.375rem",
+                      border: "1px solid #E2E8F0"
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                        <strong style={{ color: "#0284C7", fontFamily: "var(--font-mono)", fontSize: "0.8rem" }}>
+                          {t.ticketId}
+                        </strong>
+                        <span style={{ fontSize: "0.75rem", color: "#334155", fontWeight: "600" }}>
+                          • {t.ticketType}
+                        </span>
+                      </div>
+                      {t.description && (
+                        <div style={{ fontSize: "0.725rem", color: "#64748B", marginTop: "0.2rem", maxWidth: "340px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          "{t.description}"
+                        </div>
+                      )}
+                    </div>
+                    <Link
+                      to={`/ticket/${t.ticketId}`}
+                      style={{
+                        fontSize: "0.725rem",
+                        color: "#0284C7",
+                        fontWeight: "600",
+                        textDecoration: "none"
+                      }}
+                    >
+                      Track →
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Duplicate Block Warning */}
+          {duplicateTicket && (
+            <div
+              style={{
+                background: "#FEF2F2",
+                border: "1px solid #FCA5A5",
+                color: "#DC2626",
+                padding: "0.75rem 0.85rem",
+                borderRadius: "0.5rem",
+                fontSize: "0.825rem",
+                marginBottom: "1.25rem",
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "0.5rem"
+              }}
+            >
+              <AlertTriangle size={18} style={{ flexShrink: 0, marginTop: "2px" }} />
+              <div>
+                <strong>Similar Issue Already Reported:</strong>
+                <p style={{ margin: "0.25rem 0 0 0", fontSize: "0.775rem", lineHeight: 1.4 }}>
+                  Ticket <strong style={{ fontFamily: "var(--font-mono)" }}>{duplicateTicket.ticketId}</strong> is already open for <strong>"{duplicateTicket.ticketType}"</strong>. Duplicate tickets for the same issue are not permitted.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {errorMessage && !duplicateTicket && (
             <div
               style={{
                 background: "#FEF2F2",
@@ -282,6 +399,9 @@ export const PublicReportPage = () => {
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.45rem" }}>
                 {TICKET_TYPES.map((type) => {
                   const selected = ticketType === type;
+                  const isExistingCategory = activeTicketsForAsset.some(
+                    (t) => t.ticketType?.toLowerCase() === type.toLowerCase()
+                  );
                   return (
                     <button
                       type="button"
@@ -293,14 +413,14 @@ export const PublicReportPage = () => {
                         fontSize: "0.8rem",
                         fontWeight: selected ? "700" : "500",
                         cursor: "pointer",
-                        border: selected ? "1px solid #0284C7" : "1px solid #CBD5E1",
-                        background: selected ? "#EFF6FF" : "#F8FAFC",
-                        color: selected ? "#0284C7" : "#475569",
+                        border: selected ? "1px solid #0284C7" : (isExistingCategory ? "1px dashed #F87171" : "1px solid #CBD5E1"),
+                        background: selected ? "#EFF6FF" : (isExistingCategory ? "#FEF2F2" : "#F8FAFC"),
+                        color: selected ? "#0284C7" : (isExistingCategory ? "#DC2626" : "#475569"),
                         boxShadow: selected ? "0 1px 3px rgba(2, 132, 199, 0.15)" : "none",
                         transition: "all 0.15s ease"
                       }}
                     >
-                      {type}
+                      {type} {isExistingCategory && "⚠️"}
                     </button>
                   );
                 })}
@@ -353,11 +473,24 @@ export const PublicReportPage = () => {
 
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || Boolean(duplicateTicket)}
               className="btn-primary"
-              style={{ width: "100%", padding: "0.75rem", marginTop: "0.25rem", fontWeight: "700", fontSize: "0.9rem" }}
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                marginTop: "0.25rem",
+                fontWeight: "700",
+                fontSize: "0.9rem",
+                opacity: duplicateTicket ? 0.6 : 1,
+                cursor: duplicateTicket ? "not-allowed" : "pointer",
+                background: duplicateTicket ? "#94A3B8" : undefined
+              }}
             >
-              {submitting ? "Submitting Ticket..." : "Submit Maintenance Ticket"}
+              {submitting
+                ? "Submitting Ticket..."
+                : duplicateTicket
+                ? "Issue Already Reported (Duplicate Blocked)"
+                : "Submit Maintenance Ticket"}
             </button>
           </form>
         </div>

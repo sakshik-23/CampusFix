@@ -138,19 +138,31 @@ class FirebaseService {
     }
   }
 
-  // Resolve / Close a ticket
+  // Resolve / Close a ticket -> Permanently deletes from system (matching web app)
   static Future<void> resolveTicket(String ticketId, String notes) async {
+    try {
+      await _firestore.collection('tickets').doc(ticketId).delete();
+    } catch (e) {
+      debugPrint("Error resolving and deleting ticket $ticketId: $e");
+      rethrow;
+    }
+  }
+
+  // Update ticket status; if RESOLVED or CLOSED, permanently delete from system
+  static Future<void> updateTicketStatus(String ticketId, String status) async {
+    final clean = status.toUpperCase().trim();
+    if (clean == 'RESOLVED' || clean == 'CLOSED') {
+      await resolveTicket(ticketId, 'Resolved by administrator');
+      return;
+    }
     final now = DateTime.now().toIso8601String();
     try {
-      await _firestore.collection('tickets').doc(ticketId).set({
-        'status': 'CLOSED',
-        'adminNotes': notes,
-        'closedAt': now,
-        'closedBy': 'Admin',
+      await _firestore.collection('tickets').doc(ticketId).update({
+        'status': clean,
         'updatedAt': now,
-      }, SetOptions(merge: true));
+      });
     } catch (e) {
-      print("Error resolving ticket $ticketId: $e");
+      debugPrint("Error updating ticket status for $ticketId: $e");
       rethrow;
     }
   }

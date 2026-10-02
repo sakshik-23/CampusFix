@@ -399,6 +399,22 @@ export const DataProvider = ({ children }) => {
       throw new Error(`Asset with ID ${itemId} was not found.`);
     }
 
+    // Check if an active ticket has already been raised for this asset and similar issue
+    const existingTicket = tickets.find(
+      (t) =>
+        t.itemId?.toUpperCase() === asset.itemId?.toUpperCase() &&
+        (t.status || "ACTIVE") !== "RESOLVED" &&
+        (t.status || "ACTIVE") !== "CLOSED" &&
+        (t.ticketType?.toLowerCase() === ticketType?.toLowerCase() ||
+         (description && t.description && t.description.trim().toLowerCase() === description.trim().toLowerCase()))
+    );
+
+    if (existingTicket) {
+      throw new Error(
+        `A ticket (${existingTicket.ticketId}: "${existingTicket.ticketType}") has already been raised for this issue on ${asset.itemName || asset.itemId}. Duplicate tickets cannot be created.`
+      );
+    }
+
     const ticketId = await generateTicketId();
     const nowIso = new Date().toISOString();
 

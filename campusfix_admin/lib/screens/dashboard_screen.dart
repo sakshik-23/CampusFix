@@ -104,9 +104,13 @@ class DashboardHomeTab extends StatelessWidget {
               final tickets = ticketSnap.data ?? [];
               final totalAssets = assets.length;
               final activeAssets = assets.where((a) => a.status.toUpperCase() == 'ACTIVE').length;
-              final openTickets = tickets.where((t) => t.status.toUpperCase() == 'OPEN' || t.status.toUpperCase() == 'ACTIVE').length;
-              final closedTickets = tickets.where((t) => t.status.toUpperCase() == 'CLOSED' || t.status.toUpperCase() == 'RESOLVED').length;
-              final recentTickets = tickets.take(5).toList();
+              final activeTickets = tickets.where((t) {
+                final st = t.status.toUpperCase();
+                return st != 'CLOSED' && st != 'RESOLVED';
+              }).toList();
+              final openTickets = activeTickets.where((t) => t.status.toUpperCase() == 'OPEN' || t.status.toUpperCase() == 'ACTIVE').length;
+              final recentTickets = activeTickets.take(5).toList();
+              final systemHealth = totalAssets > 0 ? (((totalAssets - activeTickets.length) / totalAssets) * 100).round() : 100;
 
               final isLoading = (assetSnap.connectionState == ConnectionState.waiting && assets.isEmpty) ||
                   (ticketSnap.connectionState == ConnectionState.waiting && tickets.isEmpty);
@@ -192,10 +196,10 @@ class DashboardHomeTab extends StatelessWidget {
                       children: [
                         Expanded(
                           child: _buildMetricCard(
-                            'RESOLVED',
-                            '$closedTickets',
+                            'SYSTEM HEALTH',
+                            '$systemHealth%',
                             AppColors.success,
-                            Icons.check_circle_outline_rounded,
+                            Icons.health_and_safety_outlined,
                           ),
                         ),
                         const SizedBox(width: 10),

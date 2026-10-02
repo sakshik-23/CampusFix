@@ -40,20 +40,26 @@ class _TicketsScreenState extends State<TicketsScreen> {
             );
           }
 
-          final allTickets = snapshot.data ?? [];
+          final allRawTickets = snapshot.data ?? [];
+          // Resolved tickets are deleted from the system, so filter to active tickets
+          final allTickets = allRawTickets.where((t) {
+            final st = t.status.toUpperCase();
+            return st != 'CLOSED' && st != 'RESOLVED';
+          }).toList();
+
           final openCount = allTickets.where((t) => t.status.toUpperCase() == 'OPEN' || t.status.toUpperCase() == 'ACTIVE').length;
-          final closedCount = allTickets.where((t) => t.status.toUpperCase() == 'CLOSED' || t.status.toUpperCase() == 'RESOLVED').length;
+          final inProgressCount = allTickets.where((t) => t.status.toUpperCase() == 'IN_PROGRESS' || t.status.toUpperCase() == 'IN PROGRESS').length;
 
           final filtered = allTickets.where((t) {
             final st = t.status.toUpperCase();
             if (_filter == 'OPEN') return st == 'OPEN' || st == 'ACTIVE';
-            if (_filter == 'CLOSED') return st == 'CLOSED' || st == 'RESOLVED';
+            if (_filter == 'IN_PROGRESS') return st == 'IN_PROGRESS' || st == 'IN PROGRESS';
             return true;
           }).toList();
 
           return Column(
             children: [
-              // Segmented Filter Bar
+              // Segmented Filter Bar matching web portal
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                 padding: const EdgeInsets.all(4),
@@ -71,9 +77,9 @@ class _TicketsScreenState extends State<TicketsScreen> {
                 ),
                 child: Row(
                   children: [
-                    _buildSegmentTab('ALL', 'All', '${allTickets.length}'),
-                    _buildSegmentTab('OPEN', 'Active', '$openCount'),
-                    _buildSegmentTab('CLOSED', 'Resolved', '$closedCount'),
+                    _buildSegmentTab('ALL', 'All Active', '${allTickets.length}'),
+                    _buildSegmentTab('OPEN', 'Open', '$openCount'),
+                    _buildSegmentTab('IN_PROGRESS', 'In Progress', '$inProgressCount'),
                   ],
                 ),
               ),
@@ -88,7 +94,7 @@ class _TicketsScreenState extends State<TicketsScreen> {
                             const SizedBox(height: 12),
                             Text(
                               _filter == 'ALL'
-                                  ? 'No incident reports filed yet'
+                                  ? 'No active incident reports'
                                   : 'No $_filter tickets found',
                               style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
                             ),
@@ -183,34 +189,46 @@ class _TicketsScreenState extends State<TicketsScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (_) => TicketDetailScreen(ticket: ticket)),
-                                      );
-                                    },
-                                    borderRadius: BorderRadius.circular(6),
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            'View Details',
-                                            style: TextStyle(
-                                              color: AppColors.primary,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          SizedBox(width: 4),
-                                          Icon(Icons.arrow_forward_rounded, size: 13, color: AppColors.primary),
-                                        ],
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    OutlinedButton.icon(
+                                      onPressed: () => _confirmQuickResolve(context, ticket),
+                                      icon: const Icon(Icons.check_circle_outline_rounded, size: 14, color: AppColors.success),
+                                      label: const Text('Resolve', style: TextStyle(color: AppColors.success, fontSize: 11.5, fontWeight: FontWeight.w700)),
+                                      style: OutlinedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                        side: const BorderSide(color: Color(0xFF86EFAC)),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                       ),
                                     ),
-                                  ),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (_) => TicketDetailScreen(ticket: ticket)),
+                                        );
+                                      },
+                                      borderRadius: BorderRadius.circular(6),
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              'View Details',
+                                              style: TextStyle(
+                                                color: AppColors.primary,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                            SizedBox(width: 4),
+                                            Icon(Icons.arrow_forward_rounded, size: 13, color: AppColors.primary),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -275,6 +293,97 @@ class _TicketsScreenState extends State<TicketsScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _confirmQuickResolve(BuildContext context, CampusTicket ticket) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(color: AppColors.border),
+        ),
+        title: const Text(
+          'Resolve Incident Ticket?',
+          style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 16),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF2F2),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xFFFCA5A5)),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.info_outline_rounded, color: Color(0xFFDC2626), size: 16),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Marking this ticket as Resolved will permanently delete and remove it from the system.',
+                      style: TextStyle(color: Color(0xFFB91C1C), fontSize: 11.5, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              'Ticket ID: ${ticket.ticketId}',
+              style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.primary, fontFamily: 'monospace', fontSize: 13),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Issue: ${ticket.ticketType}',
+              style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w600)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.success,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              try {
+                await FirebaseService.resolveTicket(ticket.ticketId, 'Resolved by administrator');
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Ticket ${ticket.ticketId} resolved and deleted'),
+                    backgroundColor: AppColors.success,
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              } catch (e) {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Failed to resolve ticket: $e'),
+                    backgroundColor: AppColors.danger,
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
+            },
+            child: const Text('Resolve & Delete', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+          ),
+        ],
       ),
     );
   }

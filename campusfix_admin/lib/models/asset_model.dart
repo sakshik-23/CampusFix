@@ -73,6 +73,11 @@ class CampusAsset {
       'room': room,
       'latitude': latitude,
       'longitude': longitude,
+      'item_map_coordinates': {
+        'latitude': latitude,
+        'longitude': longitude,
+      },
+      'item_qr_code': qrUrl,
       'status': status,
       'qrUrl': qrUrl,
       'createdAt': createdAt?.toIso8601String(),
