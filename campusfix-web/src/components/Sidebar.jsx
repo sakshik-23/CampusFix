@@ -59,39 +59,44 @@ export const Sidebar = () => {
       className="no-print"
       style={{
         width: "240px",
-        backgroundColor: "#0B0D13",
-        borderRight: "1px solid rgba(255, 255, 255, 0.06)",
+        backgroundColor: "#FFFFFF",
+        borderRight: "1px solid #E2E8F0",
         display: "flex",
         flexDirection: "column",
         minHeight: "calc(100vh - 58px)",
-        padding: "1rem 0.65rem",
+        padding: "1.25rem 0.75rem",
         flexShrink: 0
       }}
     >
-      {/* Admin Profile Mini Card */}
+      {/* Admin Session Badge */}
       <div
         style={{
-          background: "#11141D",
+          background: "#F8FAFC",
           borderRadius: "0.5rem",
-          padding: "0.65rem 0.75rem",
-          marginBottom: "1rem",
-          border: "1px solid rgba(255, 255, 255, 0.05)"
+          padding: "0.65rem 0.85rem",
+          marginBottom: "1.25rem",
+          border: "1px solid #E2E8F0",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.45rem"
         }}
       >
-        <div style={{ fontSize: "0.65rem", color: "#64748B", textTransform: "uppercase", fontWeight: "700", letterSpacing: "0.06em" }}>
+        <span
+          style={{
+            width: "7px",
+            height: "7px",
+            borderRadius: "50%",
+            backgroundColor: "#10B981"
+          }}
+        />
+        <span style={{ fontSize: "0.7rem", color: "#475569", textTransform: "uppercase", fontWeight: "700", letterSpacing: "0.06em" }}>
           Active Admin Session
-        </div>
-        <div style={{ fontWeight: "600", color: "#F8FAFC", fontSize: "0.825rem", marginTop: "0.15rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          {user?.name || "Campus Admin"}
-        </div>
-        <div style={{ fontSize: "0.725rem", color: "#94A3B8", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: "var(--font-mono)" }}>
-          {user?.email || "admin@campusfix.edu"}
-        </div>
+        </span>
       </div>
 
       {/* Main Navigation Links */}
-      <nav style={{ display: "flex", flexDirection: "column", gap: "0.25rem", flex: 1 }}>
-        <div style={{ fontSize: "0.65rem", fontWeight: "700", color: "#475569", textTransform: "uppercase", padding: "0.25rem 0.5rem", letterSpacing: "0.08em" }}>
+      <nav style={{ display: "flex", flexDirection: "column", gap: "0.35rem", flex: 1 }}>
+        <div style={{ fontSize: "0.65rem", fontWeight: "700", color: "#64748B", textTransform: "uppercase", padding: "0.25rem 0.5rem", letterSpacing: "0.08em" }}>
           Operations
         </div>
         {navLinks.map((link) => {
@@ -104,32 +109,31 @@ export const Sidebar = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: "0.5rem 0.65rem",
-                borderRadius: "0.375rem",
+                padding: "0.55rem 0.75rem",
+                borderRadius: "0.5rem",
                 textDecoration: "none",
-                fontSize: "0.825rem",
-                fontWeight: active ? "600" : "400",
-                color: active ? "#FFFFFF" : "#94A3B8",
-                backgroundColor: active ? "#171B26" : "transparent",
-                border: active ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid transparent",
-                transition: "all 0.1s ease"
+                fontSize: "0.85rem",
+                fontWeight: active ? "600" : "500",
+                color: active ? "#0284C7" : "#475569",
+                backgroundColor: active ? "#F0F9FF" : "transparent",
+                border: active ? "1px solid #BAE6FD" : "1px solid transparent",
+                transition: "all 0.15s ease"
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span style={{ color: active ? "#38BDF8" : "#64748B" }}>{link.icon}</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                <span style={{ color: active ? "#0284C7" : "#64748B" }}>{link.icon}</span>
                 <span>{link.title}</span>
               </div>
               {link.badge && (
                 <span
                   style={{
                     fontSize: "0.675rem",
-                    padding: "0.1rem 0.4rem",
+                    padding: "0.1rem 0.45rem",
                     borderRadius: "9999px",
                     fontWeight: "700",
-                    fontFamily: "var(--font-mono)",
-                    background: link.badgeColor ? "rgba(239, 68, 68, 0.15)" : "#1E2330",
-                    color: link.badgeColor ? "#F87171" : "#94A3B8",
-                    border: link.badgeColor ? "1px solid rgba(239, 68, 68, 0.25)" : "none"
+                    background: link.badgeColor ? "#FEF2F2" : "#F1F5F9",
+                    color: link.badgeColor ? "#DC2626" : "#475569",
+                    border: link.badgeColor ? "1px solid #FCA5A5" : "1px solid #E2E8F0"
                   }}
                 >
                   {link.badge}
@@ -141,7 +145,7 @@ export const Sidebar = () => {
       </nav>
 
       {/* Footer / Utilities in Sidebar */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem", borderTop: "1px solid rgba(255, 255, 255, 0.06)", paddingTop: "0.75rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem", borderTop: "1px solid #E2E8F0", paddingTop: "0.85rem" }}>
         <button
           onClick={() => {
             if (window.confirm("Reset all assets and tickets back to initial dataset?")) {
@@ -149,17 +153,17 @@ export const Sidebar = () => {
             }
           }}
           className="btn-ghost"
-          style={{ width: "100%", fontSize: "0.75rem", padding: "0.35rem 0.5rem", justifyContent: "flex-start", color: "#64748B" }}
+          style={{ width: "100%", fontSize: "0.775rem", padding: "0.4rem 0.6rem", justifyContent: "flex-start", color: "#64748B" }}
         >
-          <RotateCcw size={13} /> Reset Demo Data
+          <RotateCcw size={14} /> Reset Demo Data
         </button>
 
         <Link
           to="/"
           className="btn-ghost"
-          style={{ width: "100%", fontSize: "0.75rem", padding: "0.35rem 0.5rem", justifyContent: "flex-start", color: "#64748B" }}
+          style={{ width: "100%", fontSize: "0.775rem", padding: "0.4rem 0.6rem", justifyContent: "flex-start", color: "#64748B" }}
         >
-          <ExternalLink size={13} /> Public Portal
+          <ExternalLink size={14} /> Public Portal
         </Link>
 
         <button
@@ -174,9 +178,9 @@ export const Sidebar = () => {
             background: "transparent",
             border: "none",
             color: "#EF4444",
-            fontSize: "0.775rem",
+            fontSize: "0.8rem",
             fontWeight: "600",
-            padding: "0.4rem 0.5rem",
+            padding: "0.45rem 0.6rem",
             cursor: "pointer",
             borderRadius: "0.375rem",
             textAlign: "left",

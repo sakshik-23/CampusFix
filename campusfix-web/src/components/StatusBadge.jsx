@@ -1,7 +1,9 @@
 import React from "react";
 
-export const StatusBadge = ({ status, size = "md" }) => {
-  const isOpen = status === "OPEN";
+export const StatusBadge = ({ status = "ACTIVE", size = "md" }) => {
+  const norm = (status || "ACTIVE").toUpperCase().replace("-", "_").trim();
+  const isActive = norm === "ACTIVE" || norm === "OPEN";
+  const isInProgress = norm === "IN_PROGRESS" || norm === "IN PROGRESS";
 
   const sizeStyles = {
     sm: { padding: "0.15rem 0.5rem", fontSize: "0.7rem", gap: "0.35rem" },
@@ -9,20 +11,19 @@ export const StatusBadge = ({ status, size = "md" }) => {
     lg: { padding: "0.35rem 0.85rem", fontSize: "0.8125rem", gap: "0.5rem" }
   };
 
-  if (isOpen) {
+  if (isActive) {
     return (
       <span
         style={{
           display: "inline-flex",
           alignItems: "center",
           borderRadius: "9999px",
-          backgroundColor: "rgba(239, 68, 68, 0.08)",
-          color: "#F87171",
-          border: "1px solid rgba(239, 68, 68, 0.25)",
+          backgroundColor: "#F1F5F9",
+          color: "#334155",
+          border: "1px solid #CBD5E1",
           fontFamily: "var(--font-mono)",
-          fontWeight: "600",
+          fontWeight: "700",
           letterSpacing: "0.04em",
-          boxShadow: "0 0 10px rgba(239, 68, 68, 0.1)",
           ...sizeStyles[size]
         }}
         className="select-none"
@@ -32,12 +33,41 @@ export const StatusBadge = ({ status, size = "md" }) => {
             width: size === "lg" ? "7px" : "5px",
             height: size === "lg" ? "7px" : "5px",
             borderRadius: "50%",
-            backgroundColor: "#EF4444",
-            boxShadow: "0 0 6px #EF4444"
+            backgroundColor: "#64748B"
           }}
-          className="pulse-open"
         />
-        OPEN
+        ACTIVE
+      </span>
+    );
+  }
+
+  if (isInProgress) {
+    return (
+      <span
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          borderRadius: "9999px",
+          backgroundColor: "rgba(2, 132, 199, 0.08)",
+          color: "#0284C7",
+          border: "1px solid rgba(2, 132, 199, 0.25)",
+          fontFamily: "var(--font-mono)",
+          fontWeight: "600",
+          letterSpacing: "0.04em",
+          ...sizeStyles[size]
+        }}
+        className="select-none"
+      >
+        <span
+          style={{
+            width: size === "lg" ? "7px" : "5px",
+            height: size === "lg" ? "7px" : "5px",
+            borderRadius: "50%",
+            backgroundColor: "#0284C7",
+            boxShadow: "0 0 6px #0284C7"
+          }}
+        />
+        IN PROGRESS
       </span>
     );
   }
@@ -49,7 +79,7 @@ export const StatusBadge = ({ status, size = "md" }) => {
         alignItems: "center",
         borderRadius: "9999px",
         backgroundColor: "rgba(16, 185, 129, 0.08)",
-        color: "#34D399",
+        color: "#10B981",
         border: "1px solid rgba(16, 185, 129, 0.25)",
         fontFamily: "var(--font-mono)",
         fontWeight: "600",

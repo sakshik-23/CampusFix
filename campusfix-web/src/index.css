@@ -3,27 +3,34 @@
     --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
     
-    /* Clean Dark Palette */
-    --bg-base: #090A0F;
-    --bg-surface: #0E121B;
-    --bg-surface-elevated: #131722;
-    --bg-surface-card: #0F131D;
-    --bg-surface-hover: #181D2A;
+    /* Clean, Simple Campus Palette aligned with Logo */
+    --bg-base: #F8FAFC;
+    --bg-surface: #FFFFFF;
+    --bg-surface-elevated: #FFFFFF;
+    --bg-surface-card: #FFFFFF;
+    --bg-surface-hover: #F1F5F9;
     
-    --border-subtle: rgba(255, 255, 255, 0.07);
-    --border-medium: rgba(255, 255, 255, 0.12);
-    --border-highlight: rgba(255, 255, 255, 0.18);
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
     
+    --border-subtle: #E2E8F0;
+    --border-medium: #CBD5E1;
+    --border-highlight: #94A3B8;
+    
+    /* CampusFix Brand Blue */
     --accent-sky: #0284C7;
-    --accent-sky-glow: rgba(56, 189, 248, 0.12);
+    --accent-sky-dark: #0369A1;
+    --accent-sky-light: #E0F2FE;
+    --accent-sky-glow: rgba(2, 132, 199, 0.12);
     
-    --status-open-text: #F87171;
-    --status-open-bg: rgba(239, 68, 68, 0.08);
-    --status-open-border: rgba(239, 68, 68, 0.25);
+    --status-open-text: #DC2626;
+    --status-open-bg: #FEF2F2;
+    --status-open-border: #FCA5A5;
     
-    --status-closed-text: #34D399;
-    --status-closed-bg: rgba(16, 185, 129, 0.08);
-    --status-closed-border: rgba(16, 185, 129, 0.25);
+    --status-closed-text: #059669;
+    --status-closed-bg: #ECFDF5;
+    --status-closed-border: #6EE7B7;
   }
 }
 
@@ -36,41 +43,38 @@
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-base);
-  color: #F1F5F9;
+  color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.02) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.02) 0px, transparent 50%);
 }
 
 code, pre, .font-mono {
   font-family: var(--font-mono);
 }
 
-/* Subtle Scrollbar */
+/* Modern Minimal Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #090A0F;
+  background: #F1F5F9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E2330;
+  background: #CBD5E1;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2D3548;
+  background: #94A3B8;
 }
 
 /* Surface & Panel Utilities */
 .panel-base {
-  background: rgba(14, 18, 27, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -78,27 +82,29 @@ code, pre, .font-mono {
   background: var(--bg-surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: 0.75rem;
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
   transition: all 0.15s ease;
 }
 
 .card-premium:hover {
   border-color: var(--border-medium);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
 }
 
 .card-interactive {
   cursor: pointer;
 }
 .card-interactive:hover {
-  transform: translateY(-1px);
-  border-color: rgba(56, 189, 248, 0.3);
+  transform: translateY(-2px);
+  border-color: #38BDF8;
+  box-shadow: 0 10px 15px -3px rgba(2, 132, 199, 0.08), 0 4px 6px -4px rgba(2, 132, 199, 0.05);
 }
 
-/* Input Fields */
+/* Simple Input Fields */
 .input-refined {
-  background: #0B0E16;
+  background: #FFFFFF;
   border: 1px solid var(--border-medium);
-  color: #F8FAFC;
+  color: var(--text-primary);
   border-radius: 0.5rem;
   padding: 0.625rem 0.875rem;
   font-size: 0.875rem;
@@ -112,10 +118,10 @@ code, pre, .font-mono {
 }
 
 .input-refined::placeholder {
-  color: #475569;
+  color: #94A3B8;
 }
 
-/* Clean Engineered Buttons */
+/* Clean Campus Blue Buttons */
 .btn-primary {
   background: #0284C7;
   color: #FFFFFF;
@@ -129,22 +135,23 @@ code, pre, .font-mono {
   justify-content: center;
   gap: 0.5rem;
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(2, 132, 199, 0.2);
 }
 
 .btn-primary:hover:not(:disabled) {
   background: #0369A1;
+  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.25);
 }
 
 .btn-primary:disabled {
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .btn-secondary {
-  background: #131722;
-  color: #CBD5E1;
+  background: #FFFFFF;
+  color: #334155;
   font-weight: 500;
   font-size: 0.875rem;
   border-radius: 0.5rem;
@@ -156,11 +163,12 @@ code, pre, .font-mono {
   justify-content: center;
   gap: 0.5rem;
   cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: #1A1F2E;
-  color: #FFFFFF;
+  background: #F8FAFC;
+  color: #0F172A;
   border-color: var(--border-medium);
 }
 
@@ -171,13 +179,14 @@ code, pre, .font-mono {
   font-size: 0.875rem;
   border-radius: 0.5rem;
   padding: 0.55rem 1.1rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   cursor: pointer;
+  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.2);
 }
 
 .btn-success:hover:not(:disabled) {
@@ -186,7 +195,7 @@ code, pre, .font-mono {
 
 .btn-ghost {
   background: transparent;
-  color: #94A3B8;
+  color: #475569;
   border: none;
   font-size: 0.875rem;
   padding: 0.4rem 0.75rem;
@@ -198,8 +207,8 @@ code, pre, .font-mono {
   gap: 0.375rem;
 }
 .btn-ghost:hover {
-  color: #F8FAFC;
-  background: rgba(255, 255, 255, 0.05);
+  color: #0284C7;
+  background: #F1F5F9;
 }
 
 @keyframes pulse-dot {
@@ -211,57 +220,63 @@ code, pre, .font-mono {
   animation: pulse-dot 2s infinite ease-in-out;
 }
 
-/* Leaflet Map Overrides */
+/* Clear Leaflet Map in Light/Natural Style */
 .leaflet-container {
   width: 100%;
   height: 100%;
   border-radius: 0.75rem;
   z-index: 10;
   font-family: var(--font-sans) !important;
-  background: #0B0E16 !important;
+  background: #E2E8F0 !important;
 }
 
+/* Natural tile pane without heavy dark filter */
 .dark-tiles .leaflet-tile-pane {
-  filter: brightness(0.7) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.75);
+  filter: none;
 }
 
 .leaflet-popup-content-wrapper {
-  background: #11141D !important;
-  color: #F8FAFC !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #E2E8F0 !important;
   border-radius: 0.625rem !important;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
 }
 
 .leaflet-popup-tip {
-  background: #11141D !important;
+  background: #FFFFFF !important;
 }
 
 /* Printable QR Labels */
 @media print {
-  body * {
-    visibility: hidden;
-  }
-  .printable-area, .printable-area * {
-    visibility: visible;
-  }
-  .printable-area {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    background: #FFFFFF !important;
-    color: #000000 !important;
-  }
   .no-print {
     display: none !important;
   }
+  body {
+    background: #FFFFFF !important;
+    visibility: visible !important;
+  }
+  .printable-area, .printable-area * {
+    visibility: visible !important;
+  }
+  .printable-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8mm !important;
+    width: 100% !important;
+  }
   .qr-label-card {
-    page-break-inside: avoid;
+    position: static !important;
+    transform: none !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 14px 10px !important;
     border: 2px solid #000000 !important;
+    border-radius: 10px !important;
     background: #FFFFFF !important;
     color: #000000 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    box-shadow: none !important;
   }
 }

@@ -109,6 +109,35 @@ class FirebaseService {
     }
   }
 
+  // Update asset status; if RESOLVED, permanently delete from system
+  static Future<void> updateAssetStatus(String itemId, String status) async {
+    final clean = status.toUpperCase().trim();
+    if (clean == 'RESOLVED') {
+      await deleteAssetPermanently(itemId);
+      return;
+    }
+    final now = DateTime.now().toIso8601String();
+    try {
+      await _firestore.collection('items').doc(itemId).set({
+        'status': clean,
+        'updatedAt': now,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      debugPrint("Error updating status for $itemId: $e");
+      rethrow;
+    }
+  }
+
+  // Permanently delete an asset from Firestore
+  static Future<void> deleteAssetPermanently(String itemId) async {
+    try {
+      await _firestore.collection('items').doc(itemId).delete();
+    } catch (e) {
+      debugPrint("Error permanently deleting asset $itemId: $e");
+      rethrow;
+    }
+  }
+
   // Resolve / Close a ticket
   static Future<void> resolveTicket(String ticketId, String notes) async {
     final now = DateTime.now().toIso8601String();

@@ -57,11 +57,11 @@ export const Navbar = () => {
             <QrCode size={18} color="#ffffff" />
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontSize: "1.1rem", fontWeight: "700", letterSpacing: "-0.03em", color: "#F8FAFC", lineHeight: 1.1 }}>
+            <span style={{ fontSize: "1.1rem", fontWeight: "700", letterSpacing: "-0.03em", color: "#0F172A", lineHeight: 1.1 }}>
               CampusFix
             </span>
             <span style={{ fontSize: "0.675rem", color: "#64748B", letterSpacing: "0.02em" }}>
-              Asset & Issue Management
+              Asset & Issue Maintenance
             </span>
           </div>
         </Link>
@@ -71,7 +71,7 @@ export const Navbar = () => {
           <Link
             to="/track"
             style={{
-              color: "#94A3B8",
+              color: "#475569",
               textDecoration: "none",
               fontSize: "0.8rem",
               fontWeight: "500",
@@ -105,7 +105,7 @@ export const Navbar = () => {
                   navigate("/");
                 }}
                 className="btn-ghost"
-                style={{ color: "#F87171", padding: "0.35rem 0.5rem" }}
+                style={{ color: "#EF4444", padding: "0.35rem 0.5rem" }}
                 title="Logout"
               >
                 <LogOut size={14} />

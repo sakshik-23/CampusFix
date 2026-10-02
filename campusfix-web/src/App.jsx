@@ -46,7 +46,7 @@ const ProtectedAdminLayout = () => {
       <Navbar />
       <div style={{ display: "flex", flex: 1 }}>
         <Sidebar />
-        <main style={{ flex: 1, backgroundColor: "#0B0F19", minWidth: 0, overflowY: "auto" }}>
+        <main style={{ flex: 1, backgroundColor: "var(--bg-base)", minWidth: 0, overflowY: "auto" }}>
           <Outlet />
         </main>
       </div>

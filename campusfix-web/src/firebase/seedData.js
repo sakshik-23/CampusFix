@@ -1,15 +1,18 @@
 export const INITIAL_ASSETS = [
   {
     itemId: "AST-000001",
+    item_id: "AST-000001",
+    item_code: "AST-000001",
     itemName: "Projector #01",
+    item_name: "Projector #01",
+    type_id: "TYP-001",
+    type_code: "PRJ",
     itemType: "Projector",
+    loc_id: "LOC-A203",
     description: "Ceiling-mounted Epson EB-X06 projector with HDMI/VGA inputs.",
     building: "Main Academic Block",
     floor: "2",
     room: "A-203",
-    manufacturer: "Epson",
-    model: "EB-X06",
-    serialNumber: "SN-EPS-98214",
     latitude: 18.520430,
     longitude: 73.856744,
     status: "ACTIVE",
@@ -20,15 +23,18 @@ export const INITIAL_ASSETS = [
   },
   {
     itemId: "AST-000002",
+    item_id: "AST-000002",
+    item_code: "AST-000002",
     itemName: "AC Unit #02",
-    itemType: "AC",
+    item_name: "AC Unit #02",
+    type_id: "TYP-002",
+    type_code: "AC",
+    itemType: "Air Conditioner",
+    loc_id: "LOC-A203",
     description: "Voltas 2-Ton Split Inverter Air Conditioner.",
     building: "Main Academic Block",
     floor: "2",
     room: "A-203",
-    manufacturer: "Voltas",
-    model: "183V CZT",
-    serialNumber: "SN-VOL-44120",
     latitude: 18.520480,
     longitude: 73.856790,
     status: "ACTIVE",
@@ -39,15 +45,18 @@ export const INITIAL_ASSETS = [
   },
   {
     itemId: "AST-000003",
+    item_id: "AST-000003",
+    item_code: "AST-000003",
     itemName: "Ceiling Fan #04",
-    itemType: "Fan",
+    item_name: "Ceiling Fan #04",
+    type_id: "TYP-003",
+    type_code: "FAN",
+    itemType: "Ceiling Fan",
+    loc_id: "LOC-B301",
     description: "Havells 1200mm high-speed ceiling fan near entrance window.",
     building: "Science & CS Block",
     floor: "3",
     room: "B-301",
-    manufacturer: "Havells",
-    model: "Stealth Air",
-    serialNumber: "SN-HAV-10922",
     latitude: 18.521150,
     longitude: 73.857320,
     status: "ACTIVE",
@@ -58,15 +67,18 @@ export const INITIAL_ASSETS = [
   },
   {
     itemId: "AST-000004",
+    item_id: "AST-000004",
+    item_code: "AST-000004",
     itemName: "Interactive Smart Board #01",
+    item_name: "Interactive Smart Board #01",
+    type_id: "TYP-004",
+    type_code: "SMB",
     itemType: "Smart Board",
+    loc_id: "LOC-B301",
     description: "75-inch ViewSonic 4K touch display for digital lectures.",
     building: "Science & CS Block",
     floor: "3",
     room: "B-301",
-    manufacturer: "ViewSonic",
-    model: "IFP7550",
-    serialNumber: "SN-VS-88301",
     latitude: 18.521180,
     longitude: 73.857360,
     status: "ACTIVE",
@@ -77,15 +89,18 @@ export const INITIAL_ASSETS = [
   },
   {
     itemId: "AST-000005",
+    item_id: "AST-000005",
+    item_code: "AST-000005",
     itemName: "RO Water Cooler #01",
+    item_name: "RO Water Cooler #01",
+    type_id: "TYP-005",
+    type_code: "WTR",
     itemType: "Water Cooler",
+    loc_id: "LOC-LIB1",
     description: "Blue Star 80L stainless steel water purifier and chiller.",
     building: "Library & Central Facility",
     floor: "1",
     room: "Corridor East",
-    manufacturer: "Blue Star",
-    model: "SDLX80",
-    serialNumber: "SN-BS-55201",
     latitude: 18.519920,
     longitude: 73.856100,
     status: "ACTIVE",
@@ -96,15 +111,18 @@ export const INITIAL_ASSETS = [
   },
   {
     itemId: "AST-000006",
+    item_id: "AST-000006",
+    item_code: "AST-000006",
     itemName: "Lab Workstation #12",
-    itemType: "Computer",
+    item_name: "Lab Workstation #12",
+    type_id: "TYP-006",
+    type_code: "PC",
+    itemType: "Lab Computer",
+    loc_id: "LOC-MCA1",
     description: "Dell OptiPlex 7090 Tower with Dual Monitor setup in MCA Lab 1.",
     building: "Science & CS Block",
     floor: "1",
     room: "MCA Computer Lab 1",
-    manufacturer: "Dell",
-    model: "OptiPlex 7090",
-    serialNumber: "SN-DEL-77312",
     latitude: 18.521010,
     longitude: 73.857150,
     status: "ACTIVE",
@@ -193,15 +211,96 @@ export const TICKET_TYPES = [
   "Other"
 ];
 
-export const ASSET_TYPES = [
-  "Projector",
-  "AC",
-  "Fan",
-  "Smart Board",
-  "Water Cooler",
-  "Computer",
-  "Printer",
-  "Light / Tube Light",
-  "Sound System",
-  "Other"
+export const INITIAL_ITEM_TYPES = [
+  {
+    type_id: "TYP-001",
+    type_name: "Projector",
+    type_code: "PRJ",
+    type_description: "Classroom and auditorium digital projection units and visual display systems"
+  },
+  {
+    type_id: "TYP-002",
+    type_name: "Air Conditioner",
+    type_code: "AC",
+    type_description: "Split, window, and central HVAC air conditioning and cooling units"
+  },
+  {
+    type_id: "TYP-003",
+    type_name: "Ceiling Fan",
+    type_code: "FAN",
+    type_description: "High-speed ceiling fans and classroom ventilation equipment"
+  },
+  {
+    type_id: "TYP-004",
+    type_name: "Smart Board",
+    type_code: "SMB",
+    type_description: "Interactive touchscreen digital whiteboards and smart lecture displays"
+  },
+  {
+    type_id: "TYP-005",
+    type_name: "Water Cooler",
+    type_code: "WTR",
+    type_description: "RO purified drinking water coolers, filtration units, and dispensers"
+  },
+  {
+    type_id: "TYP-006",
+    type_name: "Lab Computer",
+    type_code: "PC",
+    type_description: "Desktop workstations, CPU towers, and dual monitors in campus laboratories"
+  },
+  {
+    type_id: "TYP-007",
+    type_name: "Network Switch",
+    type_code: "NET",
+    type_description: "Managed switches, Wi-Fi 6 access points, and rack network hardware"
+  },
+  {
+    type_id: "TYP-008",
+    type_name: "Audio System",
+    type_code: "AUD",
+    type_description: "Amplifiers, wireless microphones, and wall-mounted speakers"
+  },
+  {
+    type_id: "TYP-009",
+    type_name: "Printer / Scanner",
+    type_code: "PRN",
+    type_description: "Multi-function laser printers, photocopiers, and scanners"
+  }
+];
+
+export const ASSET_TYPES = INITIAL_ITEM_TYPES.map((t) => t.type_name);
+
+export const CAMPUS_BUILDINGS = [
+  "Main IMCC Building",
+  "BSM Junior College Building",
+  "Senior College Building",
+  "Knowledge Resource Center"
+];
+
+export const CAMPUS_FLOORS = [
+  "Ground Floor",
+  "1st Floor",
+  "2nd Floor",
+  "3rd Floor",
+  "4th Floor",
+  "5th Floor"
+];
+
+export const CAMPUS_ROOMS = [
+  "Classroom 301",
+  "Classroom 302",
+  "Classroom 303",
+  "Classroom 401",
+  "Classroom 402",
+  "Classroom 403",
+  "Classroom 501",
+  "Classroom 502",
+  "Classroom 503",
+  "Computer Lab 1",
+  "Computer Lab 2",
+  "Research Lab",
+  "Exam Center",
+  "Faculty Room 1",
+  "Faculty Room 2",
+  "Faculty Room 3"
 ];

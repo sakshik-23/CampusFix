@@ -8,14 +8,14 @@ import {
   Smartphone, 
   Wrench, 
   CheckCircle2,
-  Layers,
-  Sparkles,
-  ChevronRight
+  AlertTriangle,
+  Clock,
+  ExternalLink,
+  Info
 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useData } from "../context/DataContext";
 import { CampusMap } from "../components/CampusMap";
-import { StatusBadge } from "../components/StatusBadge";
 
 export const LandingPage = () => {
   const { assets, tickets, stats } = useData();
@@ -46,11 +46,12 @@ export const LandingPage = () => {
       <section
         style={{
           position: "relative",
-          padding: "4rem 1.25rem 3rem 1.25rem",
-          overflow: "hidden"
+          padding: "3.5rem 1.25rem 2.5rem 1.25rem",
+          background: "linear-gradient(180deg, #F0F9FF 0%, #F8FAFC 100%)",
+          borderBottom: "1px solid #E2E8F0"
         }}
       >
-        <div style={{ maxWidth: "1280px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "3rem", alignItems: "center" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "2.5rem", alignItems: "center" }}>
           {/* Left Hero Content */}
           <div>
             <div
@@ -58,191 +59,199 @@ export const LandingPage = () => {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "0.5rem",
-                padding: "0.25rem 0.65rem",
+                padding: "0.3rem 0.75rem",
                 borderRadius: "9999px",
-                background: "rgba(2, 132, 199, 0.1)",
-                border: "1px solid rgba(2, 132, 199, 0.25)",
-                color: "#38BDF8",
+                background: "#E0F2FE",
+                border: "1px solid #BAE6FD",
+                color: "#0369A1",
                 fontSize: "0.75rem",
-                fontFamily: "var(--font-mono)",
                 fontWeight: "600",
-                marginBottom: "1.25rem"
+                marginBottom: "1rem"
               }}
             >
-              <QrCode size={13} /> CAMPUS FACILITY MANAGEMENT
+              <QrCode size={14} /> Campus Asset & Issue Maintenance
             </div>
 
             <h1
               style={{
-                fontSize: "clamp(2.2rem, 4vw, 3.4rem)",
+                fontSize: "clamp(2rem, 3.8vw, 3.2rem)",
                 fontWeight: "800",
-                lineHeight: 1.15,
+                lineHeight: 1.2,
                 letterSpacing: "-0.03em",
-                color: "#FFFFFF",
-                marginBottom: "1rem"
+                color: "#0F172A",
+                marginBottom: "0.85rem"
               }}
             >
-              Campus Asset & Issue Tracking
+              Report & Track Campus Facilities Simply
             </h1>
 
             <p
               style={{
-                fontSize: "1rem",
-                color: "#94A3B8",
+                fontSize: "1.05rem",
+                color: "#475569",
                 lineHeight: 1.6,
                 marginBottom: "1.75rem",
                 maxWidth: "520px"
               }}
             >
-              Scan physical QR labels on campus equipment to report maintenance issues instantly. Technicians track, inspect, and resolve tickets with real-time GPS verification.
+              Spot a broken projector, fan, or lab PC? Scan the physical QR sticker to log an issue instantly. Technicians track, repair, and close requests with ease.
             </p>
 
-            {/* Clean Search / Lookup Bar */}
+            {/* Clean & Clear Search / Lookup Bar */}
             <form
               onSubmit={handleSimulateScan}
               style={{
-                background: "#0E121B",
-                padding: "0.35rem",
-                borderRadius: "0.5rem",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
+                background: "#FFFFFF",
+                padding: "0.45rem 0.5rem",
+                borderRadius: "0.75rem",
+                border: "1.5px solid #CBD5E1",
+                boxShadow: "0 4px 14px rgba(0, 0, 0, 0.05)",
                 display: "flex",
                 gap: "0.5rem",
                 alignItems: "center",
-                maxWidth: "480px",
-                marginBottom: "1rem"
+                maxWidth: "560px",
+                marginBottom: "0.6rem"
               }}
             >
-              <div style={{ paddingLeft: "0.75rem", color: "#64748B" }}>
-                <Search size={16} />
+              <div style={{ paddingLeft: "0.75rem", color: "#0284C7", display: "flex", alignItems: "center" }}>
+                <Search size={20} />
               </div>
               <input
                 type="text"
-                placeholder="Enter Asset ID (e.g. AST-000001) or Ticket ID..."
+                placeholder="Enter Asset ID or Ticket ID..."
                 value={searchCode}
                 onChange={(e) => setSearchCode(e.target.value)}
                 style={{
                   flex: 1,
                   background: "transparent",
                   border: "none",
-                  color: "#FFFFFF",
-                  fontSize: "0.875rem",
+                  color: "#0F172A",
+                  fontSize: "0.95rem",
                   outline: "none",
-                  fontFamily: "var(--font-mono)"
+                  fontFamily: "var(--font-sans)",
+                  minWidth: 0
                 }}
               />
               <button
                 type="submit"
                 className="btn-primary"
-                style={{ padding: "0.45rem 0.9rem", fontSize: "0.8125rem" }}
+                style={{ padding: "0.55rem 1.15rem", fontSize: "0.875rem", flexShrink: 0 }}
               >
-                Look Up <ArrowRight size={14} />
+                Look Up <ArrowRight size={15} />
               </button>
             </form>
 
-            {/* Sample Asset Links */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap", fontSize: "0.75rem", color: "#64748B" }}>
-              <span>Sample Equipment:</span>
-              {assets.slice(0, 3).map((a) => (
-                <button
-                  key={a.itemId}
-                  onClick={() => navigate(`/report/${a.itemId}`)}
-                  style={{
-                    background: "#131722",
-                    border: "1px solid rgba(255, 255, 255, 0.08)",
-                    color: "#94A3B8",
-                    padding: "0.2rem 0.5rem",
-                    borderRadius: "0.3rem",
-                    fontSize: "0.725rem",
-                    cursor: "pointer",
-                    fontFamily: "var(--font-mono)",
-                    transition: "all 0.15s ease"
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "#38BDF8";
-                    e.currentTarget.style.borderColor = "rgba(56, 189, 248, 0.3)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "#94A3B8";
-                    e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
-                  }}
-                >
-                  {a.itemId} ({a.itemName})
-                </button>
-              ))}
+            {/* Clear Helper Instructions */}
+            <div style={{ fontSize: "0.8rem", color: "#64748B", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+              <span>Search by <strong>Asset ID</strong> (e.g. <code>AST-000001</code>) or <strong>Ticket ID</strong> (e.g. <code>TKT-2026-000001</code>)</span>
             </div>
           </div>
 
-          {/* Right Hero: Clean Industrial Asset QR Tag */}
+          {/* Right Hero: Sample Asset Tag Illustration (Educational Preview) */}
           <div style={{ display: "flex", justifyContent: "center" }}>
             <div
               style={{
                 width: "100%",
-                maxWidth: "320px",
+                maxWidth: "350px",
                 background: "#FFFFFF",
-                borderRadius: "0.75rem",
+                borderRadius: "1rem",
                 padding: "1.5rem",
                 color: "#0F172A",
-                boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.6)",
-                border: "1px solid #CBD5E1",
-                textAlign: "center",
-                userSelect: "none"
+                boxShadow: "0 10px 25px -5px rgba(2, 132, 199, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04)",
+                border: "1px solid #E2E8F0",
+                textAlign: "center"
               }}
             >
-              {/* Asset Tag Header */}
-              <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", fontWeight: "700", color: "#64748B", letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                CAMPUS PROPERTY ID
-              </div>
-              <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "#0F172A", marginTop: "0.15rem" }}>
-                {sampleFeaturedAsset.itemName}
-              </div>
-              <div style={{ fontSize: "0.8rem", color: "#475569", fontWeight: "600", marginTop: "2px" }}>
-                Room {sampleFeaturedAsset.room} • {sampleFeaturedAsset.building}
-              </div>
-
-              {/* QR Code */}
+              {/* Educational Badge */}
               <div
                 style={{
-                  display: "inline-block",
-                  margin: "1rem auto 0.75rem auto",
-                  padding: "0.75rem",
-                  background: "#F8FAFC",
-                  borderRadius: "0.5rem",
-                  border: "1px solid #E2E8F0"
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.35rem",
+                  padding: "0.25rem 0.65rem",
+                  borderRadius: "9999px",
+                  background: "#F1F5F9",
+                  border: "1px solid #CBD5E1",
+                  fontSize: "0.7rem",
+                  fontWeight: "700",
+                  color: "#475569",
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                  marginBottom: "0.85rem"
                 }}
               >
-                <QRCodeSVG
-                  value={`${window.location.origin}/report/${sampleFeaturedAsset.itemId}`}
-                  size={150}
-                  level="H"
-                  includeMargin={false}
-                />
+                <Info size={13} color="#0284C7" /> Physical Sticker Preview
               </div>
 
-              {/* Asset ID */}
-              <div style={{ fontFamily: "var(--font-mono)", fontWeight: "800", fontSize: "1rem", color: "#0F172A" }}>
-                {sampleFeaturedAsset.itemId}
+              <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "#0F172A" }}>
+                How Equipment Labels Look
               </div>
-              <div style={{ fontSize: "0.725rem", color: "#64748B", marginTop: "2px" }}>
-                Scan with camera to report maintenance issue
-              </div>
+              <p style={{ fontSize: "0.8rem", color: "#64748B", marginTop: "4px", lineHeight: 1.4 }}>
+                This is an example of the physical QR sticker affixed to classroom and lab equipment:
+              </p>
 
-              <div style={{ marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px solid #E2E8F0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "0.65rem", color: "#94A3B8", fontFamily: "var(--font-mono)" }}>VERIFIED ASSET</span>
-                <button
-                  onClick={() => navigate(`/report/${sampleFeaturedAsset.itemId}`)}
+              {/* Physical Sticker Illustration */}
+              <div
+                style={{
+                  margin: "1rem auto 0.75rem auto",
+                  padding: "1rem",
+                  background: "#F8FAFC",
+                  borderRadius: "0.75rem",
+                  border: "1.5px dashed #CBD5E1",
+                  textAlign: "center"
+                }}
+              >
+                <div style={{ fontSize: "0.65rem", fontWeight: "700", color: "#64748B", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                  CAMPUSFIX • ASSET LABEL
+                </div>
+                <div style={{ fontSize: "1.05rem", fontWeight: "800", color: "#0F172A", marginTop: "0.2rem" }}>
+                  {sampleFeaturedAsset.itemName}
+                </div>
+                <div style={{ fontSize: "0.8rem", color: "#64748B", marginTop: "2px" }}>
+                  Room {sampleFeaturedAsset.room} • {sampleFeaturedAsset.building}
+                </div>
+
+                {/* Non-functional Sample QR Code */}
+                <div
                   style={{
-                    background: "#0284C7",
-                    color: "#ffffff",
-                    border: "none",
-                    borderRadius: "0.3rem",
-                    padding: "0.25rem 0.6rem",
-                    fontSize: "0.725rem",
-                    fontWeight: "600",
-                    cursor: "pointer"
+                    display: "inline-block",
+                    margin: "0.85rem auto 0.65rem auto",
+                    padding: "0.75rem",
+                    background: "#FFFFFF",
+                    borderRadius: "0.5rem",
+                    border: "1px solid #E2E8F0"
                   }}
                 >
-                  Report Issue
-                </button>
+                  <QRCodeSVG
+                    value="CampusFix Example QR Tag — Demonstrates physical asset label format."
+                    size={140}
+                    level="M"
+                    includeMargin={false}
+                  />
+                </div>
+
+                <div style={{ fontFamily: "var(--font-mono)", fontWeight: "700", fontSize: "1rem", color: "#0284C7" }}>
+                  {sampleFeaturedAsset.itemId}
+                </div>
+                <div style={{ fontSize: "0.7rem", color: "#94A3B8", marginTop: "2px" }}>
+                  (Unique Asset ID Format)
+                </div>
+              </div>
+
+              {/* Descriptive Explanatory Footer */}
+              <div
+                style={{
+                  fontSize: "0.775rem",
+                  color: "#475569",
+                  lineHeight: 1.5,
+                  padding: "0.6rem 0.75rem",
+                  background: "#F0F9FF",
+                  borderRadius: "0.5rem",
+                  border: "1px solid #BAE6FD",
+                  textAlign: "left"
+                }}
+              >
+                💡 <strong style={{ color: "#0369A1" }}>Example only:</strong> Students and faculty scan the physical sticker on the actual equipment using their phone camera to file an issue directly.
               </div>
             </div>
           </div>
@@ -250,78 +259,81 @@ export const LandingPage = () => {
       </section>
 
       {/* Metric Cards */}
-      <section style={{ maxWidth: "1280px", margin: "0 auto 3rem auto", padding: "0 1.25rem", width: "100%" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
-          <div className="card-premium" style={{ padding: "1.25rem" }}>
-            <div style={{ color: "#64748B", fontSize: "0.75rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.06em" }}>Total Assets</div>
-            <div style={{ fontSize: "1.8rem", fontWeight: "800", color: "#FFFFFF", marginTop: "0.15rem", letterSpacing: "-0.03em" }}>{stats.totalAssets}</div>
-            <div style={{ fontSize: "0.75rem", color: "#38BDF8", marginTop: "0.25rem" }}>Registered with QR labels</div>
+      <section style={{ maxWidth: "1280px", margin: "2.5rem auto", padding: "0 1.25rem", width: "100%" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
+          <div className="card-premium" style={{ padding: "1.25rem", borderLeft: "4px solid #0284C7" }}>
+            <div style={{ color: "#64748B", fontSize: "0.75rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>Total Assets</div>
+            <div style={{ fontSize: "1.9rem", fontWeight: "800", color: "#0F172A", marginTop: "0.15rem" }}>{stats.totalAssets}</div>
+            <div style={{ fontSize: "0.775rem", color: "#0284C7", marginTop: "0.25rem", fontWeight: "500" }}>Registered in campus inventory</div>
           </div>
 
-          <div className="card-premium" style={{ padding: "1.25rem" }}>
-            <div style={{ color: "#64748B", fontSize: "0.75rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.06em" }}>Active Issues</div>
-            <div style={{ fontSize: "1.8rem", fontWeight: "800", color: "#F87171", marginTop: "0.15rem", letterSpacing: "-0.03em" }}>{stats.openTickets}</div>
-            <div style={{ fontSize: "0.75rem", color: "#94A3B8", marginTop: "0.25rem" }}>Pending technician action</div>
+          <div className="card-premium" style={{ padding: "1.25rem", borderLeft: "4px solid #EF4444" }}>
+            <div style={{ color: "#64748B", fontSize: "0.75rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>Active Issues</div>
+            <div style={{ fontSize: "1.9rem", fontWeight: "800", color: "#DC2626", marginTop: "0.15rem" }}>{stats.openTickets}</div>
+            <div style={{ fontSize: "0.775rem", color: "#64748B", marginTop: "0.25rem" }}>Awaiting repair</div>
           </div>
 
-          <div className="card-premium" style={{ padding: "1.25rem" }}>
-            <div style={{ color: "#64748B", fontSize: "0.75rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.06em" }}>Resolved</div>
-            <div style={{ fontSize: "1.8rem", fontWeight: "800", color: "#34D399", marginTop: "0.15rem", letterSpacing: "-0.03em" }}>{stats.closedTickets}</div>
-            <div style={{ fontSize: "0.75rem", color: "#34D399", marginTop: "0.25rem" }}>Completed and verified</div>
+          <div className="card-premium" style={{ padding: "1.25rem", borderLeft: "4px solid #10B981" }}>
+            <div style={{ color: "#64748B", fontSize: "0.75rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>Resolved</div>
+            <div style={{ fontSize: "1.9rem", fontWeight: "800", color: "#059669", marginTop: "0.15rem" }}>{stats.closedTickets}</div>
+            <div style={{ fontSize: "0.775rem", color: "#059669", marginTop: "0.25rem", fontWeight: "500" }}>Fixed and verified</div>
           </div>
 
-          <div className="card-premium" style={{ padding: "1.25rem" }}>
-            <div style={{ color: "#64748B", fontSize: "0.75rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.06em" }}>Operational Rate</div>
-            <div style={{ fontSize: "1.8rem", fontWeight: "800", color: "#CBD5E1", marginTop: "0.15rem", letterSpacing: "-0.03em" }}>
+          <div className="card-premium" style={{ padding: "1.25rem", borderLeft: "4px solid #6366F1" }}>
+            <div style={{ color: "#64748B", fontSize: "0.75rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>Operational Rate</div>
+            <div style={{ fontSize: "1.9rem", fontWeight: "800", color: "#0F172A", marginTop: "0.15rem" }}>
               {stats.totalAssets > 0 ? `${Math.round(((stats.totalAssets - stats.openTickets) / stats.totalAssets) * 100)}%` : "100%"}
             </div>
-            <div style={{ fontSize: "0.75rem", color: "#94A3B8", marginTop: "0.25rem" }}>Equipment in working condition</div>
+            <div style={{ fontSize: "0.775rem", color: "#64748B", marginTop: "0.25rem" }}>Equipment working properly</div>
           </div>
         </div>
       </section>
 
       {/* 3 Step Workflow */}
-      <section style={{ maxWidth: "1280px", margin: "0 auto 3.5rem auto", padding: "0 1.25rem", width: "100%" }}>
-        <div style={{ marginBottom: "1.5rem" }}>
-          <div style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "#38BDF8", fontWeight: "600", letterSpacing: "0.06em" }}>
-            HOW IT WORKS
+      <section style={{ maxWidth: "1280px", margin: "1rem auto 3rem auto", padding: "0 1.25rem", width: "100%" }}>
+        <div style={{ marginBottom: "1.5rem", textAlign: "center" }}>
+          <div style={{ fontSize: "0.75rem", color: "#0284C7", fontWeight: "700", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+            SIMPLE WORKFLOW
           </div>
-          <h2 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#FFFFFF", letterSpacing: "-0.025em", marginTop: "0.2rem" }}>
-            Three-Step Resolution Process
+          <h2 style={{ fontSize: "1.6rem", fontWeight: "800", color: "#0F172A", letterSpacing: "-0.025em", marginTop: "0.25rem" }}>
+            How CampusFix Works
           </h2>
+          <p style={{ color: "#64748B", fontSize: "0.95rem", maxWidth: "480px", margin: "0.4rem auto 0 auto" }}>
+            No complicated app downloads or logins required for reporting issues.
+          </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
-          <div className="card-premium" style={{ padding: "1.5rem" }}>
-            <div style={{ width: "36px", height: "36px", borderRadius: "0.5rem", background: "rgba(2, 132, 199, 0.1)", color: "#38BDF8", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
-              <QrCode size={18} />
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
+          <div className="card-premium" style={{ padding: "1.75rem", textAlign: "left" }}>
+            <div style={{ width: "42px", height: "42px", borderRadius: "0.625rem", background: "#E0F2FE", color: "#0284C7", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+              <QrCode size={22} />
             </div>
-            <div style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "#64748B", fontWeight: "600" }}>STEP 01</div>
-            <h3 style={{ fontSize: "1.05rem", fontWeight: "700", color: "#FFFFFF", margin: "0.3rem 0 0.4rem 0" }}>Scan Equipment QR</h3>
-            <p style={{ color: "#94A3B8", fontSize: "0.85rem", lineHeight: 1.6 }}>
-              Scan the physical QR sticker on any device using any phone camera to open the asset filing page directly.
+            <div style={{ fontSize: "0.75rem", color: "#0284C7", fontWeight: "700" }}>STEP 01</div>
+            <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#0F172A", margin: "0.3rem 0 0.5rem 0" }}>Scan Equipment QR</h3>
+            <p style={{ color: "#475569", fontSize: "0.875rem", lineHeight: 1.6 }}>
+              Scan the physical QR sticker on any classroom or lab device with your smartphone camera.
             </p>
           </div>
 
-          <div className="card-premium" style={{ padding: "1.5rem" }}>
-            <div style={{ width: "36px", height: "36px", borderRadius: "0.5rem", background: "rgba(168, 85, 247, 0.1)", color: "#C084FC", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
-              <Smartphone size={18} />
+          <div className="card-premium" style={{ padding: "1.75rem", textAlign: "left" }}>
+            <div style={{ width: "42px", height: "42px", borderRadius: "0.625rem", background: "#FEF3C7", color: "#D97706", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+              <Smartphone size={22} />
             </div>
-            <div style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "#64748B", fontWeight: "600" }}>STEP 02</div>
-            <h3 style={{ fontSize: "1.05rem", fontWeight: "700", color: "#FFFFFF", margin: "0.3rem 0 0.4rem 0" }}>Submit Issue Details</h3>
-            <p style={{ color: "#94A3B8", fontSize: "0.85rem", lineHeight: 1.6 }}>
-              Select defect category, describe the issue, and provide your phone number. The ticket is immediately routed to technicians.
+            <div style={{ fontSize: "0.75rem", color: "#D97706", fontWeight: "700" }}>STEP 02</div>
+            <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#0F172A", margin: "0.3rem 0 0.5rem 0" }}>Submit Issue Details</h3>
+            <p style={{ color: "#475569", fontSize: "0.875rem", lineHeight: 1.6 }}>
+              Select what is broken, provide a short description, and submit. An instant tracking ticket is generated.
             </p>
           </div>
 
-          <div className="card-premium" style={{ padding: "1.5rem" }}>
-            <div style={{ width: "36px", height: "36px", borderRadius: "0.5rem", background: "rgba(16, 185, 129, 0.1)", color: "#34D399", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
-              <Wrench size={18} />
+          <div className="card-premium" style={{ padding: "1.75rem", textAlign: "left" }}>
+            <div style={{ width: "42px", height: "42px", borderRadius: "0.625rem", background: "#DCFCE7", color: "#16A34A", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+              <Wrench size={22} />
             </div>
-            <div style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "#64748B", fontWeight: "600" }}>STEP 03</div>
-            <h3 style={{ fontSize: "1.05rem", fontWeight: "700", color: "#FFFFFF", margin: "0.3rem 0 0.4rem 0" }}>On-Site Resolution</h3>
-            <p style={{ color: "#94A3B8", fontSize: "0.85rem", lineHeight: 1.6 }}>
-              Maintenance staff inspect the asset, perform repairs, record resolution remarks, and close the ticket with GPS confirmation.
+            <div style={{ fontSize: "0.75rem", color: "#16A34A", fontWeight: "700" }}>STEP 03</div>
+            <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#0F172A", margin: "0.3rem 0 0.5rem 0" }}>Technician Resolves</h3>
+            <p style={{ color: "#475569", fontSize: "0.875rem", lineHeight: 1.6 }}>
+              Campus maintenance staff inspect the asset, fix the problem on-site, and mark the ticket resolved.
             </p>
           </div>
         </div>
@@ -331,24 +343,24 @@ export const LandingPage = () => {
       <section style={{ maxWidth: "1280px", margin: "0 auto 4rem auto", padding: "0 1.25rem", width: "100%" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "1rem", flexWrap: "wrap", gap: "0.5rem" }}>
           <div>
-            <div style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "#38BDF8", fontWeight: "600", letterSpacing: "0.06em" }}>
+            <div style={{ fontSize: "0.75rem", color: "#0284C7", fontWeight: "700", letterSpacing: "0.06em", textTransform: "uppercase" }}>
               CAMPUS ASSET MAP
             </div>
-            <h2 style={{ fontSize: "1.4rem", fontWeight: "800", color: "#FFFFFF", letterSpacing: "-0.025em", marginTop: "0.2rem" }}>
-              Equipment Locations & Maintenance Status
+            <h2 style={{ fontSize: "1.4rem", fontWeight: "800", color: "#0F172A", letterSpacing: "-0.025em", marginTop: "0.2rem" }}>
+              Equipment Locations & Real-Time Status
             </h2>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem", fontSize: "0.75rem", fontFamily: "var(--font-mono)" }}>
-            <span style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#34D399" }}>
-              <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#10B981" }}></span> Operational
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", fontSize: "0.8rem", fontWeight: "500" }}>
+            <span style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#059669" }}>
+              <span style={{ width: "9px", height: "9px", borderRadius: "50%", background: "#10B981" }}></span> Operational
             </span>
-            <span style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#F87171" }}>
-              <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#EF4444" }}></span> Issue Reported
+            <span style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#DC2626" }}>
+              <span style={{ width: "9px", height: "9px", borderRadius: "50%", background: "#EF4444" }}></span> Issue Reported
             </span>
           </div>
         </div>
 
-        <div className="card-premium" style={{ padding: "0.4rem" }}>
+        <div className="card-premium" style={{ padding: "0.5rem", borderRadius: "0.75rem" }}>
           <CampusMap assets={assets} tickets={tickets} height="400px" />
         </div>
       </section>

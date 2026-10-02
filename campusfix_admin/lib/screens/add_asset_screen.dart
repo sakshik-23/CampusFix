@@ -20,9 +20,6 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
   final _buildingController = TextEditingController(text: 'Main Academic Block');
   final _floorController = TextEditingController(text: '1');
   final _roomController = TextEditingController(text: '101');
-  final _manufacturerController = TextEditingController();
-  final _modelController = TextEditingController();
-  final _serialController = TextEditingController();
 
   String _selectedCategory = 'Projector';
   double _latitude = 18.520430;
@@ -93,9 +90,6 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
       building: _buildingController.text.trim(),
       floor: _floorController.text.trim(),
       room: _roomController.text.trim(),
-      manufacturer: _manufacturerController.text.trim(),
-      model: _modelController.text.trim(),
-      serialNumber: _serialController.text.trim(),
       latitude: _latitude,
       longitude: _longitude,
       status: 'ACTIVE',
@@ -322,65 +316,6 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // Hardware Info (Manufacturer, Model, Serial)
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF0D111A),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: const Color(0xFF1E2638)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('HARDWARE SPECIFICATIONS (OPTIONAL)', style: TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.w700, fontSize: 10, letterSpacing: 0.8)),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _manufacturerController,
-                              style: const TextStyle(color: Colors.white, fontSize: 13.5),
-                              decoration: const InputDecoration(
-                                labelText: 'Manufacturer',
-                                labelStyle: TextStyle(color: Color(0xFF64748B), fontSize: 12),
-                                border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0284C7))),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: TextFormField(
-                              controller: _modelController,
-                              style: const TextStyle(color: Colors.white, fontSize: 13.5),
-                              decoration: const InputDecoration(
-                                labelText: 'Model Number',
-                                labelStyle: TextStyle(color: Color(0xFF64748B), fontSize: 12),
-                                border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0284C7))),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        controller: _serialController,
-                        style: const TextStyle(color: Colors.white, fontSize: 13.5),
-                        decoration: const InputDecoration(
-                          labelText: 'Serial / Inventory Tag',
-                          labelStyle: TextStyle(color: Color(0xFF64748B), fontSize: 12),
-                          border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
-                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
-                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0284C7))),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 const SizedBox(height: 16),
 
                 // Live GPS Location

@@ -11,10 +11,9 @@ import {
 } from "lucide-react";
 import { useData } from "../../context/DataContext";
 import { QRPreviewModal } from "../../components/QRPreviewModal";
-import { ASSET_TYPES } from "../../firebase/seedData";
 
 export const AdminAssetsPage = () => {
-  const { assets, deleteAsset } = useData();
+  const { assets, itemTypes, updateAsset, deleteAsset } = useData();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("ALL");
   const [selectedStatus, setSelectedStatus] = useState("ALL");
@@ -30,7 +29,7 @@ export const AdminAssetsPage = () => {
       asset.itemType?.toLowerCase().includes(term);
 
     const matchType = selectedType === "ALL" || asset.itemType === selectedType;
-    const matchStatus = selectedStatus === "ALL" || asset.status === selectedStatus;
+    const matchStatus = selectedStatus === "ALL" || (asset.status || "ACTIVE") === selectedStatus;
 
     return matchSearch && matchType && matchStatus;
   });
@@ -41,15 +40,19 @@ export const AdminAssetsPage = () => {
     }
   };
 
+  const handleActivate = async (itemId) => {
+    await updateAsset(itemId, { status: "ACTIVE" });
+  };
+
   return (
     <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem", maxWidth: "1400px", margin: "0 auto" }}>
       {/* Top Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
         <div>
-          <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#38BDF8", fontWeight: "600", letterSpacing: "0.06em" }}>
+          <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#0284C7", fontWeight: "700", letterSpacing: "0.06em" }}>
             ASSET INVENTORY
           </div>
-          <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#FFFFFF", letterSpacing: "-0.025em", marginTop: "0.15rem" }}>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#0F172A", letterSpacing: "-0.025em", marginTop: "0.15rem" }}>
             Campus Equipment Inventory
           </h1>
         </div>
@@ -93,12 +96,12 @@ export const AdminAssetsPage = () => {
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
             className="input-refined"
-            style={{ padding: "0.45rem 0.75rem", fontSize: "0.825rem" }}
+            style={{ padding: "0.45rem 0.75rem", fontSize: "0.825rem", background: "#FFFFFF" }}
           >
-            <option value="ALL" style={{ background: "#0B0D13" }}>All Categories</option>
-            {ASSET_TYPES.map((t) => (
-              <option key={t} value={t} style={{ background: "#0B0D13" }}>
-                {t}
+            <option value="ALL">All Categories</option>
+            {itemTypes.map((t) => (
+              <option key={t.type_id} value={t.type_name}>
+                {t.type_name}
               </option>
             ))}
           </select>
@@ -109,11 +112,11 @@ export const AdminAssetsPage = () => {
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
             className="input-refined"
-            style={{ padding: "0.45rem 0.75rem", fontSize: "0.825rem" }}
+            style={{ padding: "0.45rem 0.75rem", fontSize: "0.825rem", background: "#FFFFFF" }}
           >
-            <option value="ALL" style={{ background: "#0B0D13" }}>All Statuses</option>
-            <option value="ACTIVE" style={{ background: "#0B0D13" }}>ACTIVE</option>
-            <option value="INACTIVE" style={{ background: "#0B0D13" }}>INACTIVE</option>
+            <option value="ALL">All Statuses</option>
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="INACTIVE">INACTIVE</option>
           </select>
         </div>
       </div>
@@ -123,7 +126,7 @@ export const AdminAssetsPage = () => {
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: "0.825rem" }}>
             <thead>
-              <tr style={{ background: "#08090D", borderBottom: "1px solid rgba(255, 255, 255, 0.06)", color: "#64748B", textTransform: "uppercase", fontSize: "0.7rem", letterSpacing: "0.06em", fontFamily: "var(--font-mono)" }}>
+              <tr style={{ background: "#F8FAFC", borderBottom: "1px solid #E2E8F0", color: "#64748B", textTransform: "uppercase", fontSize: "0.7rem", letterSpacing: "0.06em", fontFamily: "var(--font-mono)" }}>
                 <th style={{ padding: "0.75rem 1rem" }}>Asset ID</th>
                 <th style={{ padding: "0.75rem 1rem" }}>Device / Name</th>
                 <th style={{ padding: "0.75rem 1rem" }}>Category</th>
@@ -138,29 +141,24 @@ export const AdminAssetsPage = () => {
                   <tr
                     key={asset.itemId}
                     style={{
-                      borderBottom: "1px solid rgba(255, 255, 255, 0.04)",
+                      borderBottom: "1px solid #E2E8F0",
                       transition: "background 0.1s ease"
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255, 255, 255, 0.03)"}
+                    onMouseEnter={(e) => e.currentTarget.style.background = "#F8FAFC"}
                     onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
                   >
-                    <td style={{ padding: "0.75rem 1rem", fontFamily: "var(--font-mono)", fontWeight: "700", color: "#38BDF8" }}>
+                    <td style={{ padding: "0.75rem 1rem", fontFamily: "var(--font-mono)", fontWeight: "700", color: "#0284C7" }}>
                       {asset.itemId}
                     </td>
-                    <td style={{ padding: "0.75rem 1rem", fontWeight: "600", color: "#FFFFFF" }}>
+                    <td style={{ padding: "0.75rem 1rem", fontWeight: "600", color: "#0F172A" }}>
                       {asset.itemName}
-                      {asset.model && (
-                        <span style={{ display: "block", fontSize: "0.7rem", color: "#64748B", fontWeight: "400" }}>
-                          {asset.manufacturer} {asset.model}
-                        </span>
-                      )}
                     </td>
-                    <td style={{ padding: "0.75rem 1rem", color: "#94A3B8" }}>
-                      <span style={{ background: "#0B0D13", padding: "0.15rem 0.45rem", borderRadius: "0.25rem", fontSize: "0.725rem", border: "1px solid rgba(255, 255, 255, 0.06)" }}>
+                    <td style={{ padding: "0.75rem 1rem", color: "#475569" }}>
+                      <span style={{ background: "#F1F5F9", padding: "0.15rem 0.45rem", borderRadius: "0.25rem", fontSize: "0.725rem", border: "1px solid #E2E8F0" }}>
                         {asset.itemType}
                       </span>
                     </td>
-                    <td style={{ padding: "0.75rem 1rem", color: "#CBD5E1" }}>
+                    <td style={{ padding: "0.75rem 1rem", color: "#334155" }}>
                       <strong>{asset.room}</strong>
                       <span style={{ display: "block", fontSize: "0.7rem", color: "#64748B" }}>
                         Floor {asset.floor} • {asset.building}
@@ -175,11 +173,11 @@ export const AdminAssetsPage = () => {
                           padding: "0.1rem 0.45rem",
                           borderRadius: "9999px",
                           background: asset.status === "ACTIVE" ? "rgba(16, 185, 129, 0.1)" : "rgba(100, 116, 139, 0.1)",
-                          color: asset.status === "ACTIVE" ? "#34D399" : "#94A3B8",
+                          color: asset.status === "ACTIVE" ? "#059669" : "#64748B",
                           border: `1px solid ${asset.status === "ACTIVE" ? "rgba(16, 185, 129, 0.25)" : "rgba(100, 116, 139, 0.2)"}`
                         }}
                       >
-                        {asset.status}
+                        {asset.status || "ACTIVE"}
                       </span>
                     </td>
                     <td style={{ padding: "0.75rem 1rem", textAlign: "right" }}>
@@ -211,14 +209,23 @@ export const AdminAssetsPage = () => {
                           <Edit size={14} />
                         </Link>
 
-                        {asset.status === "ACTIVE" && (
+                        {asset.status === "ACTIVE" ? (
                           <button
                             onClick={() => handleDelete(asset.itemId, asset.itemName)}
                             className="btn-ghost"
                             style={{ padding: "0.3rem", color: "#F87171" }}
-                            title="Deactivate"
+                            title="Deactivate Asset"
                           >
                             <Trash2 size={14} />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleActivate(asset.itemId)}
+                            className="btn-ghost"
+                            style={{ padding: "0.3rem", color: "#10B981" }}
+                            title="Reactivate Asset"
+                          >
+                            <PlusCircle size={14} />
                           </button>
                         )}
                       </div>

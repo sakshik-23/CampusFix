@@ -24,10 +24,10 @@ export const AdminDashboard = () => {
       {/* Top Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
         <div>
-          <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#38BDF8", fontWeight: "600", letterSpacing: "0.06em" }}>
+          <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#0284C7", fontWeight: "700", letterSpacing: "0.06em" }}>
             ADMIN OVERVIEW
           </div>
-          <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#FFFFFF", letterSpacing: "-0.025em", marginTop: "0.15rem" }}>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#0F172A", letterSpacing: "-0.025em", marginTop: "0.15rem" }}>
             Campus Maintenance Overview
           </h1>
         </div>
@@ -49,7 +49,7 @@ export const AdminDashboard = () => {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
             <div>
               <span style={{ fontSize: "0.7rem", fontWeight: "600", color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em" }}>Total Assets</span>
-              <div style={{ fontSize: "1.8rem", fontWeight: "800", color: "#FFFFFF", marginTop: "0.1rem", letterSpacing: "-0.03em" }}>
+              <div style={{ fontSize: "1.8rem", fontWeight: "800", color: "#0F172A", marginTop: "0.1rem", letterSpacing: "-0.03em" }}>
                 {stats.totalAssets}
               </div>
             </div>
@@ -122,8 +122,8 @@ export const AdminDashboard = () => {
         {/* Map */}
         <div className="card-premium" style={{ padding: "1.25rem", display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-            <h3 style={{ fontSize: "0.95rem", fontWeight: "700", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-              <MapPin size={15} color="#38BDF8" /> Campus Asset Geo-Telemetry
+            <h3 style={{ fontSize: "0.95rem", fontWeight: "700", color: "#0F172A", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+              <MapPin size={15} color="#0284C7" /> Campus Asset Geo-Telemetry
             </h3>
             <span style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#64748B" }}>
               {assets.length} Coordinates
@@ -138,10 +138,10 @@ export const AdminDashboard = () => {
         {/* Recent Tickets Feed */}
         <div className="card-premium" style={{ padding: "1.25rem", display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-            <h3 style={{ fontSize: "0.95rem", fontWeight: "700", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-              <Ticket size={15} color="#F87171" /> Recent Reported Tickets
+            <h3 style={{ fontSize: "0.95rem", fontWeight: "700", color: "#0F172A", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+              <Ticket size={15} color="#EF4444" /> Recent Reported Tickets
             </h3>
-            <Link to="/admin/tickets" style={{ fontSize: "0.75rem", color: "#38BDF8", textDecoration: "none", fontWeight: "600", display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+            <Link to="/admin/tickets" style={{ fontSize: "0.75rem", color: "#0284C7", textDecoration: "none", fontWeight: "600", display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
               View All ({tickets.length}) <ArrowRight size={12} />
             </Link>
           </div>
@@ -152,10 +152,10 @@ export const AdminDashboard = () => {
                 <div
                   key={t.ticketId}
                   style={{
-                    background: "#0B0D13",
+                    background: "#F8FAFC",
                     padding: "0.75rem 0.85rem",
-                    borderRadius: "0.375rem",
-                    border: "1px solid rgba(255, 255, 255, 0.05)",
+                    borderRadius: "0.5rem",
+                    border: "1px solid #E2E8F0",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
@@ -164,12 +164,12 @@ export const AdminDashboard = () => {
                 >
                   <div>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                      <span style={{ fontFamily: "var(--font-mono)", fontWeight: "700", color: "#38BDF8", fontSize: "0.8rem" }}>
+                      <span style={{ fontFamily: "var(--font-mono)", fontWeight: "700", color: "#0284C7", fontSize: "0.8rem" }}>
                         {t.ticketId}
                       </span>
                       <StatusBadge status={t.status} size="sm" />
                     </div>
-                    <div style={{ fontSize: "0.85rem", fontWeight: "600", color: "#FFFFFF", marginTop: "0.15rem" }}>
+                    <div style={{ fontSize: "0.85rem", fontWeight: "600", color: "#0F172A", marginTop: "0.15rem" }}>
                       {t.itemSnapshot?.itemName || "Asset"} <span style={{ color: "#64748B", fontWeight: "400" }}>• {t.ticketType}</span>
                     </div>
                     <div style={{ fontSize: "0.7rem", color: "#64748B" }}>

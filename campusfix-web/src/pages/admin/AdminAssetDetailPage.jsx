@@ -22,7 +22,7 @@ import { QRPreviewModal } from "../../components/QRPreviewModal";
 
 export const AdminAssetDetailPage = () => {
   const { itemId } = useParams();
-  const { getAsset, getTicketsByItem, deleteAsset, loading } = useData();
+  const { getAsset, getTicketsByItem, updateAsset, deleteAsset, loading } = useData();
   const navigate = useNavigate();
 
   const [asset, setAsset] = useState(null);
@@ -42,8 +42,13 @@ export const AdminAssetDetailPage = () => {
   const handleDelete = async () => {
     if (window.confirm(`Deactivate ${asset.itemName} (${asset.itemId})?`)) {
       await deleteAsset(asset.itemId);
-      navigate("/admin/assets");
+      setAsset((prev) => ({ ...prev, status: "INACTIVE" }));
     }
+  };
+
+  const handleActivate = async () => {
+    await updateAsset(asset.itemId, { status: "ACTIVE" });
+    setAsset((prev) => ({ ...prev, status: "ACTIVE" }));
   };
 
   if (loading) {
@@ -80,10 +85,10 @@ export const AdminAssetDetailPage = () => {
           </Link>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#F8FAFC" }}>
+              <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#0F172A" }}>
                 {asset.itemName}
               </h1>
-              <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", background: "rgba(59, 130, 246, 0.15)", color: "#60A5FA", padding: "0.2rem 0.5rem", borderRadius: "0.25rem", fontWeight: "700" }}>
+              <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", background: "rgba(2, 132, 199, 0.1)", color: "#0284C7", padding: "0.2rem 0.5rem", borderRadius: "0.25rem", fontWeight: "700" }}>
                 {asset.itemId}
               </span>
               <span
@@ -93,13 +98,13 @@ export const AdminAssetDetailPage = () => {
                   padding: "0.2rem 0.5rem",
                   borderRadius: "9999px",
                   background: asset.status === "ACTIVE" ? "rgba(16, 185, 129, 0.15)" : "rgba(100, 116, 139, 0.2)",
-                  color: asset.status === "ACTIVE" ? "#10B981" : "#94A3B8"
+                  color: asset.status === "ACTIVE" ? "#10B981" : "#64748B"
                 }}
               >
-                {asset.status}
+                {asset.status || "ACTIVE"}
               </span>
             </div>
-            <p style={{ color: "#94A3B8", fontSize: "0.85rem", marginTop: "0.15rem" }}>
+            <p style={{ color: "#64748B", fontSize: "0.85rem", marginTop: "0.15rem" }}>
               {asset.room} • {asset.building}
             </p>
           </div>
@@ -120,14 +125,23 @@ export const AdminAssetDetailPage = () => {
           >
             <Edit size={15} /> Edit Asset
           </Link>
-          {asset.status === "ACTIVE" && (
+          {asset.status === "ACTIVE" ? (
             <button
               onClick={handleDelete}
               className="btn-secondary"
-              style={{ fontSize: "0.85rem", padding: "0.45rem 0.85rem", color: "#F87171" }}
+              style={{ fontSize: "0.85rem", padding: "0.45rem 0.85rem", color: "#EF4444" }}
               title="Deactivate Asset"
             >
               <Trash2 size={15} />
+            </button>
+          ) : (
+            <button
+              onClick={handleActivate}
+              className="btn-secondary"
+              style={{ fontSize: "0.85rem", padding: "0.45rem 0.85rem", color: "#10B981" }}
+              title="Reactivate Asset"
+            >
+              Activate
             </button>
           )}
         </div>
@@ -137,49 +151,48 @@ export const AdminAssetDetailPage = () => {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "1.5rem" }}>
         {/* Specifications Card (PRD FR-17) */}
         <div className="card-premium" style={{ padding: "1.5rem" }}>
-          <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#F8FAFC", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#0F172A", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <Box size={18} color="#0284C7" /> Asset Specifications
           </h3>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", fontSize: "0.875rem" }}>
             <div>
               <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Category / Type</span>
-              <div style={{ color: "#F8FAFC", fontWeight: "600", marginTop: "0.15rem" }}>{asset.itemType}</div>
+              <div style={{ color: "#0F172A", fontWeight: "600", marginTop: "0.15rem" }}>{asset.itemType}</div>
             </div>
 
             <div>
               <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Room Code</span>
-              <div style={{ color: "#F8FAFC", fontWeight: "600", marginTop: "0.15rem" }}>{asset.room}</div>
+              <div style={{ color: "#0F172A", fontWeight: "600", marginTop: "0.15rem" }}>{asset.room}</div>
             </div>
 
             <div>
               <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Floor Level</span>
-              <div style={{ color: "#F8FAFC", fontWeight: "600", marginTop: "0.15rem" }}>Floor {asset.floor}</div>
+              <div style={{ color: "#0F172A", fontWeight: "600", marginTop: "0.15rem" }}>Floor {asset.floor}</div>
             </div>
 
             <div>
               <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Building</span>
-              <div style={{ color: "#F8FAFC", fontWeight: "600", marginTop: "0.15rem" }}>{asset.building}</div>
+              <div style={{ color: "#0F172A", fontWeight: "600", marginTop: "0.15rem" }}>{asset.building}</div>
             </div>
 
             <div>
-              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Manufacturer</span>
-              <div style={{ color: "#F8FAFC", fontWeight: "600", marginTop: "0.15rem" }}>{asset.manufacturer || "N/A"}</div>
+              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Item Code</span>
+              <div style={{ color: "#0284C7", fontWeight: "700", fontFamily: "var(--font-mono)", marginTop: "0.15rem" }}>
+                {asset.item_code || asset.itemId}
+              </div>
             </div>
 
             <div>
-              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Model</span>
-              <div style={{ color: "#F8FAFC", fontWeight: "600", marginTop: "0.15rem" }}>{asset.model || "N/A"}</div>
-            </div>
-
-            <div style={{ gridColumn: "span 2" }}>
-              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Serial Number</span>
-              <div style={{ color: "#F8FAFC", fontWeight: "600", fontFamily: "var(--font-mono)", marginTop: "0.15rem" }}>{asset.serialNumber || "N/A"}</div>
+              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Location Reference</span>
+              <div style={{ color: "#0F172A", fontWeight: "600", fontFamily: "var(--font-mono)", marginTop: "0.15rem" }}>
+                {asset.loc_id || `LOC-${(asset.room || "").replace(/[^a-zA-Z0-9]/g, "").toUpperCase()}`}
+              </div>
             </div>
 
             <div style={{ gridColumn: "span 2" }}>
               <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Description</span>
-              <p style={{ color: "#94A3B8", marginTop: "0.25rem", lineHeight: 1.5 }}>
+              <p style={{ color: "#475569", marginTop: "0.25rem", lineHeight: 1.5 }}>
                 {asset.description || "No specific remarks registered."}
               </p>
             </div>
@@ -194,10 +207,10 @@ export const AdminAssetDetailPage = () => {
         {/* Geo-Location Map Card (PRD FR-20, FR-37) */}
         <div className="card-premium" style={{ padding: "1.5rem", display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-            <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#F8FAFC", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#0F172A", display: "flex", alignItems: "center", gap: "0.5rem" }}>
               <MapPin size={18} color="#0284C7" /> Map Coordinates
             </h3>
-            <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "#94A3B8" }}>
+            <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "#64748B" }}>
               {asset.latitude?.toFixed(6)}, {asset.longitude?.toFixed(6)}
             </span>
           </div>
@@ -214,7 +227,7 @@ export const AdminAssetDetailPage = () => {
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.75rem", fontSize: "0.75rem", color: "#64748B" }}>
             <span>GPS Updated: {asset.locationUpdatedAt ? new Date(asset.locationUpdatedAt).toLocaleDateString() : "Default"}</span>
-            <Link to={`/report/${asset.itemId}`} target="_blank" style={{ color: "#38BDF8", textDecoration: "none", display: "flex", alignItems: "center", gap: "0.25rem" }}>
+            <Link to={`/report/${asset.itemId}`} target="_blank" style={{ color: "#0284C7", textDecoration: "none", display: "flex", alignItems: "center", gap: "0.25rem", fontWeight: "600" }}>
               Open QR Link <ExternalLink size={12} />
             </Link>
           </div>
@@ -224,7 +237,7 @@ export const AdminAssetDetailPage = () => {
       {/* Asset Maintenance History (PRD FR-40, FR-41) */}
       <div className="card-premium" style={{ padding: "1.5rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-          <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#F8FAFC", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#0F172A", display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <Ticket size={18} color="#EF4444" /> Maintenance History ({tickets.length})
           </h3>
         </div>
@@ -235,10 +248,10 @@ export const AdminAssetDetailPage = () => {
               <div
                 key={t.ticketId}
                 style={{
-                  background: "#090A0F",
+                  background: "#F8FAFC",
                   padding: "1rem",
                   borderRadius: "0.5rem",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  border: "1px solid #E2E8F0",
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
@@ -248,15 +261,15 @@ export const AdminAssetDetailPage = () => {
               >
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <span style={{ fontFamily: "var(--font-mono)", fontWeight: "700", color: "#38BDF8", fontSize: "0.9rem" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontWeight: "700", color: "#0284C7", fontSize: "0.9rem" }}>
                       {t.ticketId}
                     </span>
                     <StatusBadge status={t.status} size="sm" />
-                    <span style={{ fontSize: "0.8rem", color: "#CBD5E1", fontWeight: "600" }}>
+                    <span style={{ fontSize: "0.8rem", color: "#0F172A", fontWeight: "600" }}>
                       • {t.ticketType}
                     </span>
                   </div>
-                  <p style={{ fontSize: "0.85rem", color: "#94A3B8", marginTop: "0.25rem", margin: 0 }}>
+                  <p style={{ fontSize: "0.85rem", color: "#475569", marginTop: "0.25rem", margin: 0 }}>
                     "{t.description}"
                   </p>
                   <div style={{ fontSize: "0.75rem", color: "#64748B", marginTop: "0.35rem" }}>

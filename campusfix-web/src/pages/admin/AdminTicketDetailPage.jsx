@@ -21,7 +21,7 @@ import { CampusMap } from "../../components/CampusMap";
 
 export const AdminTicketDetailPage = () => {
   const { ticketId } = useParams();
-  const { getTicket, getAsset, closeTicket, loading } = useData();
+  const { getTicket, getAsset, updateTicketStatus, closeTicket, loading } = useData();
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -42,6 +42,30 @@ export const AdminTicketDetailPage = () => {
     }
   }, [ticketId, loading, getTicket, getAsset]);
 
+  const handleStatusChange = async (newStatus) => {
+    if (!ticket) return;
+    if (newStatus === "RESOLVED") {
+      const confirmDelete = window.confirm(
+        `Are you sure you want to mark ticket ${ticket.ticketId} as RESOLVED?\n\nThis ticket will be entirely and permanently removed from the system.`
+      );
+      if (!confirmDelete) return;
+
+      try {
+        await closeTicket(ticket.ticketId, "Resolved and removed by administrator.");
+        navigate("/admin/tickets");
+      } catch (err) {
+        alert("Failed to resolve ticket: " + (err.message || err));
+      }
+    } else {
+      try {
+        await updateTicketStatus(ticket.ticketId, newStatus);
+        setTicket((prev) => ({ ...prev, status: newStatus }));
+      } catch (err) {
+        alert("Failed to update status: " + (err.message || err));
+      }
+    }
+  };
+
   const handleCloseTicket = async (e) => {
     e.preventDefault();
     setSubmitting(true);
@@ -52,9 +76,7 @@ export const AdminTicketDetailPage = () => {
         user?.email || "admin@campusfix.edu"
       );
       setShowCloseModal(false);
-      // Refresh local ticket state
-      const updated = getTicket(ticketId);
-      setTicket(updated);
+      navigate("/admin/tickets");
     } catch (err) {
       alert("Error closing ticket: " + err.message);
     } finally {
@@ -99,13 +121,46 @@ export const AdminTicketDetailPage = () => {
           </Link>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#F8FAFC", fontFamily: "var(--font-mono)" }}>
+              <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#0F172A", fontFamily: "var(--font-mono)" }}>
                 {ticket.ticketId}
               </h1>
-              <StatusBadge status={ticket.status} size="md" />
+              <select
+                value={
+                  ticket.status === "IN_PROGRESS" || ticket.status === "IN PROGRESS"
+                    ? "IN PROGRESS"
+                    : "ACTIVE"
+                }
+                onChange={(e) => handleStatusChange(e.target.value)}
+                style={{
+                  fontSize: "0.75rem",
+                  fontWeight: "700",
+                  fontFamily: "var(--font-mono)",
+                  padding: "0.2rem 0.6rem",
+                  borderRadius: "9999px",
+                  cursor: "pointer",
+                  outline: "none",
+                  border:
+                    ticket.status === "IN_PROGRESS" || ticket.status === "IN PROGRESS"
+                      ? "1px solid #BAE6FD"
+                      : "1px solid #CBD5E1",
+                  background:
+                    ticket.status === "IN_PROGRESS" || ticket.status === "IN PROGRESS"
+                      ? "#F0F9FF"
+                      : "#F8FAFC",
+                  color:
+                    ticket.status === "IN_PROGRESS" || ticket.status === "IN PROGRESS"
+                      ? "#0284C7"
+                      : "#334155"
+                }}
+                title="Change ticket status (Selecting RESOLVED will permanently delete this ticket)"
+              >
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="IN PROGRESS">IN PROGRESS</option>
+                <option value="RESOLVED">RESOLVED</option>
+              </select>
             </div>
-            <p style={{ color: "#94A3B8", fontSize: "0.85rem", marginTop: "0.15rem" }}>
-              Reported on {new Date(ticket.createdAt).toLocaleDateString()} at {new Date(ticket.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            <p style={{ color: "#64748B", fontSize: "0.85rem", marginTop: "0.15rem" }}>
+              Reported: {ticket.createdAt ? new Date(ticket.createdAt).toLocaleDateString() : "Recently"}
             </p>
           </div>
         </div>
@@ -120,7 +175,7 @@ export const AdminTicketDetailPage = () => {
             <CheckCircle size={18} /> Resolve & Close Ticket
           </button>
         ) : (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(16, 185, 129, 0.12)", border: "1px solid rgba(16, 185, 129, 0.3)", padding: "0.5rem 1rem", borderRadius: "0.5rem", color: "#34D399", fontSize: "0.85rem", fontWeight: "700" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(16, 185, 129, 0.12)", border: "1px solid rgba(16, 185, 129, 0.3)", padding: "0.5rem 1rem", borderRadius: "0.5rem", color: "#059669", fontSize: "0.85rem", fontWeight: "700" }}>
             <CheckCircle size={16} /> Ticket Resolved (Closed)
           </div>
         )}
@@ -130,7 +185,7 @@ export const AdminTicketDetailPage = () => {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "1.5rem" }}>
         {/* Issue Details Card (PRD FR-35) */}
         <div className="card-premium" style={{ padding: "1.5rem" }}>
-          <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#F8FAFC", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#0F172A", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <Ticket size={18} color="#EF4444" /> Issue Information
           </h3>
 
@@ -138,7 +193,7 @@ export const AdminTicketDetailPage = () => {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
               <div>
                 <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Issue Category</span>
-                <div style={{ color: "#F8FAFC", fontWeight: "700", fontSize: "1rem", marginTop: "0.15rem" }}>
+                <div style={{ color: "#0F172A", fontWeight: "700", fontSize: "1rem", marginTop: "0.15rem" }}>
                   {ticket.ticketType}
                 </div>
               </div>
@@ -275,11 +330,11 @@ export const AdminTicketDetailPage = () => {
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#34D399", fontSize: "0.85rem", fontWeight: "700", textTransform: "uppercase", marginBottom: "0.5rem" }}>
               <CheckCircle size={18} /> Confirm Issue Resolution
             </div>
-            <h3 style={{ fontSize: "1.35rem", fontWeight: "800", color: "#F8FAFC" }}>
-              Close Ticket {ticket.ticketId}?
+            <h3 style={{ fontSize: "1.35rem", fontWeight: "800", color: "#0F172A" }}>
+              Resolve & Remove {ticket.ticketId}?
             </h3>
-            <p style={{ color: "#94A3B8", fontSize: "0.85rem", margin: "0.35rem 0 1.25rem 0" }}>
-              Are you sure you want to close this ticket? Status will change to Closed and the reporter will be notified.
+            <p style={{ color: "#64748B", fontSize: "0.85rem", margin: "0.35rem 0 1rem 0" }}>
+              Marking this ticket as resolved will entirely and permanently remove it from the system.
             </p>
 
             <form onSubmit={handleCloseTicket}>

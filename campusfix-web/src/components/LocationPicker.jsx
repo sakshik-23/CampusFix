@@ -99,10 +99,10 @@ export const LocationPicker = ({
     <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
       {/* Controls and current coordinates display */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "var(--font-mono)", fontSize: "0.875rem", color: "#94A3B8" }}>
-          <MapPin size={16} color="#3B82F6" />
-          <span>Lat: <strong style={{ color: "#F8FAFC" }}>{position[0]}</strong></span>
-          <span>Lng: <strong style={{ color: "#F8FAFC" }}>{position[1]}</strong></span>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "var(--font-mono)", fontSize: "0.85rem", color: "#475569" }}>
+          <MapPin size={16} color="#0284C7" />
+          <span>Lat: <strong style={{ color: "#0F172A" }}>{position[0]}</strong></span>
+          <span>Lng: <strong style={{ color: "#0F172A" }}>{position[1]}</strong></span>
         </div>
 
         <button
@@ -110,12 +110,12 @@ export const LocationPicker = ({
           onClick={handleCurrentLocation}
           disabled={isLocating}
           className="btn-secondary"
-          style={{ fontSize: "0.8125rem", padding: "0.375rem 0.75rem", background: locateSuccess ? "rgba(16, 185, 129, 0.2)" : "#1E293B" }}
+          style={{ fontSize: "0.8125rem", padding: "0.375rem 0.75rem", background: locateSuccess ? "#ECFDF5" : "#FFFFFF" }}
         >
           {isLocating ? (
             <span>Fetching GPS...</span>
           ) : locateSuccess ? (
-            <span style={{ color: "#10B981", display: "flex", alignItems: "center", gap: "0.25rem" }}><Check size={14} /> GPS Detected</span>
+            <span style={{ color: "#059669", display: "flex", alignItems: "center", gap: "0.25rem" }}><Check size={14} /> GPS Detected</span>
           ) : (
             <span style={{ display: "flex", alignItems: "center", gap: "0.375rem" }}><Navigation size={14} /> Use Current GPS</span>
           )}
@@ -123,7 +123,7 @@ export const LocationPicker = ({
       </div>
 
       {/* Map Container */}
-      <div style={{ height: "260px", width: "100%", borderRadius: "0.5rem", overflow: "hidden", border: "1px solid #1E293B" }}>
+      <div style={{ height: "260px", width: "100%", borderRadius: "0.5rem", overflow: "hidden", border: "1px solid #E2E8F0" }}>
         <MapContainer
           center={position}
           zoom={18}

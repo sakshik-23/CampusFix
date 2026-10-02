@@ -63,7 +63,7 @@ export const AdminLoginPage = () => {
           >
             <Shield size={22} />
           </div>
-          <h1 style={{ fontSize: "1.35rem", fontWeight: "800", color: "#FFFFFF", letterSpacing: "-0.025em" }}>
+          <h1 style={{ fontSize: "1.35rem", fontWeight: "800", color: "#0F172A", letterSpacing: "-0.025em" }}>
             Admin Portal
           </h1>
           <p style={{ color: "#64748B", fontSize: "0.8rem", marginTop: "0.15rem" }}>
@@ -74,9 +74,9 @@ export const AdminLoginPage = () => {
         {error && (
           <div
             style={{
-              background: "rgba(239, 68, 68, 0.1)",
-              border: "1px solid rgba(239, 68, 68, 0.25)",
-              color: "#F87171",
+              background: "#FEF2F2",
+              border: "1px solid #FCA5A5",
+              color: "#DC2626",
               padding: "0.65rem 0.75rem",
               borderRadius: "0.375rem",
               fontSize: "0.8rem",
@@ -93,7 +93,7 @@ export const AdminLoginPage = () => {
 
         <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <div>
-            <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "#CBD5E1", marginBottom: "0.3rem", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+            <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "#475569", marginBottom: "0.3rem", textTransform: "uppercase", letterSpacing: "0.04em" }}>
               Administrator Email
             </label>
             <div style={{ position: "relative" }}>
@@ -113,7 +113,7 @@ export const AdminLoginPage = () => {
           </div>
 
           <div>
-            <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "#CBD5E1", marginBottom: "0.3rem", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+            <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "#475569", marginBottom: "0.3rem", textTransform: "uppercase", letterSpacing: "0.04em" }}>
               Password
             </label>
             <div style={{ position: "relative" }}>

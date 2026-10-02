@@ -15,6 +15,11 @@ service cloud.firestore {
       allow write: if true;
     }
 
+    // Item Types (Asset Categories) defined by Admin according to ER diagram
+    match /item_types/{typeId} {
+      allow read, write: if true;
+    }
+
     // Tickets (Maintenance Issues)
     match /tickets/{ticketId} {
       // Public can create and view tickets
