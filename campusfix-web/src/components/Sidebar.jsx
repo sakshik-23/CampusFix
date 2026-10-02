@@ -7,8 +7,6 @@ import {
   Ticket, 
   Printer, 
   LogOut, 
-  RotateCcw,
-  ExternalLink,
   ShieldAlert
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
@@ -18,7 +16,7 @@ export const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout, user } = useAuth();
-  const { stats, resetToSeedData } = useData();
+  const { stats } = useData();
 
   const isActive = (path) => location.pathname === path;
   const isStartsWith = (path) => location.pathname.startsWith(path);
@@ -146,26 +144,6 @@ export const Sidebar = () => {
 
       {/* Footer / Utilities in Sidebar */}
       <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem", borderTop: "1px solid #E2E8F0", paddingTop: "0.85rem" }}>
-        <button
-          onClick={() => {
-            if (window.confirm("Reset all assets and tickets back to initial dataset?")) {
-              resetToSeedData();
-            }
-          }}
-          className="btn-ghost"
-          style={{ width: "100%", fontSize: "0.775rem", padding: "0.4rem 0.6rem", justifyContent: "flex-start", color: "#64748B" }}
-        >
-          <RotateCcw size={14} /> Reset Demo Data
-        </button>
-
-        <Link
-          to="/"
-          className="btn-ghost"
-          style={{ width: "100%", fontSize: "0.775rem", padding: "0.4rem 0.6rem", justifyContent: "flex-start", color: "#64748B" }}
-        >
-          <ExternalLink size={14} /> Public Portal
-        </Link>
-
         <button
           onClick={() => {
             logout();
