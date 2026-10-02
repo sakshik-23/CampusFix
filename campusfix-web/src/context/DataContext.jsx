@@ -416,7 +416,9 @@ export const DataProvider = ({ children }) => {
         itemType: asset.itemType,
         building: asset.building,
         floor: asset.floor,
-        room: asset.room
+        room: asset.room,
+        latitude: asset.latitude || 18.520430,
+        longitude: asset.longitude || 73.856744
       },
       adminNotes: "",
       createdAt: nowIso,

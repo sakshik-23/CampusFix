@@ -49,8 +49,12 @@ class CampusTicket {
       description: map['description'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
       status: map['status'] ?? 'OPEN',
-      latitude: (map['latitude'] as num?)?.toDouble() ?? 18.520430,
-      longitude: (map['longitude'] as num?)?.toDouble() ?? 73.856744,
+      latitude: (map['latitude'] as num?)?.toDouble() ??
+          (map['itemSnapshot'] is Map ? (map['itemSnapshot']['latitude'] as num?)?.toDouble() : null) ??
+          18.520430,
+      longitude: (map['longitude'] as num?)?.toDouble() ??
+          (map['itemSnapshot'] is Map ? (map['itemSnapshot']['longitude'] as num?)?.toDouble() : null) ??
+          73.856744,
       itemSnapshot: Map<String, dynamic>.from(map['itemSnapshot'] ?? {}),
       adminNotes: map['adminNotes'] ?? '',
       createdAt: _parseDate(map['createdAt']),

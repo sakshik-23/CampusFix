@@ -16,12 +16,74 @@ class TicketDetailScreen extends StatefulWidget {
 class _TicketDetailScreenState extends State<TicketDetailScreen> {
   late String _status;
   String _notes = '';
+  late double _itemLat;
+  late double _itemLng;
+  String _floor = '';
 
   @override
   void initState() {
     super.initState();
     _status = widget.ticket.status;
     _notes = widget.ticket.adminNotes;
+    _itemLat = widget.ticket.latitude;
+    _itemLng = widget.ticket.longitude;
+    _floor = widget.ticket.itemSnapshot['floor']?.toString() ?? '';
+    _loadLiveAssetDetails();
+  }
+
+  Future<void> _loadLiveAssetDetails() async {
+    try {
+      final asset = await FirebaseService.getAssetById(widget.ticket.itemId);
+      if (asset != null && mounted) {
+        setState(() {
+          _itemLat = asset.latitude;
+          _itemLng = asset.longitude;
+          if (asset.floor.isNotEmpty) _floor = asset.floor;
+        });
+      }
+    } catch (_) {}
+  }
+
+  void _openGoogleMaps() async {
+    final lat = _itemLat;
+    final lng = _itemLng;
+    final assetName = widget.ticket.itemSnapshot['itemName'] ?? widget.ticket.itemId;
+    final room = widget.ticket.itemSnapshot['room'] ?? '';
+    final encodedLabel = Uri.encodeComponent('$assetName ${room.isNotEmpty ? "(Room $room)" : ""}');
+
+    // 1. Google Maps turn-by-turn navigation intent
+    final googleNavigationUri = Uri.parse('google.navigation:q=$lat,$lng&mode=d');
+    // 2. Universal geo URI with label
+    final geoUri = Uri.parse('geo:$lat,$lng?q=$lat,$lng($encodedLabel)');
+    // 3. Fallback universal Google Maps web directions URL
+    final mapsWebUri = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=$lat,$lng');
+
+    try {
+      if (await canLaunchUrl(googleNavigationUri)) {
+        await launchUrl(googleNavigationUri, mode: LaunchMode.externalApplication);
+        return;
+      }
+    } catch (_) {}
+
+    try {
+      if (await canLaunchUrl(geoUri)) {
+        await launchUrl(geoUri, mode: LaunchMode.externalApplication);
+        return;
+      }
+    } catch (_) {}
+
+    if (await canLaunchUrl(mapsWebUri)) {
+      await launchUrl(mapsWebUri, mode: LaunchMode.externalApplication);
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not open map navigation.'),
+          backgroundColor: AppColors.danger,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   void _callPhone(String phone) async {
@@ -267,7 +329,85 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> {
                 _buildInfoRow('Asset Name', assetName),
                 _buildInfoRow('Asset ID', widget.ticket.itemId),
                 if (building.isNotEmpty) _buildInfoRow('Building', building),
+                if (_floor.isNotEmpty) _buildInfoRow('Floor', _floor),
                 if (room.isNotEmpty) _buildInfoRow('Room / Hall', room),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+
+          // Asset Location & GPS Navigation Card
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppColors.border),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'ITEM GPS LOCATION',
+                      style: TextStyle(
+                        color: AppColors.textMuted,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF10B981).withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.location_on_rounded, size: 11, color: Color(0xFF10B981)),
+                          SizedBox(width: 3),
+                          Text(
+                            'GPS Fixed',
+                            style: TextStyle(color: Color(0xFF10B981), fontSize: 10, fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                _buildInfoRow('Latitude', _itemLat.toStringAsFixed(6)),
+                _buildInfoRow('Longitude', _itemLng.toStringAsFixed(6)),
+                const SizedBox(height: 14),
+                SizedBox(
+                  width: double.infinity,
+                  height: 46,
+                  child: ElevatedButton.icon(
+                    onPressed: _openGoogleMaps,
+                    icon: const Icon(Icons.navigation_rounded, size: 18),
+                    label: const Text(
+                      'Navigate in Google Maps',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13.5),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0F9D58), // Google Maps Green
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
