@@ -84,9 +84,25 @@ export const AdminTicketDetailPage = () => {
     }
   };
 
+  const formatTicketDate = (dateVal) => {
+    if (!dateVal) return "Recently";
+    try {
+      if (typeof dateVal?.toDate === "function") {
+        return dateVal.toDate().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+      }
+      if (dateVal?.seconds) {
+        return new Date(dateVal.seconds * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+      }
+      const d = new Date(dateVal);
+      return isNaN(d.getTime()) ? "Recently" : d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+    } catch {
+      return "Recently";
+    }
+  };
+
   if (loading) {
     return (
-      <div style={{ padding: "3rem", textAlign: "center", color: "#94A3B8" }}>
+      <div style={{ padding: "3rem", textAlign: "center", color: "#64748B" }}>
         Loading ticket...
       </div>
     );
@@ -95,8 +111,8 @@ export const AdminTicketDetailPage = () => {
   if (!ticket) {
     return (
       <div style={{ padding: "3rem", textAlign: "center" }}>
-        <h2 style={{ color: "#F8FAFC" }}>Ticket Not Found</h2>
-        <p style={{ color: "#94A3B8", margin: "1rem 0" }}>No ticket found with ID {ticketId}</p>
+        <h2 style={{ color: "#0F172A" }}>Ticket Not Found</h2>
+        <p style={{ color: "#64748B", margin: "1rem 0" }}>No ticket found with ID {ticketId}</p>
         <Link to="/admin/tickets" className="btn-secondary">
           <ArrowLeft size={16} /> Back to Tickets List
         </Link>
@@ -108,8 +124,8 @@ export const AdminTicketDetailPage = () => {
   const isClosed = ticket.status === "CLOSED";
 
   return (
-    <div style={{ padding: "1.75rem", display: "flex", flexDirection: "column", gap: "1.75rem" }}>
-      {/* Top Header & Close Action */}
+    <div style={{ padding: "1.75rem", display: "flex", flexDirection: "column", gap: "1.75rem", maxWidth: "1400px", margin: "0 auto" }}>
+      {/* Top Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
           <Link
@@ -160,25 +176,10 @@ export const AdminTicketDetailPage = () => {
               </select>
             </div>
             <p style={{ color: "#64748B", fontSize: "0.85rem", marginTop: "0.15rem" }}>
-              Reported: {ticket.createdAt ? new Date(ticket.createdAt).toLocaleDateString() : "Recently"}
+              Reported: {formatTicketDate(ticket.createdAt)}
             </p>
           </div>
         </div>
-
-        {/* Action Button: Close Ticket (PRD FR-36) */}
-        {!isClosed ? (
-          <button
-            onClick={() => setShowCloseModal(true)}
-            className="btn-success"
-            style={{ fontSize: "0.9rem", padding: "0.6rem 1.25rem" }}
-          >
-            <CheckCircle size={18} /> Resolve & Close Ticket
-          </button>
-        ) : (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(16, 185, 129, 0.12)", border: "1px solid rgba(16, 185, 129, 0.3)", padding: "0.5rem 1rem", borderRadius: "0.5rem", color: "#059669", fontSize: "0.85rem", fontWeight: "700" }}>
-            <CheckCircle size={16} /> Ticket Resolved (Closed)
-          </div>
-        )}
       </div>
 
       {/* Grid: Issue Details & Reporter Information */}
@@ -186,61 +187,61 @@ export const AdminTicketDetailPage = () => {
         {/* Issue Details Card (PRD FR-35) */}
         <div className="card-premium" style={{ padding: "1.5rem" }}>
           <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#0F172A", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <Ticket size={18} color="#EF4444" /> Issue Information
+            <Ticket size={18} color="#0284C7" /> Issue Information
           </h3>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem", fontSize: "0.875rem" }}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
               <div>
-                <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Issue Category</span>
+                <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase", fontWeight: "600" }}>Issue Category</span>
                 <div style={{ color: "#0F172A", fontWeight: "700", fontSize: "1rem", marginTop: "0.15rem" }}>
                   {ticket.ticketType}
                 </div>
               </div>
 
               <div>
-                <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Reporter Phone</span>
+                <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase", fontWeight: "600" }}>Reporter Phone</span>
                 <div style={{ marginTop: "0.15rem" }}>
                   <a
                     href={`tel:${ticket.phoneNumber}`}
                     style={{
-                      color: "#38BDF8",
+                      color: "#0284C7",
                       textDecoration: "none",
                       fontWeight: "700",
                       fontFamily: "var(--font-mono)",
                       display: "inline-flex",
                       alignItems: "center",
                       gap: "0.375rem",
-                      background: "#090A0F",
-                      padding: "0.25rem 0.5rem",
+                      background: "#F8FAFC",
+                      padding: "0.35rem 0.65rem",
                       borderRadius: "0.375rem",
-                      border: "1px solid rgba(255, 255, 255, 0.08)"
+                      border: "1px solid #CBD5E1"
                     }}
                   >
-                    <Phone size={14} /> {ticket.phoneNumber}
+                    <Phone size={14} color="#0284C7" /> {ticket.phoneNumber}
                   </a>
                 </div>
               </div>
             </div>
 
             <div>
-              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Problem Description</span>
-              <div style={{ background: "#090A0F", padding: "1rem", borderRadius: "0.5rem", marginTop: "0.25rem", border: "1px solid rgba(255, 255, 255, 0.08)", color: "#F8FAFC", lineHeight: 1.6 }}>
+              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase", fontWeight: "600" }}>Problem Description</span>
+              <div style={{ background: "#F8FAFC", padding: "1rem", borderRadius: "0.5rem", marginTop: "0.25rem", border: "1px solid #E2E8F0", color: "#1E293B", lineHeight: 1.6, fontStyle: "italic" }}>
                 "{ticket.description}"
               </div>
             </div>
 
             {/* Resolution Section if Closed */}
             {isClosed && (
-              <div style={{ background: "rgba(16, 185, 129, 0.08)", border: "1px solid rgba(16, 185, 129, 0.25)", borderRadius: "0.5rem", padding: "1rem", marginTop: "0.5rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", color: "#34D399", fontSize: "0.85rem", fontWeight: "700" }}>
+              <div style={{ background: "#F0FDF4", border: "1px solid #86EFAC", borderRadius: "0.5rem", padding: "1rem", marginTop: "0.5rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", color: "#166534", fontSize: "0.85rem", fontWeight: "700" }}>
                   <Wrench size={15} /> Resolution Summary
                 </div>
-                <p style={{ color: "#D1FAE5", marginTop: "0.35rem", fontSize: "0.9rem", margin: "0.35rem 0 0 0" }}>
+                <p style={{ color: "#14532D", marginTop: "0.35rem", fontSize: "0.9rem", margin: "0.35rem 0 0 0" }}>
                   {ticket.adminNotes || "Issue resolved on-site."}
                 </p>
-                <div style={{ fontSize: "0.75rem", color: "#6EE7B7", marginTop: "0.5rem", display: "flex", justifyContent: "space-between" }}>
-                  <span>Closed at: {new Date(ticket.closedAt).toLocaleString()}</span>
+                <div style={{ fontSize: "0.75rem", color: "#15803D", marginTop: "0.5rem", display: "flex", justifyContent: "space-between" }}>
+                  <span>Closed at: {ticket.closedAt ? new Date(ticket.closedAt).toLocaleString() : "N/A"}</span>
                   <span>By: {ticket.closedBy || "admin"}</span>
                 </div>
               </div>
@@ -251,12 +252,12 @@ export const AdminTicketDetailPage = () => {
         {/* Associated Asset Card */}
         <div className="card-premium" style={{ padding: "1.5rem", display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
-            <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#F8FAFC", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <Box size={18} color="#38BDF8" /> Reported Asset Details
+            <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#0F172A", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <Box size={18} color="#0284C7" /> Reported Asset Details
             </h3>
             <Link
               to={`/admin/assets/${ticket.itemId}`}
-              style={{ fontSize: "0.75rem", color: "#38BDF8", textDecoration: "none", fontWeight: "600" }}
+              style={{ fontSize: "0.75rem", color: "#0284C7", textDecoration: "none", fontWeight: "600" }}
             >
               View Asset Details
             </Link>
@@ -264,20 +265,20 @@ export const AdminTicketDetailPage = () => {
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", fontSize: "0.85rem", marginBottom: "1rem" }}>
             <div>
-              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Asset Name</span>
-              <div style={{ color: "#F8FAFC", fontWeight: "600" }}>{assetInfo.itemName}</div>
+              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase", fontWeight: "600" }}>Asset Name</span>
+              <div style={{ color: "#0F172A", fontWeight: "600" }}>{assetInfo.itemName || "Asset"}</div>
             </div>
             <div>
-              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Asset ID</span>
-              <div style={{ color: "#38BDF8", fontFamily: "var(--font-mono)", fontWeight: "700" }}>{ticket.itemId}</div>
+              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase", fontWeight: "600" }}>Asset ID</span>
+              <div style={{ color: "#0284C7", fontFamily: "var(--font-mono)", fontWeight: "700" }}>{ticket.itemId}</div>
             </div>
             <div>
-              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Type</span>
-              <div style={{ color: "#CBD5E1" }}>{assetInfo.itemType}</div>
+              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase", fontWeight: "600" }}>Type</span>
+              <div style={{ color: "#334155", fontWeight: "500" }}>{assetInfo.itemType || "General"}</div>
             </div>
             <div>
-              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase" }}>Room</span>
-              <div style={{ color: "#F8FAFC", fontWeight: "600" }}>{assetInfo.room}</div>
+              <span style={{ color: "#64748B", fontSize: "0.75rem", textTransform: "uppercase", fontWeight: "600" }}>Room</span>
+              <div style={{ color: "#0F172A", fontWeight: "600" }}>{assetInfo.room || "N/A"}</div>
             </div>
           </div>
 
@@ -339,7 +340,7 @@ export const AdminTicketDetailPage = () => {
 
             <form onSubmit={handleCloseTicket}>
               <div style={{ marginBottom: "1.25rem" }}>
-                <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "600", color: "#E2E8F0", marginBottom: "0.35rem" }}>
+                <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "600", color: "#334155", marginBottom: "0.35rem" }}>
                   Resolution Remarks / Technician Notes
                 </label>
                 <textarea
