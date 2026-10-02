@@ -1,6 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { QrCode, Shield, Heart } from "lucide-react";
+import { QrCode } from "lucide-react";
 
 export const Footer = () => {
   return (
@@ -22,16 +21,10 @@ export const Footer = () => {
           gap: "2rem"
         }}
       >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-            gap: "2rem"
-          }}
-        >
-          {/* Col 1: System Branding */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
+          {/* System Branding */}
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.35rem" }}>
               <div
                 style={{
                   width: "28px",
@@ -49,30 +42,10 @@ export const Footer = () => {
                 CampusFix
               </span>
             </div>
-            <p style={{ fontSize: "0.85rem", lineHeight: 1.6, color: "#64748B" }}>
+            <p style={{ fontSize: "0.825rem", lineHeight: 1.5, color: "#64748B", margin: 0, maxWidth: "540px" }}>
               QR-Based Campus Asset & Issue Maintenance System. Fast, transparent maintenance workflows for college facilities and equipment.
             </p>
           </div>
-
-          {/* Col 2: Quick Links */}
-          <div>
-            <h4 style={{ fontSize: "0.875rem", fontWeight: "700", color: "#0F172A", marginBottom: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-              Quick Navigation
-            </h4>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.5rem", fontSize: "0.85rem" }}>
-              <li>
-                <Link to="/" style={{ color: "#475569", textDecoration: "none" }}>Portal Home</Link>
-              </li>
-              <li>
-                <Link to="/track" style={{ color: "#475569", textDecoration: "none" }}>Track Raised Ticket</Link>
-              </li>
-              <li>
-                <Link to="/admin/login" style={{ color: "#0284C7", fontWeight: "600", textDecoration: "none" }}>Admin Portal Login</Link>
-              </li>
-            </ul>
-          </div>
-
-
         </div>
 
         <div

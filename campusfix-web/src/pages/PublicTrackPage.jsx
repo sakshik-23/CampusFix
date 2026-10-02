@@ -44,14 +44,14 @@ export const PublicTrackPage = () => {
 
       <div className="card-premium" style={{ padding: "1.75rem", marginBottom: "1.5rem" }}>
         <div style={{ marginBottom: "1.25rem" }}>
-          <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#38BDF8", fontWeight: "600", letterSpacing: "0.06em" }}>
+          <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#0284C7", fontWeight: "700", letterSpacing: "0.06em" }}>
             TICKET LOOKUP
           </div>
-          <h1 style={{ fontSize: "1.4rem", fontWeight: "800", color: "#FFFFFF", marginTop: "0.2rem" }}>
+          <h1 style={{ fontSize: "1.4rem", fontWeight: "800", color: "#0F172A", marginTop: "0.2rem" }}>
             Track Maintenance Ticket
           </h1>
-          <p style={{ color: "#94A3B8", fontSize: "0.825rem", marginTop: "0.25rem" }}>
-            Enter your Ticket ID (e.g. <span style={{ fontFamily: "var(--font-mono)", color: "#CBD5E1" }}>TKT-2026-000001</span>) or 10-digit registered phone number.
+          <p style={{ color: "#64748B", fontSize: "0.825rem", marginTop: "0.25rem" }}>
+            Enter your Ticket ID (e.g. <span style={{ fontFamily: "var(--font-mono)", color: "#334155", fontWeight: "600" }}>TKT-2026-000001</span>) or 10-digit registered phone number.
           </p>
         </div>
 
@@ -66,14 +66,17 @@ export const PublicTrackPage = () => {
               style={{
                 width: "100%",
                 paddingLeft: "2.25rem",
-                fontFamily: "var(--font-mono)"
+                fontFamily: "var(--font-mono)",
+                background: "#FFFFFF",
+                color: "#0F172A",
+                border: "1px solid #CBD5E1"
               }}
             />
             <div style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "#64748B" }}>
               <Ticket size={16} />
             </div>
           </div>
-          <button type="submit" className="btn-primary">
+          <button type="submit" className="btn-primary" style={{ fontWeight: "700" }}>
             Search
           </button>
         </form>
@@ -103,16 +106,16 @@ export const PublicTrackPage = () => {
                 >
                   <div>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.2rem" }}>
-                      <span style={{ fontFamily: "var(--font-mono)", fontWeight: "700", color: "#38BDF8", fontSize: "0.95rem" }}>
+                      <span style={{ fontFamily: "var(--font-mono)", fontWeight: "700", color: "#0284C7", fontSize: "0.95rem" }}>
                         {ticket.ticketId}
                       </span>
                       <StatusBadge status={ticket.status} size="sm" />
                     </div>
-                    <div style={{ fontWeight: "600", color: "#FFFFFF", fontSize: "0.9rem" }}>
-                      {ticket.itemSnapshot?.itemName || "Asset"} • <span style={{ color: "#94A3B8", fontWeight: "400" }}>{ticket.ticketType}</span>
+                    <div style={{ fontWeight: "600", color: "#0F172A", fontSize: "0.9rem" }}>
+                      {ticket.itemSnapshot?.itemName || "Asset"} • <span style={{ color: "#64748B", fontWeight: "400" }}>{ticket.ticketType}</span>
                     </div>
                     <div style={{ fontSize: "0.75rem", color: "#64748B", marginTop: "0.15rem" }}>
-                      Room {ticket.itemSnapshot?.room} • Raised {new Date(ticket.createdAt).toLocaleDateString()}
+                      Room {ticket.itemSnapshot?.room} • Raised {ticket.createdAt ? new Date(ticket.createdAt).toLocaleDateString() : "Recently"}
                     </div>
                   </div>
 

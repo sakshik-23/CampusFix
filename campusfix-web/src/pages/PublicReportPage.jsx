@@ -94,14 +94,14 @@ export const PublicReportPage = () => {
     return (
       <div style={{ maxWidth: "540px", margin: "4rem auto", padding: "0 1.25rem", textAlign: "center" }}>
         <div className="card-premium" style={{ padding: "2.5rem" }}>
-          <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "rgba(239, 68, 68, 0.1)", color: "#EF4444", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1rem auto" }}>
+          <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "#FEF2F2", color: "#EF4444", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1rem auto", border: "1px solid #FCA5A5" }}>
             <AlertTriangle size={24} />
           </div>
-          <h2 style={{ fontSize: "1.3rem", fontWeight: "700", color: "#FFFFFF", marginBottom: "0.5rem" }}>
+          <h2 style={{ fontSize: "1.3rem", fontWeight: "700", color: "#0F172A", marginBottom: "0.5rem" }}>
             Asset Not Found
           </h2>
-          <p style={{ color: "#94A3B8", fontSize: "0.875rem", marginBottom: "1.5rem" }}>
-            No registered asset found matching identifier <strong style={{ color: "#FFFFFF", fontFamily: "var(--font-mono)" }}>{itemId}</strong>.
+          <p style={{ color: "#64748B", fontSize: "0.875rem", marginBottom: "1.5rem" }}>
+            No registered asset found matching identifier <strong style={{ color: "#0F172A", fontFamily: "var(--font-mono)" }}>{itemId}</strong>.
           </p>
           <Link to="/" className="btn-secondary">
             <ArrowLeft size={14} /> Back to Portal
@@ -115,46 +115,46 @@ export const PublicReportPage = () => {
   if (submittedTicket) {
     return (
       <div style={{ maxWidth: "520px", margin: "3rem auto 5rem auto", padding: "0 1.25rem" }}>
-        <div className="card-premium" style={{ padding: "2rem", textAlign: "center", border: "1px solid rgba(52, 211, 153, 0.25)" }}>
+        <div className="card-premium" style={{ padding: "2rem", textAlign: "center", border: "1px solid #86EFAC" }}>
           <div
             style={{
               width: "56px",
               height: "56px",
               borderRadius: "50%",
-              background: "rgba(16, 185, 129, 0.1)",
-              color: "#34D399",
+              background: "#DCFCE7",
+              color: "#16A34A",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               margin: "0 auto 1rem auto",
-              boxShadow: "0 0 20px rgba(16, 185, 129, 0.2)"
+              boxShadow: "0 2px 8px rgba(22, 163, 74, 0.15)"
             }}
           >
             <Check size={28} />
           </div>
 
-          <h2 style={{ fontSize: "1.4rem", fontWeight: "800", color: "#FFFFFF", marginBottom: "0.25rem" }}>
+          <h2 style={{ fontSize: "1.4rem", fontWeight: "800", color: "#0F172A", marginBottom: "0.25rem" }}>
             Ticket Logged Successfully
           </h2>
-          <p style={{ color: "#94A3B8", fontSize: "0.825rem", marginBottom: "1.5rem" }}>
+          <p style={{ color: "#64748B", fontSize: "0.825rem", marginBottom: "1.5rem" }}>
             Campus maintenance administration has received your ticket.
           </p>
 
           {/* Minimalist Voucher Card */}
           <div
             style={{
-              background: "#0B0D13",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
+              background: "#F8FAFC",
+              border: "1px solid #E2E8F0",
               borderRadius: "0.625rem",
               padding: "1.25rem",
               textAlign: "left",
               marginBottom: "1.5rem"
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem", borderBottom: "1px solid rgba(255, 255, 255, 0.06)", paddingBottom: "0.75rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem", borderBottom: "1px solid #E2E8F0", paddingBottom: "0.75rem" }}>
               <div>
-                <span style={{ fontSize: "0.65rem", color: "#64748B", textTransform: "uppercase", letterSpacing: "0.05em", fontFamily: "var(--font-mono)" }}>TICKET REFERENCE</span>
-                <div style={{ fontSize: "1.1rem", fontWeight: "700", color: "#38BDF8", fontFamily: "var(--font-mono)" }}>
+                <span style={{ fontSize: "0.65rem", color: "#64748B", textTransform: "uppercase", letterSpacing: "0.05em", fontFamily: "var(--font-mono)", fontWeight: "600" }}>TICKET REFERENCE</span>
+                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "#0284C7", fontFamily: "var(--font-mono)" }}>
                   {submittedTicket.ticketId}
                 </div>
               </div>
@@ -163,26 +163,26 @@ export const PublicReportPage = () => {
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", fontSize: "0.825rem" }}>
               <div>
-                <span style={{ color: "#64748B", fontSize: "0.75rem" }}>Asset</span>
-                <div style={{ fontWeight: "600", color: "#FFFFFF" }}>{asset.itemName}</div>
+                <span style={{ color: "#64748B", fontSize: "0.725rem", display: "block" }}>Asset</span>
+                <div style={{ fontWeight: "600", color: "#0F172A" }}>{asset.itemName}</div>
               </div>
               <div>
-                <span style={{ color: "#64748B", fontSize: "0.75rem" }}>Location</span>
-                <div style={{ fontWeight: "600", color: "#FFFFFF" }}>{asset.room} ({asset.building})</div>
+                <span style={{ color: "#64748B", fontSize: "0.725rem", display: "block" }}>Location</span>
+                <div style={{ fontWeight: "600", color: "#0F172A" }}>{asset.room} ({asset.building})</div>
               </div>
               <div>
-                <span style={{ color: "#64748B", fontSize: "0.75rem" }}>Category</span>
-                <div style={{ fontWeight: "600", color: "#FFFFFF" }}>{submittedTicket.ticketType}</div>
+                <span style={{ color: "#64748B", fontSize: "0.725rem", display: "block" }}>Category</span>
+                <div style={{ fontWeight: "600", color: "#0F172A" }}>{submittedTicket.ticketType}</div>
               </div>
               <div>
-                <span style={{ color: "#64748B", fontSize: "0.75rem" }}>Reporter Phone</span>
-                <div style={{ fontWeight: "600", color: "#FFFFFF", fontFamily: "var(--font-mono)" }}>{submittedTicket.phoneNumber}</div>
+                <span style={{ color: "#64748B", fontSize: "0.725rem", display: "block" }}>Reporter Phone</span>
+                <div style={{ fontWeight: "600", color: "#0F172A", fontFamily: "var(--font-mono)" }}>{submittedTicket.phoneNumber}</div>
               </div>
             </div>
 
-            <div style={{ marginTop: "0.75rem", borderTop: "1px solid rgba(255, 255, 255, 0.06)", paddingTop: "0.75rem", fontSize: "0.825rem" }}>
-              <span style={{ color: "#64748B", fontSize: "0.75rem" }}>Description:</span>
-              <p style={{ color: "#CBD5E1", marginTop: "0.2rem", fontStyle: "italic" }}>
+            <div style={{ marginTop: "0.75rem", borderTop: "1px solid #E2E8F0", paddingTop: "0.75rem", fontSize: "0.825rem" }}>
+              <span style={{ color: "#64748B", fontSize: "0.725rem", display: "block", marginBottom: "0.2rem" }}>Description:</span>
+              <p style={{ color: "#334155", background: "#FFFFFF", padding: "0.6rem 0.75rem", borderRadius: "0.375rem", border: "1px solid #E2E8F0", margin: 0, fontStyle: "italic", fontSize: "0.8rem", lineHeight: 1.45 }}>
                 "{submittedTicket.description}"
               </p>
             </div>
@@ -217,37 +217,38 @@ export const PublicReportPage = () => {
           display: "inline-flex",
           alignItems: "center",
           gap: "0.35rem",
-          color: "#94A3B8",
-          fontSize: "0.8rem",
+          color: "#64748B",
+          fontSize: "0.825rem",
           textDecoration: "none",
-          marginBottom: "1rem"
+          marginBottom: "1rem",
+          fontWeight: "500"
         }}
       >
         <ArrowLeft size={14} /> Back to Portal
       </Link>
 
       <div className="card-premium" style={{ overflow: "hidden" }}>
-        {/* Verified Asset Header Bar */}
-        <div style={{ padding: "1.25rem", borderBottom: "1px solid rgba(255, 255, 255, 0.06)", background: "#0B0D13" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        {/* Verified Asset Header Bar - Clean Uniform Light Design */}
+        <div style={{ padding: "1.25rem 1.5rem", borderBottom: "1px solid #E2E8F0", background: "linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.5rem" }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span style={{ fontSize: "0.675rem", fontFamily: "var(--font-mono)", color: "#38BDF8", background: "rgba(56, 189, 248, 0.1)", padding: "0.15rem 0.4rem", borderRadius: "0.25rem", fontWeight: "700" }}>
+                <span style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#0284C7", background: "#E0F2FE", border: "1px solid #BAE6FD", padding: "0.15rem 0.5rem", borderRadius: "0.375rem", fontWeight: "700" }}>
                   {asset.itemId}
                 </span>
-                <span style={{ fontSize: "0.725rem", color: "#64748B" }}>• {asset.itemType}</span>
+                <span style={{ fontSize: "0.75rem", color: "#64748B", fontWeight: "500" }}>• {asset.itemType}</span>
               </div>
-              <h1 style={{ fontSize: "1.3rem", fontWeight: "800", color: "#FFFFFF", marginTop: "0.25rem" }}>
+              <h1 style={{ fontSize: "1.35rem", fontWeight: "800", color: "#0F172A", marginTop: "0.35rem", letterSpacing: "-0.02em" }}>
                 {asset.itemName}
               </h1>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#94A3B8", fontSize: "0.75rem", background: "#141722", padding: "0.3rem 0.6rem", borderRadius: "0.375rem", border: "1px solid rgba(255, 255, 255, 0.05)" }}>
-              <MapPin size={13} color="#38BDF8" />
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#334155", fontSize: "0.75rem", background: "#FFFFFF", padding: "0.35rem 0.65rem", borderRadius: "0.375rem", border: "1px solid #CBD5E1", boxShadow: "0 1px 2px rgba(0,0,0,0.03)" }}>
+              <MapPin size={13} color="#0284C7" />
               <span>Room <strong>{asset.room}</strong></span>
             </div>
           </div>
-          <p style={{ color: "#94A3B8", fontSize: "0.8rem", marginTop: "0.4rem", lineHeight: 1.4 }}>
-            {asset.description || "Campus physical asset."}
+          <p style={{ color: "#64748B", fontSize: "0.825rem", marginTop: "0.45rem", lineHeight: 1.45 }}>
+            {asset.description || "Campus physical asset registered in maintenance database."}
           </p>
         </div>
 
@@ -255,9 +256,9 @@ export const PublicReportPage = () => {
           {errorMessage && (
             <div
               style={{
-                background: "rgba(239, 68, 68, 0.1)",
-                border: "1px solid rgba(239, 68, 68, 0.25)",
-                color: "#F87171",
+                background: "#FEF2F2",
+                border: "1px solid #FCA5A5",
+                color: "#DC2626",
                 padding: "0.65rem 0.85rem",
                 borderRadius: "0.5rem",
                 fontSize: "0.825rem",
@@ -273,12 +274,12 @@ export const PublicReportPage = () => {
           )}
 
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-            {/* Category selection pills instead of boring dropdown */}
+            {/* Category selection chips - Uniform Clean Palette */}
             <div>
-              <label style={{ display: "block", fontSize: "0.8rem", fontWeight: "600", color: "#CBD5E1", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+              <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "700", color: "#334155", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Select Issue Category
               </label>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.45rem" }}>
                 {TICKET_TYPES.map((type) => {
                   const selected = ticketType === type;
                   return (
@@ -287,15 +288,16 @@ export const PublicReportPage = () => {
                       key={type}
                       onClick={() => setTicketType(type)}
                       style={{
-                        padding: "0.45rem 0.75rem",
-                        borderRadius: "0.375rem",
+                        padding: "0.45rem 0.8rem",
+                        borderRadius: "0.45rem",
                         fontSize: "0.8rem",
-                        fontWeight: selected ? "600" : "400",
+                        fontWeight: selected ? "700" : "500",
                         cursor: "pointer",
-                        border: selected ? "1px solid #38BDF8" : "1px solid rgba(255, 255, 255, 0.08)",
-                        background: selected ? "rgba(56, 189, 248, 0.12)" : "#0B0D13",
-                        color: selected ? "#38BDF8" : "#94A3B8",
-                        transition: "all 0.12s ease"
+                        border: selected ? "1px solid #0284C7" : "1px solid #CBD5E1",
+                        background: selected ? "#EFF6FF" : "#F8FAFC",
+                        color: selected ? "#0284C7" : "#475569",
+                        boxShadow: selected ? "0 1px 3px rgba(2, 132, 199, 0.15)" : "none",
+                        transition: "all 0.15s ease"
                       }}
                     >
                       {type}
@@ -307,7 +309,7 @@ export const PublicReportPage = () => {
 
             {/* Description input */}
             <div>
-              <label style={{ display: "block", fontSize: "0.8rem", fontWeight: "600", color: "#CBD5E1", marginBottom: "0.35rem", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+              <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "700", color: "#334155", marginBottom: "0.35rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Problem Description <span style={{ color: "#EF4444" }}>*</span>
               </label>
               <textarea
@@ -316,10 +318,10 @@ export const PublicReportPage = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="input-refined"
-                style={{ width: "100%", resize: "vertical" }}
+                style={{ width: "100%", resize: "vertical", background: "#FFFFFF", color: "#0F172A", border: "1px solid #CBD5E1" }}
                 required
               />
-              <div style={{ display: "flex", justifyContent: "space-between", marginTop: "0.25rem", fontSize: "0.7rem", color: "#64748B" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: "0.25rem", fontSize: "0.725rem", color: "#64748B" }}>
                 <span>Minimum 5 characters</span>
                 <span>{description.length} chars</span>
               </div>
@@ -327,7 +329,7 @@ export const PublicReportPage = () => {
 
             {/* Phone Number */}
             <div>
-              <label style={{ display: "block", fontSize: "0.8rem", fontWeight: "600", color: "#CBD5E1", marginBottom: "0.35rem", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+              <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "700", color: "#334155", marginBottom: "0.35rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Your Mobile Number <span style={{ color: "#EF4444" }}>*</span>
               </label>
               <div style={{ position: "relative" }}>
@@ -337,14 +339,14 @@ export const PublicReportPage = () => {
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   className="input-refined"
-                  style={{ width: "100%", paddingLeft: "2.25rem", fontFamily: "var(--font-mono)" }}
+                  style={{ width: "100%", paddingLeft: "2.25rem", fontFamily: "var(--font-mono)", background: "#FFFFFF", color: "#0F172A", border: "1px solid #CBD5E1" }}
                   required
                 />
                 <div style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "#64748B" }}>
                   <Phone size={14} />
                 </div>
               </div>
-              <p style={{ fontSize: "0.7rem", color: "#64748B", marginTop: "0.3rem" }}>
+              <p style={{ fontSize: "0.725rem", color: "#64748B", marginTop: "0.3rem" }}>
                 Technicians will contact this number for clarification or on-site verification.
               </p>
             </div>
@@ -353,7 +355,7 @@ export const PublicReportPage = () => {
               type="submit"
               disabled={submitting}
               className="btn-primary"
-              style={{ width: "100%", padding: "0.75rem", marginTop: "0.25rem" }}
+              style={{ width: "100%", padding: "0.75rem", marginTop: "0.25rem", fontWeight: "700", fontSize: "0.9rem" }}
             >
               {submitting ? "Submitting Ticket..." : "Submit Maintenance Ticket"}
             </button>

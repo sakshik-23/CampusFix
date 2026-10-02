@@ -107,8 +107,8 @@ export const PublicTicketPage = () => {
         {/* Top Header Pass */}
         <div
           style={{
-            background: "#0B0E16",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+            background: "linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%)",
+            borderBottom: "1px solid #E2E8F0",
             padding: "1.5rem"
           }}
         >
@@ -117,7 +117,7 @@ export const PublicTicketPage = () => {
               <span style={{ fontSize: "0.65rem", color: "#64748B", textTransform: "uppercase", fontWeight: "700", letterSpacing: "0.08em", fontFamily: "var(--font-mono)" }}>
                 MAINTENANCE TICKET
               </span>
-              <h1 style={{ fontSize: "1.6rem", fontWeight: "800", color: "#FFFFFF", fontFamily: "var(--font-mono)", marginTop: "0.2rem" }}>
+              <h1 style={{ fontSize: "1.6rem", fontWeight: "800", color: "#0F172A", fontFamily: "var(--font-mono)", marginTop: "0.2rem" }}>
                 {ticket.ticketId}
               </h1>
             </div>
@@ -126,16 +126,16 @@ export const PublicTicketPage = () => {
 
           {/* Simple 2-Step Progression Bar */}
           <div style={{ marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", color: "#38BDF8", fontWeight: "600" }}>
-              <span style={{ width: "16px", height: "16px", borderRadius: "50%", background: "rgba(2, 132, 199, 0.15)", border: "1px solid #0284C7", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Check size={10} color="#38BDF8" />
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", color: "#0284C7", fontWeight: "600" }}>
+              <span style={{ width: "18px", height: "18px", borderRadius: "50%", background: "#E0F2FE", border: "1px solid #BAE6FD", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Check size={11} color="#0284C7" />
               </span>
               Reported
             </div>
-            <div style={{ flex: 1, height: "1px", background: isClosed ? "#10B981" : "rgba(255, 255, 255, 0.1)" }}></div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", color: isClosed ? "#34D399" : "#64748B", fontWeight: isClosed ? "600" : "400" }}>
-              <span style={{ width: "16px", height: "16px", borderRadius: "50%", background: isClosed ? "rgba(16, 185, 129, 0.15)" : "rgba(255, 255, 255, 0.05)", border: isClosed ? "1px solid #10B981" : "1px solid rgba(255, 255, 255, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.65rem" }}>
-                {isClosed ? <Check size={10} color="#34D399" /> : "2"}
+            <div style={{ flex: 1, height: "2px", background: isClosed ? "#10B981" : "#E2E8F0" }}></div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", color: isClosed ? "#16A34A" : "#64748B", fontWeight: isClosed ? "600" : "400" }}>
+              <span style={{ width: "18px", height: "18px", borderRadius: "50%", background: isClosed ? "#DCFCE7" : "#F1F5F9", border: isClosed ? "1px solid #86EFAC" : "1px solid #CBD5E1", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.65rem" }}>
+                {isClosed ? <Check size={11} color="#16A34A" /> : "2"}
               </span>
               Resolved on Site
             </div>
@@ -145,17 +145,17 @@ export const PublicTicketPage = () => {
         {/* Details Content */}
         <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           {/* Issue Info */}
-          <div style={{ background: "#0B0D13", padding: "1.25rem", borderRadius: "0.625rem", border: "1px solid rgba(255, 255, 255, 0.05)" }}>
+          <div style={{ background: "#F8FAFC", padding: "1.25rem", borderRadius: "0.625rem", border: "1px solid #E2E8F0" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1rem", marginBottom: "1rem" }}>
               <div>
                 <span style={{ fontSize: "0.75rem", color: "#64748B" }}>Category</span>
-                <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "#FFFFFF", marginTop: "0.1rem" }}>
+                <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "#0F172A", marginTop: "0.1rem" }}>
                   {ticket.ticketType}
                 </div>
               </div>
               <div>
                 <span style={{ fontSize: "0.75rem", color: "#64748B" }}>Contact Phone (Masked)</span>
-                <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "#FFFFFF", fontFamily: "var(--font-mono)", marginTop: "0.1rem" }}>
+                <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "#0F172A", fontFamily: "var(--font-mono)", marginTop: "0.1rem" }}>
                   {maskPhone(ticket.phoneNumber)}
                 </div>
               </div>
@@ -163,18 +163,18 @@ export const PublicTicketPage = () => {
 
             <div>
               <span style={{ fontSize: "0.75rem", color: "#64748B" }}>Defect Description</span>
-              <div style={{ background: "#11141D", padding: "0.85rem", borderRadius: "0.375rem", marginTop: "0.25rem", color: "#E2E8F0", fontSize: "0.875rem", lineHeight: 1.5, border: "1px solid rgba(255, 255, 255, 0.05)" }}>
+              <div style={{ background: "#FFFFFF", padding: "0.85rem", borderRadius: "0.375rem", marginTop: "0.25rem", color: "#334155", fontSize: "0.875rem", lineHeight: 1.5, border: "1px solid #E2E8F0" }}>
                 "{ticket.description}"
               </div>
             </div>
 
             {/* Resolution Note if Closed */}
             {ticket.adminNotes && (
-              <div style={{ marginTop: "1rem", background: "rgba(16, 185, 129, 0.06)", border: "1px solid rgba(16, 185, 129, 0.2)", padding: "0.85rem", borderRadius: "0.375rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#34D399", fontSize: "0.75rem", fontWeight: "700" }}>
+              <div style={{ marginTop: "1rem", background: "#F0FDF4", border: "1px solid #86EFAC", padding: "0.85rem", borderRadius: "0.375rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#166534", fontSize: "0.75rem", fontWeight: "700" }}>
                   <Wrench size={13} /> Technician Resolution Remarks:
                 </div>
-                <p style={{ color: "#D1FAE5", fontSize: "0.85rem", marginTop: "0.25rem", margin: 0 }}>
+                <p style={{ color: "#14532D", fontSize: "0.85rem", marginTop: "0.25rem", margin: 0 }}>
                   {ticket.adminNotes}
                 </p>
               </div>
@@ -182,17 +182,17 @@ export const PublicTicketPage = () => {
           </div>
 
           {/* Asset & Location Snapshot */}
-          <div style={{ background: "#0B0F19", padding: "1.25rem", borderRadius: "0.625rem", border: "1px solid rgba(255, 255, 255, 0.05)" }}>
+          <div style={{ background: "#F8FAFC", padding: "1.25rem", borderRadius: "0.625rem", border: "1px solid #E2E8F0" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.75rem", marginBottom: "1rem" }}>
               <div>
                 <span style={{ fontSize: "0.75rem", color: "#64748B" }}>Asset Name</span>
-                <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "#FFFFFF" }}>
-                  {assetInfo.itemName || "Asset"} <span style={{ fontSize: "0.75rem", color: "#38BDF8", fontFamily: "var(--font-mono)" }}>({ticket.itemId})</span>
+                <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "#0F172A" }}>
+                  {assetInfo.itemName || "Asset"} <span style={{ fontSize: "0.75rem", color: "#0284C7", fontFamily: "var(--font-mono)" }}>({ticket.itemId})</span>
                 </div>
               </div>
               <div>
                 <span style={{ fontSize: "0.75rem", color: "#64748B" }}>Room / Block</span>
-                <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "#FFFFFF" }}>
+                <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "#0F172A" }}>
                   Room {assetInfo.room} • {assetInfo.building}
                 </div>
               </div>
