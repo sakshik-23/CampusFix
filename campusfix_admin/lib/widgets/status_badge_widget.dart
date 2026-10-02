@@ -13,25 +13,26 @@ class StatusBadgeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String cleanStatus = status.toUpperCase().trim();
-    final bool isOpen = cleanStatus == 'OPEN';
+    final bool isOpen = cleanStatus == 'OPEN' || cleanStatus == 'ACTIVE';
+    final bool isProgress = cleanStatus == 'IN_PROGRESS' || cleanStatus == 'IN PROGRESS';
     final bool isClosed = cleanStatus == 'CLOSED' || cleanStatus == 'RESOLVED';
 
-    final Color dotColor = isOpen
-        ? const Color(0xFFEF4444)
-        : (isClosed ? const Color(0xFF10B981) : const Color(0xFFF59E0B));
-    final Color textColor = isOpen
-        ? const Color(0xFFFCA5A5)
-        : (isClosed ? const Color(0xFF6EE7B7) : const Color(0xFFFCD34D));
-    final Color bgColor = isOpen
-        ? const Color(0x1FEF4444)
-        : (isClosed ? const Color(0x1F10B981) : const Color(0x1FF59E0B));
-    final Color borderColor = isOpen
-        ? const Color(0x3DEF4444)
-        : (isClosed ? const Color(0x3D10B981) : const Color(0x3DF59E0B));
+    final Color dotColor = isClosed
+        ? const Color(0xFF16A34A)
+        : (isProgress ? const Color(0xFF0284C7) : const Color(0xFF64748B));
+    final Color textColor = isClosed
+        ? const Color(0xFF166534)
+        : (isProgress ? const Color(0xFF0284C7) : const Color(0xFF334155));
+    final Color bgColor = isClosed
+        ? const Color(0xFFF0FDF4)
+        : (isProgress ? const Color(0xFFEFF6FF) : const Color(0xFFF1F5F9));
+    final Color borderColor = isClosed
+        ? const Color(0xFF86EFAC)
+        : (isProgress ? const Color(0xFFBAE6FD) : const Color(0xFFCBD5E1));
 
-    final String displayText = isOpen
-        ? 'OPEN'
-        : (isClosed ? 'RESOLVED' : cleanStatus);
+    final String displayText = isClosed
+        ? 'RESOLVED'
+        : (isProgress ? 'IN PROGRESS' : (isOpen ? 'ACTIVE' : cleanStatus));
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -40,7 +41,7 @@ class StatusBadgeWidget extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(999),
         border: Border.all(color: borderColor, width: 1),
       ),
       child: Row(
@@ -53,13 +54,6 @@ class StatusBadgeWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: dotColor,
               shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: dotColor.withValues(alpha: 0.5),
-                  blurRadius: 4,
-                  spreadRadius: 1,
-                )
-              ],
             ),
           ),
           const SizedBox(width: 5),

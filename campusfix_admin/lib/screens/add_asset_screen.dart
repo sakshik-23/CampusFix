@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/asset_model.dart';
 import '../services/firebase_service.dart';
 import '../services/location_service.dart';
+import '../theme/app_colors.dart';
 import 'asset_detail_screen.dart';
 
 class AddAssetScreen extends StatefulWidget {
@@ -104,7 +105,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Asset $assetId registered successfully'),
-          backgroundColor: const Color(0xFF10B981),
+          backgroundColor: AppColors.success,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -118,7 +119,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to save asset: $e'),
-          backgroundColor: const Color(0xFFEF4444),
+          backgroundColor: AppColors.danger,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -128,13 +129,19 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF07090E),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0D111A),
+        backgroundColor: AppColors.surface,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(color: AppColors.border, height: 1),
+        ),
         title: const Text(
           'Register New Asset',
-          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17, color: Color(0xFFF8FAFC), letterSpacing: -0.3),
+          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17, color: AppColors.textPrimary, letterSpacing: -0.3),
         ),
       ),
       body: SafeArea(
@@ -153,26 +160,26 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('ASSET ID', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                          const Text('ASSET ID', style: TextStyle(color: AppColors.textMuted, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                           const SizedBox(height: 6),
                           TextFormField(
                             controller: _idController,
-                            style: const TextStyle(color: Color(0xFF38BDF8), fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13.5),
+                            style: const TextStyle(color: AppColors.primary, fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13.5),
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: const Color(0xFF0D111A),
+                              fillColor: AppColors.surface,
                               suffixIcon: _isLoadingId
                                   ? const SizedBox(
                                       width: 14,
                                       height: 14,
                                       child: Center(
-                                        child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF0284C7)),
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
                                       ),
                                     )
                                   : null,
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E2638))),
-                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E2638))),
-                              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF0284C7))),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.border)),
+                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.border)),
+                              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.primary)),
                               contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                             ),
                             validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
@@ -186,21 +193,21 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('CATEGORY', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                          const Text('CATEGORY', style: TextStyle(color: AppColors.textMuted, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                           const SizedBox(height: 6),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF0D111A),
+                              color: AppColors.surface,
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: const Color(0xFF1E2638)),
+                              border: Border.all(color: AppColors.border),
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: _selectedCategory,
-                                dropdownColor: const Color(0xFF0D111A),
+                                dropdownColor: AppColors.surface,
                                 isExpanded: true,
-                                style: const TextStyle(color: Color(0xFFF8FAFC), fontSize: 13.5, fontWeight: FontWeight.w600),
+                                style: const TextStyle(color: AppColors.textPrimary, fontSize: 13.5, fontWeight: FontWeight.w600),
                                 items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                                 onChanged: (val) {
                                   if (val != null) setState(() => _selectedCategory = val);
@@ -216,19 +223,19 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                 const SizedBox(height: 16),
 
                 // Asset Name
-                const Text('ASSET NAME *', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                const Text('ASSET NAME *', style: TextStyle(color: AppColors.textMuted, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                 const SizedBox(height: 6),
                 TextFormField(
                   controller: _nameController,
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
                   decoration: InputDecoration(
                     hintText: 'e.g. Epson Ceiling Projector #02',
-                    hintStyle: const TextStyle(color: Color(0xFF475569), fontSize: 13),
+                    hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
                     filled: true,
-                    fillColor: const Color(0xFF0D111A),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E2638))),
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E2638))),
-                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF0284C7))),
+                    fillColor: AppColors.surface,
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.border)),
+                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.border)),
+                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.primary)),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   ),
                   validator: (v) => (v == null || v.isEmpty) ? 'Please enter asset name' : null,
@@ -236,20 +243,20 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                 const SizedBox(height: 16),
 
                 // Description
-                const Text('DESCRIPTION', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                const Text('DESCRIPTION', style: TextStyle(color: AppColors.textMuted, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                 const SizedBox(height: 6),
                 TextFormField(
                   controller: _descController,
                   maxLines: 2,
-                  style: const TextStyle(color: Colors.white, fontSize: 13.5),
+                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 13.5),
                   decoration: InputDecoration(
                     hintText: 'e.g. HDMI projector connected to main instructor podium.',
-                    hintStyle: const TextStyle(color: Color(0xFF475569), fontSize: 13),
+                    hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
                     filled: true,
-                    fillColor: const Color(0xFF0D111A),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E2638))),
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF1E2638))),
-                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF0284C7))),
+                    fillColor: AppColors.surface,
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.border)),
+                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.border)),
+                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.primary)),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   ),
                 ),
@@ -259,24 +266,31 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF0D111A),
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: const Color(0xFF1E2638)),
+                    border: Border.all(color: AppColors.border),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.02),
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('LOCATION PLACEMENT', style: TextStyle(color: Color(0xFF38BDF8), fontWeight: FontWeight.w700, fontSize: 11, letterSpacing: 0.6)),
+                      const Text('LOCATION PLACEMENT', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700, fontSize: 11, letterSpacing: 0.6)),
                       const SizedBox(height: 12),
                       TextFormField(
                         controller: _buildingController,
-                        style: const TextStyle(color: Colors.white, fontSize: 13.5),
+                        style: const TextStyle(color: AppColors.textPrimary, fontSize: 13.5),
                         decoration: const InputDecoration(
                           labelText: 'Building Name',
-                          labelStyle: TextStyle(color: Color(0xFF64748B), fontSize: 12),
-                          border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
-                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
-                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0284C7))),
+                          labelStyle: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                          border: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.border)),
+                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.border)),
+                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary)),
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -285,13 +299,13 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                           Expanded(
                             child: TextFormField(
                               controller: _floorController,
-                              style: const TextStyle(color: Colors.white, fontSize: 13.5),
+                              style: const TextStyle(color: AppColors.textPrimary, fontSize: 13.5),
                               decoration: const InputDecoration(
                                 labelText: 'Floor',
-                                labelStyle: TextStyle(color: Color(0xFF64748B), fontSize: 12),
-                                border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0284C7))),
+                                labelStyle: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                                border: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.border)),
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.border)),
+                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary)),
                               ),
                             ),
                           ),
@@ -299,13 +313,13 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                           Expanded(
                             child: TextFormField(
                               controller: _roomController,
-                              style: const TextStyle(color: Colors.white, fontSize: 13.5),
+                              style: const TextStyle(color: AppColors.textPrimary, fontSize: 13.5),
                               decoration: const InputDecoration(
                                 labelText: 'Room / Hall Number',
-                                labelStyle: TextStyle(color: Color(0xFF64748B), fontSize: 12),
-                                border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF1E2638))),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF0284C7))),
+                                labelStyle: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                                border: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.border)),
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.border)),
+                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary)),
                               ),
                             ),
                           ),
@@ -316,36 +330,41 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                const SizedBox(height: 16),
-
                 // Live GPS Location
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF0D111A),
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: const Color(0xFF1E2638)),
+                    border: Border.all(color: AppColors.border),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.02),
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
                   ),
                   child: Row(
                     children: [
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF10B981).withValues(alpha: 0.12),
+                          color: AppColors.success.withOpacity(0.12),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.location_on_rounded, color: Color(0xFF34D399), size: 20),
+                        child: const Icon(Icons.location_on_rounded, color: AppColors.success, size: 20),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('GEOLOCATION PIN', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                            const Text('GEOLOCATION PIN', style: TextStyle(color: AppColors.textMuted, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                             const SizedBox(height: 2),
                             Text(
                               '${_latitude.toStringAsFixed(6)}, ${_longitude.toStringAsFixed(6)}',
-                              style: const TextStyle(color: Color(0xFF38BDF8), fontSize: 12.5, fontFamily: 'monospace', fontWeight: FontWeight.w700),
+                              style: const TextStyle(color: AppColors.primary, fontSize: 12.5, fontFamily: 'monospace', fontWeight: FontWeight.w700),
                             ),
                           ],
                         ),
@@ -357,7 +376,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                             : const Icon(Icons.my_location_rounded, size: 14),
                         label: const Text('Fetch GPS', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF0284C7),
+                          backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
                           elevation: 0,
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -376,7 +395,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                   child: ElevatedButton(
                     onPressed: _isSaving ? null : _saveAsset,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0284C7),
+                      backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

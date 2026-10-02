@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/asset_model.dart';
 import '../services/location_service.dart';
 import '../services/firebase_service.dart';
+import '../theme/app_colors.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class AssetDetailScreen extends StatefulWidget {
@@ -40,7 +41,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('GPS updated to ${_lat.toStringAsFixed(6)}, ${_lng.toStringAsFixed(6)}'),
-            backgroundColor: const Color(0xFF10B981),
+            backgroundColor: AppColors.success,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -49,7 +50,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to update GPS: $e'),
-            backgroundColor: const Color(0xFFEF4444),
+            backgroundColor: AppColors.danger,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -59,7 +60,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Could not acquire GPS fix. Please verify location permissions.'),
-          backgroundColor: Color(0xFFEF4444),
+          backgroundColor: AppColors.danger,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -69,13 +70,19 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF07090E),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0D111A),
+        backgroundColor: AppColors.surface,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(color: AppColors.border, height: 1),
+        ),
         title: Text(
           widget.asset.itemId,
-          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, fontFamily: 'monospace', color: Color(0xFFF8FAFC)),
+          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, fontFamily: 'monospace', color: AppColors.textPrimary),
         ),
       ),
       body: ListView(
@@ -85,9 +92,16 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
           Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: const Color(0xFF0D111A),
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0xFF1E2638)),
+              border: Border.all(color: AppColors.border),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,24 +112,24 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF0284C7).withValues(alpha: 0.15),
+                        color: AppColors.primary.withOpacity(0.12),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         widget.asset.itemType,
-                        style: const TextStyle(color: Color(0xFF38BDF8), fontWeight: FontWeight.w700, fontSize: 11),
+                        style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700, fontSize: 11),
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF10B981).withValues(alpha: 0.15),
+                        color: AppColors.borderLight,
                         borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.3)),
+                        border: Border.all(color: AppColors.border),
                       ),
                       child: Text(
                         widget.asset.status.toUpperCase(),
-                        style: const TextStyle(color: Color(0xFF34D399), fontWeight: FontWeight.w700, fontSize: 10, letterSpacing: 0.5),
+                        style: const TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w700, fontSize: 10, letterSpacing: 0.5),
                       ),
                     ),
                   ],
@@ -123,13 +137,13 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                 const SizedBox(height: 12),
                 Text(
                   widget.asset.itemName,
-                  style: const TextStyle(color: Color(0xFFF8FAFC), fontWeight: FontWeight.w800, fontSize: 18, letterSpacing: -0.3),
+                  style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w800, fontSize: 18, letterSpacing: -0.3),
                 ),
                 if (widget.asset.description.isNotEmpty) ...[
                   const SizedBox(height: 6),
                   Text(
                     widget.asset.description,
-                    style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13, height: 1.4),
+                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 13, height: 1.4),
                   ),
                 ],
               ],
@@ -141,14 +155,21 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF0D111A),
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0xFF1E2638)),
+              border: Border.all(color: AppColors.border),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('SPECIFICATIONS & PLACEMENT', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                const Text('SPECIFICATIONS & PLACEMENT', style: TextStyle(color: AppColors.textMuted, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                 const SizedBox(height: 10),
                 _buildInfoRow('Building', widget.asset.building),
                 _buildInfoRow('Floor', widget.asset.floor),
@@ -162,9 +183,16 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF0D111A),
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0xFF1E2638)),
+              border: Border.all(color: AppColors.border),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,7 +200,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('GEOLOCATION PIN', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                    const Text('GEOLOCATION PIN', style: TextStyle(color: AppColors.textMuted, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                     ElevatedButton.icon(
                       onPressed: _updatingGps ? null : _updateGps,
                       icon: _updatingGps
@@ -180,7 +208,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                           : const Icon(Icons.my_location_rounded, size: 14),
                       label: const Text('Update GPS', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0284C7),
+                        backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -196,18 +224,18 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF07090E),
+                          color: AppColors.cardSubtle,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFF161D2B)),
+                          border: Border.all(color: AppColors.borderLight),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('LATITUDE', style: TextStyle(color: Color(0xFF64748B), fontSize: 9, fontWeight: FontWeight.w700)),
+                            const Text('LATITUDE', style: TextStyle(color: AppColors.textMuted, fontSize: 9, fontWeight: FontWeight.w700)),
                             const SizedBox(height: 2),
                             Text(
                               _lat.toStringAsFixed(6),
-                              style: const TextStyle(color: Color(0xFF38BDF8), fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13),
+                              style: const TextStyle(color: AppColors.primary, fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13),
                             ),
                           ],
                         ),
@@ -218,18 +246,18 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF07090E),
+                          color: AppColors.cardSubtle,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFF161D2B)),
+                          border: Border.all(color: AppColors.borderLight),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('LONGITUDE', style: TextStyle(color: Color(0xFF64748B), fontSize: 9, fontWeight: FontWeight.w700)),
+                            const Text('LONGITUDE', style: TextStyle(color: AppColors.textMuted, fontSize: 9, fontWeight: FontWeight.w700)),
                             const SizedBox(height: 2),
                             Text(
                               _lng.toStringAsFixed(6),
-                              style: const TextStyle(color: Color(0xFF38BDF8), fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13),
+                              style: const TextStyle(color: AppColors.primary, fontFamily: 'monospace', fontWeight: FontWeight.w700, fontSize: 13),
                             ),
                           ],
                         ),
@@ -246,19 +274,27 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFF0D111A),
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0xFF1E2638)),
+              border: Border.all(color: AppColors.border),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
             ),
             child: Column(
               children: [
-                const Text('PUBLIC ISSUE REPORTING QR', style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                const Text('PUBLIC ISSUE REPORTING QR', style: TextStyle(color: AppColors.textMuted, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                 const SizedBox(height: 16),
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.borderLight),
                   ),
                   child: QrImageView(
                     data: (widget.asset.qrUrl.isNotEmpty && widget.asset.qrUrl.contains('campusfix1.vercel.app'))
@@ -274,7 +310,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                       ? widget.asset.qrUrl
                       : 'https://campusfix1.vercel.app/report/${widget.asset.itemId}',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 11, fontFamily: 'monospace'),
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 11, fontFamily: 'monospace'),
                 ),
               ],
             ),
@@ -291,8 +327,8 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: Color(0xFF64748B), fontSize: 12.5)),
-          Text(value, style: const TextStyle(color: Color(0xFFF8FAFC), fontWeight: FontWeight.w600, fontSize: 12.5)),
+          Text(label, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5)),
+          Text(value, style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600, fontSize: 12.5)),
         ],
       ),
     );

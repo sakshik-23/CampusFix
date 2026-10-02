@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/asset_model.dart';
 import '../services/firebase_service.dart';
+import '../theme/app_colors.dart';
 import 'asset_detail_screen.dart';
 import 'add_asset_screen.dart';
 
@@ -18,17 +19,22 @@ class _AssetsScreenState extends State<AssetsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF07090E),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0D111A),
+        backgroundColor: AppColors.surface,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(color: AppColors.border, height: 1),
+        ),
         title: const Text(
           'Asset Registry',
-          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17, color: Color(0xFFF8FAFC), letterSpacing: -0.3),
+          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17, color: AppColors.textPrimary, letterSpacing: -0.3),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add_circle_outline_rounded, color: Color(0xFF38BDF8), size: 22),
+            icon: const Icon(Icons.add_circle_outline_rounded, color: AppColors.primary, size: 22),
             tooltip: 'Register New Asset',
             onPressed: () {
               Navigator.of(context).push(
@@ -46,17 +52,17 @@ class _AssetsScreenState extends State<AssetsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
             child: TextField(
               controller: _searchController,
-              style: const TextStyle(color: Colors.white, fontSize: 13.5),
+              style: const TextStyle(color: AppColors.textPrimary, fontSize: 13.5),
               onChanged: (val) => setState(() => _searchQuery = val),
               decoration: InputDecoration(
                 hintText: 'Search by ID, name, building, room...',
-                hintStyle: const TextStyle(color: Color(0xFF475569), fontSize: 13),
+                hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
                 filled: true,
-                fillColor: const Color(0xFF0D111A),
-                prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF64748B), size: 18),
+                fillColor: AppColors.surface,
+                prefixIcon: const Icon(Icons.search_rounded, color: AppColors.textMuted, size: 18),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.close_rounded, color: Color(0xFF64748B), size: 16),
+                        icon: const Icon(Icons.close_rounded, color: AppColors.textMuted, size: 16),
                         onPressed: () {
                           _searchController.clear();
                           setState(() => _searchQuery = '');
@@ -65,15 +71,15 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     : null,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Color(0xFF1E2638)),
+                  borderSide: const BorderSide(color: AppColors.border),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Color(0xFF1E2638)),
+                  borderSide: const BorderSide(color: AppColors.border),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Color(0xFF0284C7), width: 1.5),
+                  borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               ),
@@ -84,12 +90,12 @@ class _AssetsScreenState extends State<AssetsScreen> {
               stream: FirebaseService.streamAssets(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator(color: Color(0xFF0284C7), strokeWidth: 2));
+                  return const Center(child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2));
                 }
 
                 if (snapshot.hasError) {
                   return Center(
-                    child: Text('Error loading assets: ${snapshot.error}', style: const TextStyle(color: Color(0xFFEF4444))),
+                    child: Text('Error loading assets: ${snapshot.error}', style: const TextStyle(color: AppColors.danger)),
                   );
                 }
 
@@ -108,11 +114,11 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.inventory_2_outlined, size: 40, color: Color(0xFF334155)),
+                        const Icon(Icons.inventory_2_outlined, size: 40, color: AppColors.textMuted),
                         const SizedBox(height: 12),
                         Text(
                           _searchQuery.isEmpty ? 'No assets registered yet' : 'No assets matching "$_searchQuery"',
-                          style: const TextStyle(color: Color(0xFF64748B), fontSize: 13),
+                          style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
                         ),
                       ],
                     ),
@@ -133,9 +139,16 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     return Container(
                       margin: const EdgeInsets.only(bottom: 8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF0D111A),
+                        color: AppColors.surface,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFF1E2638)),
+                        border: Border.all(color: AppColors.border),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.02),
+                            blurRadius: 4,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
                       ),
                       child: ListTile(
                         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
@@ -144,7 +157,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                             Text(
                               asset.itemId,
                               style: const TextStyle(
-                                color: Color(0xFF38BDF8),
+                                color: AppColors.primary,
                                 fontFamily: 'monospace',
                                 fontWeight: FontWeight.w700,
                                 fontSize: 12,
@@ -154,12 +167,12 @@ class _AssetsScreenState extends State<AssetsScreen> {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF1E2638),
+                                color: AppColors.borderLight,
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
                                 asset.itemType,
-                                style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 10, fontWeight: FontWeight.w600),
+                                style: const TextStyle(color: AppColors.textSecondary, fontSize: 10, fontWeight: FontWeight.w600),
                               ),
                             ),
                           ],
@@ -171,17 +184,17 @@ class _AssetsScreenState extends State<AssetsScreen> {
                             children: [
                               Text(
                                 asset.itemName,
-                                style: const TextStyle(color: Color(0xFFF8FAFC), fontWeight: FontWeight.w700, fontSize: 14),
+                                style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                               ),
                               const SizedBox(height: 2),
                               Text(
                                 location,
-                                style: const TextStyle(color: Color(0xFF64748B), fontSize: 11.5),
+                                style: const TextStyle(color: AppColors.textSecondary, fontSize: 11.5),
                               ),
                             ],
                           ),
                         ),
-                        trailing: const Icon(Icons.chevron_right_rounded, color: Color(0xFF475569), size: 18),
+                        trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.textMuted, size: 18),
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(builder: (_) => AssetDetailScreen(asset: asset)),

@@ -4,6 +4,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../models/asset_model.dart';
 import '../services/firebase_service.dart';
+import '../theme/app_colors.dart';
 import 'asset_detail_screen.dart';
 
 class QRScannerScreen extends StatefulWidget {
@@ -154,14 +155,14 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF0D111A),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
-          side: const BorderSide(color: Color(0xFF1E2638)),
+          side: const BorderSide(color: AppColors.border),
         ),
         title: const Text(
           'Manual Asset Lookup',
-          style: TextStyle(color: Color(0xFFF8FAFC), fontWeight: FontWeight.w700, fontSize: 16),
+          style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 16),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -169,20 +170,20 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
           children: [
             const Text(
               'Enter an Asset ID (e.g. AST-000001) or paste the QR URL:',
-              style: TextStyle(color: Color(0xFF94A3B8), fontSize: 12.5),
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: controller,
-              style: const TextStyle(color: Colors.white, fontSize: 14, fontFamily: 'monospace'),
+              style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontFamily: 'monospace'),
               decoration: InputDecoration(
                 hintText: 'AST-000001',
-                hintStyle: const TextStyle(color: Color(0xFF475569)),
+                hintStyle: const TextStyle(color: AppColors.textMuted),
                 filled: true,
-                fillColor: const Color(0xFF07090E),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFF1E2638))),
-                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFF1E2638))),
-                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFF0284C7))),
+                fillColor: AppColors.cardSubtle,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: AppColors.borderLight)),
+                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: AppColors.borderLight)),
+                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: AppColors.primary)),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               ),
             ),
@@ -191,11 +192,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel', style: TextStyle(color: Color(0xFF64748B))),
+            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF0284C7),
+              backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
               elevation: 0,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -223,27 +224,33 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF07090E),
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0D111A),
+        backgroundColor: AppColors.surface,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(color: AppColors.border, height: 1),
+        ),
         title: const Text(
           'Scan Asset QR Code',
-          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFFF8FAFC)),
+          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: AppColors.textPrimary),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.keyboard_outlined, color: Color(0xFF38BDF8), size: 22),
+            icon: const Icon(Icons.keyboard_outlined, color: AppColors.primary, size: 22),
             tooltip: 'Manual Lookup',
             onPressed: _showManualLookupDialog,
           ),
           if (_permissionGranted && _cameraController != null) ...[
             IconButton(
-              icon: const Icon(Icons.flash_on_rounded, color: Color(0xFF94A3B8), size: 20),
+              icon: const Icon(Icons.flash_on_rounded, color: AppColors.textMuted, size: 20),
               onPressed: () => _cameraController?.toggleTorch(),
             ),
             IconButton(
-              icon: const Icon(Icons.cameraswitch_rounded, color: Color(0xFF94A3B8), size: 20),
+              icon: const Icon(Icons.cameraswitch_rounded, color: AppColors.textMuted, size: 20),
               onPressed: () => _cameraController?.switchCamera(),
             ),
           ],
@@ -251,7 +258,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
       ),
       body: _checkingPermission
           ? const Center(
-              child: CircularProgressIndicator(color: Color(0xFF0284C7), strokeWidth: 2),
+              child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2),
             )
           : !_permissionGranted || _cameraController == null
               ? Center(
@@ -260,9 +267,16 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                     child: Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF0D111A),
+                        color: AppColors.surface,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFF1E2638)),
+                        border: Border.all(color: AppColors.border),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.04),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -270,15 +284,15 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFEF4444).withValues(alpha: 0.12),
+                              color: AppColors.danger.withOpacity(0.12),
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.camera_alt_outlined, color: Color(0xFFEF4444), size: 32),
+                            child: const Icon(Icons.camera_alt_outlined, color: AppColors.danger, size: 32),
                           ),
                           const SizedBox(height: 16),
                           const Text(
                             'Camera Access Required',
-                            style: TextStyle(color: Color(0xFFF8FAFC), fontWeight: FontWeight.w800, fontSize: 16),
+                            style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w800, fontSize: 16),
                           ),
                           const SizedBox(height: 8),
                           Text(
@@ -286,7 +300,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                                 ? _permissionMessage
                                 : 'Please grant camera access to scan physical QR labels on campus equipment.',
                             textAlign: TextAlign.center,
-                            style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12.5, height: 1.4),
+                            style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5, height: 1.4),
                           ),
                           const SizedBox(height: 20),
                           SizedBox(
@@ -301,7 +315,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF0284C7),
+                                backgroundColor: AppColors.primary,
                                 foregroundColor: Colors.white,
                                 elevation: 0,
                                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -315,8 +329,8 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                             width: double.infinity,
                             child: TextButton.icon(
                               onPressed: _showManualLookupDialog,
-                              icon: const Icon(Icons.keyboard_outlined, size: 16, color: Color(0xFF38BDF8)),
-                              label: const Text('Or Enter Asset ID Manually', style: TextStyle(color: Color(0xFF38BDF8), fontWeight: FontWeight.w600)),
+                              icon: const Icon(Icons.keyboard_outlined, size: 16, color: AppColors.primary),
+                              label: const Text('Or Enter Asset ID Manually', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600)),
                             ),
                           ),
                         ],
@@ -346,21 +360,21 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                             child: Container(
                               padding: const EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF0D111A),
+                                color: AppColors.surface,
                                 borderRadius: BorderRadius.circular(14),
-                                border: Border.all(color: const Color(0xFF1E2638)),
+                                border: Border.all(color: AppColors.border),
                               ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(Icons.error_outline_rounded, color: Color(0xFFEF4444), size: 30),
+                                  const Icon(Icons.error_outline_rounded, color: AppColors.danger, size: 30),
                                   const SizedBox(height: 10),
-                                  const Text('Camera Error', style: TextStyle(color: Color(0xFFF8FAFC), fontWeight: FontWeight.w700)),
+                                  const Text('Camera Error', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700)),
                                   const SizedBox(height: 6),
                                   Text(
                                     error.errorDetails?.message ?? error.errorCode.name,
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
+                                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
                                   ),
                                   const SizedBox(height: 16),
                                   Row(
@@ -373,8 +387,8 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                                             });
                                           },
                                           style: OutlinedButton.styleFrom(
-                                            foregroundColor: const Color(0xFF38BDF8),
-                                            side: const BorderSide(color: Color(0xFF1E2638)),
+                                            foregroundColor: AppColors.primary,
+                                            side: const BorderSide(color: AppColors.border),
                                           ),
                                           child: const Text('Retry'),
                                         ),
@@ -384,7 +398,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                                         child: ElevatedButton(
                                           onPressed: _showManualLookupDialog,
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: const Color(0xFF0284C7),
+                                            backgroundColor: AppColors.primary,
                                             foregroundColor: Colors.white,
                                           ),
                                           child: const Text('Manual Entry'),
@@ -404,11 +418,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                       width: 240,
                       height: 240,
                       decoration: BoxDecoration(
-                        border: Border.all(color: const Color(0xFF38BDF8), width: 2.5),
+                        border: Border.all(color: AppColors.primary, width: 2.5),
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF0284C7).withValues(alpha: 0.2),
+                            color: AppColors.primary.withOpacity(0.2),
                             blurRadius: 20,
                             spreadRadius: 2,
                           )
@@ -422,13 +436,13 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF0D111A).withValues(alpha: 0.9),
+                              color: AppColors.surface.withOpacity(0.95),
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: const Color(0xFF1E2638)),
+                              border: Border.all(color: AppColors.border),
                             ),
                             child: const Text(
                               'Align QR label within square',
-                              style: TextStyle(color: Color(0xFFF8FAFC), fontSize: 12.5, fontWeight: FontWeight.w600),
+                              style: TextStyle(color: AppColors.textPrimary, fontSize: 12.5, fontWeight: FontWeight.w600),
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -438,7 +452,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> with WidgetsBindingOb
                               padding: EdgeInsets.all(4.0),
                               child: Text(
                                 'Manual ID Entry',
-                                style: TextStyle(color: Color(0xFF38BDF8), fontSize: 12, fontWeight: FontWeight.w700, decoration: TextDecoration.underline),
+                                style: TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.w700, decoration: TextDecoration.underline),
                               ),
                             ),
                           ),

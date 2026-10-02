@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'theme/app_colors.dart';
 import 'screens/login_screen.dart';
 
 void main() async {
@@ -20,7 +21,7 @@ void main() async {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
       ),
     );
   }
@@ -36,19 +37,31 @@ class CampusFixAdminApp extends StatelessWidget {
       title: 'CampusFix Admin',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF07090E),
-        primaryColor: const Color(0xFF0284C7),
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF0284C7),
-          secondary: Color(0xFF10B981),
-          surface: Color(0xFF0D111A),
+        useMaterial3: false,
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: AppColors.background,
+        primaryColor: AppColors.primary,
+        colorScheme: const ColorScheme.light(
+          primary: AppColors.primary,
+          secondary: AppColors.success,
+          surface: AppColors.surface,
+          background: AppColors.background,
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF0D111A),
+          backgroundColor: AppColors.surface,
+          foregroundColor: AppColors.textPrimary,
           elevation: 0,
           centerTitle: false,
+          iconTheme: IconThemeData(color: AppColors.textPrimary),
+          titleTextStyle: TextStyle(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.w800,
+            fontSize: 17,
+            letterSpacing: -0.3,
+          ),
         ),
+        cardColor: AppColors.surface,
+        dividerColor: AppColors.border,
       ),
       home: const LoginScreen(),
     );

@@ -3,6 +3,7 @@ import '../models/asset_model.dart';
 import '../models/ticket_model.dart';
 import '../services/firebase_service.dart';
 import '../widgets/status_badge_widget.dart';
+import '../theme/app_colors.dart';
 import 'assets_screen.dart';
 import 'tickets_screen.dart';
 import 'ticket_detail_screen.dart';
@@ -28,18 +29,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF07090E),
+      backgroundColor: AppColors.background,
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-          color: Color(0xFF0D111A),
-          border: Border(top: BorderSide(color: Color(0xFF1E2638), width: 1)),
+          color: AppColors.surface,
+          border: Border(top: BorderSide(color: AppColors.border, width: 1)),
         ),
         child: BottomNavigationBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          selectedItemColor: const Color(0xFF38BDF8),
-          unselectedItemColor: const Color(0xFF64748B),
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: AppColors.textMuted,
           selectedFontSize: 11,
           unselectedFontSize: 11,
           type: BottomNavigationBarType.fixed,
@@ -103,7 +104,7 @@ class DashboardHomeTab extends StatelessWidget {
               final tickets = ticketSnap.data ?? [];
               final totalAssets = assets.length;
               final activeAssets = assets.where((a) => a.status.toUpperCase() == 'ACTIVE').length;
-              final openTickets = tickets.where((t) => t.status.toUpperCase() == 'OPEN').length;
+              final openTickets = tickets.where((t) => t.status.toUpperCase() == 'OPEN' || t.status.toUpperCase() == 'ACTIVE').length;
               final closedTickets = tickets.where((t) => t.status.toUpperCase() == 'CLOSED' || t.status.toUpperCase() == 'RESOLVED').length;
               final recentTickets = tickets.take(5).toList();
 
@@ -126,28 +127,28 @@ class DashboardHomeTab extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w800,
-                              color: Color(0xFFF8FAFC),
+                              color: AppColors.textPrimary,
                               letterSpacing: -0.4,
                             ),
                           ),
                           SizedBox(height: 2),
                           Text(
                             'Asset & Maintenance Control',
-                            style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                            style: TextStyle(fontSize: 12, color: AppColors.textMuted),
                           ),
                         ],
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF131B2E),
+                          color: AppColors.primaryLight,
                           borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: const Color(0xFF0284C7).withValues(alpha: 0.3)),
+                          border: Border.all(color: AppColors.primaryBorder),
                         ),
                         child: const Text(
                           'ADMIN PORTAL',
                           style: TextStyle(
-                            color: Color(0xFF38BDF8),
+                            color: AppColors.primary,
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.5,
@@ -161,7 +162,7 @@ class DashboardHomeTab extends StatelessWidget {
                   if (isLoading)
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 30.0),
-                      child: Center(child: CircularProgressIndicator(color: Color(0xFF0284C7), strokeWidth: 2)),
+                      child: Center(child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2)),
                     )
                   else ...[
                     // Metric Stats Grid
@@ -171,17 +172,17 @@ class DashboardHomeTab extends StatelessWidget {
                           child: _buildMetricCard(
                             'TOTAL ASSETS',
                             '$totalAssets',
-                            const Color(0xFF38BDF8),
+                            AppColors.primary,
                             Icons.devices_rounded,
                           ),
                         ),
                         const SizedBox(width: 10),
                         Expanded(
                           child: _buildMetricCard(
-                            'OPEN INCIDENTS',
+                            'ACTIVE TICKETS',
                             '$openTickets',
-                            openTickets > 0 ? const Color(0xFFEF4444) : const Color(0xFF10B981),
-                            Icons.error_outline_rounded,
+                            AppColors.textSecondary,
+                            Icons.confirmation_num_outlined,
                           ),
                         ),
                       ],
@@ -193,7 +194,7 @@ class DashboardHomeTab extends StatelessWidget {
                           child: _buildMetricCard(
                             'RESOLVED',
                             '$closedTickets',
-                            const Color(0xFF10B981),
+                            AppColors.success,
                             Icons.check_circle_outline_rounded,
                           ),
                         ),
@@ -202,7 +203,7 @@ class DashboardHomeTab extends StatelessWidget {
                           child: _buildMetricCard(
                             'ACTIVE ASSETS',
                             '$activeAssets',
-                            const Color(0xFFA78BFA),
+                            const Color(0xFF6366F1),
                             Icons.layers_outlined,
                           ),
                         ),
@@ -227,9 +228,16 @@ class DashboardHomeTab extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF0D111A),
+                              color: AppColors.surface,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: const Color(0xFF1E2638)),
+                              border: Border.all(color: AppColors.border),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF0F172A).withValues(alpha: 0.03),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 2),
+                                )
+                              ],
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,20 +245,20 @@ class DashboardHomeTab extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF0284C7).withValues(alpha: 0.12),
+                                    color: AppColors.primaryLight,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  child: const Icon(Icons.qr_code_scanner_rounded, color: Color(0xFF38BDF8), size: 20),
+                                  child: const Icon(Icons.qr_code_scanner_rounded, color: AppColors.primary, size: 20),
                                 ),
                                 const SizedBox(height: 12),
                                 const Text(
                                   'Scan QR Label',
-                                  style: TextStyle(color: Color(0xFFF8FAFC), fontWeight: FontWeight.w700, fontSize: 13),
+                                  style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 13),
                                 ),
                                 const SizedBox(height: 2),
                                 const Text(
                                   'Inspect & update GPS',
-                                  style: TextStyle(color: Color(0xFF64748B), fontSize: 11),
+                                  style: TextStyle(color: AppColors.textMuted, fontSize: 11),
                                 ),
                               ],
                             ),
@@ -270,9 +278,16 @@ class DashboardHomeTab extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF0D111A),
+                              color: AppColors.surface,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: const Color(0xFF1E2638)),
+                              border: Border.all(color: AppColors.border),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF0F172A).withValues(alpha: 0.03),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 2),
+                                )
+                              ],
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,20 +295,20 @@ class DashboardHomeTab extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF10B981).withValues(alpha: 0.12),
+                                    color: AppColors.successLight,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  child: const Icon(Icons.add_circle_outline_rounded, color: Color(0xFF34D399), size: 20),
+                                  child: const Icon(Icons.add_circle_outline_rounded, color: AppColors.success, size: 20),
                                 ),
                                 const SizedBox(height: 12),
                                 const Text(
                                   'Register Asset',
-                                  style: TextStyle(color: Color(0xFFF8FAFC), fontWeight: FontWeight.w700, fontSize: 13),
+                                  style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 13),
                                 ),
                                 const SizedBox(height: 2),
                                 const Text(
                                   'Add new hardware',
-                                  style: TextStyle(color: Color(0xFF64748B), fontSize: 11),
+                                  style: TextStyle(color: AppColors.textMuted, fontSize: 11),
                                 ),
                               ],
                             ),
@@ -309,12 +324,12 @@ class DashboardHomeTab extends StatelessWidget {
                     children: [
                       const Text(
                         'Recent Incident Tickets',
-                        style: TextStyle(color: Color(0xFFF8FAFC), fontWeight: FontWeight.w700, fontSize: 14, letterSpacing: -0.2),
+                        style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 14, letterSpacing: -0.2),
                       ),
                       if (tickets.isNotEmpty)
                         Text(
                           '${tickets.length} total',
-                          style: const TextStyle(color: Color(0xFF64748B), fontSize: 11),
+                          style: const TextStyle(color: AppColors.textMuted, fontSize: 11),
                         ),
                     ],
                   ),
@@ -324,14 +339,14 @@ class DashboardHomeTab extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF0D111A),
+                        color: AppColors.surface,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFF1E2638)),
+                        border: Border.all(color: AppColors.border),
                       ),
                       child: const Center(
                         child: Text(
                           'No incident reports recorded yet',
-                          style: TextStyle(color: Color(0xFF64748B), fontSize: 12.5),
+                          style: TextStyle(color: AppColors.textMuted, fontSize: 12.5),
                         ),
                       ),
                     )
@@ -346,9 +361,16 @@ class DashboardHomeTab extends StatelessWidget {
                       return Container(
                         margin: const EdgeInsets.only(bottom: 8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF0D111A),
+                          color: AppColors.surface,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF1E2638)),
+                          border: Border.all(color: AppColors.border),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF0F172A).withValues(alpha: 0.02),
+                              blurRadius: 6,
+                              offset: const Offset(0, 1),
+                            )
+                          ],
                         ),
                         child: ListTile(
                           contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
@@ -357,7 +379,7 @@ class DashboardHomeTab extends StatelessWidget {
                             children: [
                               Text(
                                 t.ticketType,
-                                style: const TextStyle(color: Color(0xFFF8FAFC), fontWeight: FontWeight.w700, fontSize: 13.5),
+                                style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 13.5),
                               ),
                               StatusBadgeWidget(status: t.status),
                             ],
@@ -366,10 +388,10 @@ class DashboardHomeTab extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 4.0),
                             child: Text(
                               '${t.ticketId} • $location',
-                              style: const TextStyle(color: Color(0xFF64748B), fontSize: 11.5),
+                              style: const TextStyle(color: AppColors.textMuted, fontSize: 11.5),
                             ),
                           ),
-                          trailing: const Icon(Icons.chevron_right_rounded, color: Color(0xFF475569), size: 18),
+                          trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.textMuted, size: 18),
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(builder: (_) => TicketDetailScreen(ticket: t)),
@@ -391,9 +413,16 @@ class DashboardHomeTab extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF0D111A),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF1E2638)),
+        border: Border.all(color: AppColors.border),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF0F172A).withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          )
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -405,12 +434,12 @@ class DashboardHomeTab extends StatelessWidget {
                 title,
                 style: const TextStyle(
                   fontSize: 10,
-                  color: Color(0xFF64748B),
+                  color: AppColors.textMuted,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.6,
                 ),
               ),
-              Icon(icon, color: color.withValues(alpha: 0.8), size: 16),
+              Icon(icon, color: color, size: 16),
             ],
           ),
           const SizedBox(height: 8),
