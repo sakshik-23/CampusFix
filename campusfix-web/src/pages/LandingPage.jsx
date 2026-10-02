@@ -191,7 +191,7 @@ export const LandingPage = () => {
 
             {/* Clear Helper Instructions */}
             <div style={{ fontSize: "0.8rem", color: "#64748B", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-              <span>Track maintenance status with your <strong>Ticket Number</strong> (e.g. <code>TKT-2026-000001</code>). Asset IDs are for admin inventory only.</span>
+              <span>Track maintenance status with your <strong>Ticket Number</strong> (e.g. <code>TKT-2026-000001</code>).</span>
             </div>
           </div>
 
