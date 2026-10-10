@@ -104,7 +104,7 @@ export const AdminDashboard = () => {
             <div>
               <span style={{ fontSize: "0.7rem", fontWeight: "600", color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em" }}>System Health</span>
               <div style={{ fontSize: "1.8rem", fontWeight: "800", color: "#C084FC", marginTop: "0.1rem", letterSpacing: "-0.03em" }}>
-                {stats.totalAssets > 0 ? `${Math.round(((stats.totalAssets - stats.openTickets) / stats.totalAssets) * 100)}%` : "100%"}
+                {stats.operationalRate !== undefined ? `${stats.operationalRate}%` : (stats.totalAssets > 0 ? `${Math.round(((stats.totalAssets - stats.openTickets) / stats.totalAssets) * 100)}%` : "100%")}
               </div>
             </div>
             <div style={{ padding: "0.4rem", borderRadius: "0.4rem", background: "rgba(168, 85, 247, 0.1)", color: "#C084FC" }}>

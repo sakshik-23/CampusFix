@@ -110,7 +110,13 @@ class DashboardHomeTab extends StatelessWidget {
               }).toList();
               final openTickets = activeTickets.where((t) => t.status.toUpperCase() == 'OPEN' || t.status.toUpperCase() == 'ACTIVE').length;
               final recentTickets = activeTickets.take(5).toList();
-              final systemHealth = totalAssets > 0 ? (((totalAssets - activeTickets.length) / totalAssets) * 100).round() : 100;
+              final assetIdsWithIssues = activeTickets
+                  .map((t) => t.itemId.toUpperCase())
+                  .where((id) => id.isNotEmpty)
+                  .toSet();
+              final operationalRate = totalAssets > 0
+                  ? (((totalAssets - assetIdsWithIssues.length) / totalAssets) * 100).clamp(0, 100).round()
+                  : 100;
 
               final isLoading = (assetSnap.connectionState == ConnectionState.waiting && assets.isEmpty) ||
                   (ticketSnap.connectionState == ConnectionState.waiting && tickets.isEmpty);
@@ -196,8 +202,8 @@ class DashboardHomeTab extends StatelessWidget {
                       children: [
                         Expanded(
                           child: _buildMetricCard(
-                            'SYSTEM HEALTH',
-                            '$systemHealth%',
+                            'OPERATIONAL RATE',
+                            '$operationalRate%',
                             AppColors.success,
                             Icons.health_and_safety_outlined,
                           ),

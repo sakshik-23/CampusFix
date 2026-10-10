@@ -330,7 +330,7 @@ export const LandingPage = () => {
           <div className="card-premium" style={{ padding: "1.25rem", borderLeft: "4px solid #6366F1" }}>
             <div style={{ color: "#64748B", fontSize: "0.75rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>Operational Rate</div>
             <div style={{ fontSize: "1.9rem", fontWeight: "800", color: "#0F172A", marginTop: "0.15rem" }}>
-              {stats.totalAssets > 0 ? `${Math.round(((stats.totalAssets - stats.openTickets) / stats.totalAssets) * 100)}%` : "100%"}
+              {stats.operationalRate !== undefined ? `${stats.operationalRate}%` : (stats.totalAssets > 0 ? `${Math.round(((stats.totalAssets - stats.openTickets) / stats.totalAssets) * 100)}%` : "100%")}
             </div>
             <div style={{ fontSize: "0.775rem", color: "#64748B", marginTop: "0.25rem" }}>Equipment working properly</div>
           </div>

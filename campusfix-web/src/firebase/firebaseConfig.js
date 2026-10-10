@@ -2,14 +2,14 @@ import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Read Firebase config from environment variables
+// Read Firebase config from environment variables with fallback to campusfix-360dd project
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || ""
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCFYsBiNSw5n581nFf6NlnCCynyG0sOaY4",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "campusfix-360dd.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "campusfix-360dd",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "campusfix-360dd.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "1042223313585",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:1042223313585:web:39c3d3029cf0f45c46a890"
 };
 
 export const isFirebaseConfigured = Boolean(

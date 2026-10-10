@@ -526,12 +526,24 @@ export const DataProvider = ({ children }) => {
   };
 
   // Compute live statistics
+  const activeIssuesList = tickets.filter(
+    (t) => (t.status || "").toUpperCase() !== "CLOSED" && (t.status || "").toUpperCase() !== "RESOLVED"
+  );
+  const assetIdsWithActiveIssues = new Set(
+    activeIssuesList.map((t) => t.itemId?.toUpperCase()).filter(Boolean)
+  );
+  const operationalRate = assets.length > 0
+    ? Math.max(0, Math.min(100, Math.round(((assets.length - assetIdsWithActiveIssues.size) / assets.length) * 100)))
+    : 100;
+
   const stats = {
     totalAssets: assets.length,
     activeAssets: assets.filter((a) => a.status === "ACTIVE").length,
     openTickets: tickets.filter((t) => t.status === "ACTIVE" || t.status === "OPEN").length,
+    activeTicketsCount: activeIssuesList.length,
     inProgressTickets: tickets.filter((t) => t.status === "IN_PROGRESS" || t.status === "IN PROGRESS").length,
     closedTickets: tickets.filter((t) => t.status === "CLOSED" || t.status === "RESOLVED").length,
+    operationalRate,
     recentTickets: tickets.slice(0, 5)
   };
 
